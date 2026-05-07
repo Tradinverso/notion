@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Competencia Mercado Trading — TRADINVERSO 2026</title>
+<style>
+:root{--bg:#080808;--bg2:#111;--bg3:#161616;--bg4:#1c1c1c;--border:#222;--border2:#2a2a2a;--accent:#00BFFF;--green:#00FF88;--red:#FF4444;--yellow:#FFAA00;--purple:#AA66FF;--text:#e8e8e8;--muted:#666;--muted2:#444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;height:48px;gap:2px;overflow-x:auto;backdrop-filter:blur(8px);}
+nav::-webkit-scrollbar{height:2px;}nav::-webkit-scrollbar-thumb{background:var(--accent);}
+.logo{color:var(--accent);font-weight:900;font-size:14px;letter-spacing:.15em;white-space:nowrap;margin-right:12px;padding-right:12px;border-right:1px solid var(--border);}
+nav a{color:var(--muted);text-decoration:none;white-space:nowrap;padding:5px 10px;border-radius:4px;font-size:12px;transition:all .15s;flex-shrink:0;}
+nav a:hover,nav a.act{color:var(--accent);background:rgba(0,191,255,.08);}
+/* LAYOUT */
+.page{max-width:1400px;margin:0 auto;padding:0 24px;}
+section{padding:52px 0 40px;border-bottom:1px solid var(--border);}
+h1{font-size:30px;font-weight:900;letter-spacing:-.02em;line-height:1.15;margin-bottom:8px;}
+h2{font-size:20px;font-weight:800;margin-bottom:16px;color:var(--text);}
+h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:10px;}
+h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+p{color:#bbb;margin-bottom:10px;font-size:13px;}
+/* GRIDS */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;}
+.card-a{border-left:3px solid var(--accent);}
+.card-g{border-left:3px solid var(--green);}
+.card-r{border-left:3px solid var(--red);}
+.card-y{border-left:3px solid var(--yellow);}
+.card-p{border-left:3px solid var(--purple);}
+/* STAT BOXES */
+.stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;}
+.stat-n{font-size:28px;font-weight:900;color:var(--accent);line-height:1;margin-bottom:4px;}
+.stat-l{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;}
+/* CHIPS */
+.chip{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.c-a{background:rgba(0,191,255,.12);color:var(--accent);border:1px solid rgba(0,191,255,.25);}
+.c-g{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2);}
+.c-r{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2);}
+.c-y{background:rgba(255,170,0,.1);color:var(--yellow);border:1px solid rgba(255,170,0,.2);}
+.c-p{background:rgba(170,102,255,.1);color:var(--purple);border:1px solid rgba(170,102,255,.2);}
+.c-x{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);}
+/* PRIORITY */
+.p1{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;background:rgba(255,68,68,.2);color:var(--red);}
+.p2{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;background:rgba(255,170,0,.15);color:var(--yellow);}
+.p3{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;background:rgba(100,100,100,.15);color:var(--muted);}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:9px 12px;background:var(--bg3);color:var(--accent);font-size:10px;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border);}
+td{padding:9px 12px;border-bottom:1px solid var(--border);color:#bbb;vertical-align:top;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.s5{color:var(--green);}
+.s4{color:#88ff99;}
+.s3{color:var(--yellow);}
+.s2{color:var(--red);}
+.s1{color:#666;}
+/* VSL CARDS */
+.vsl{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.vsl-hd{background:var(--bg3);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border);}
+.vsl-body{padding:18px;}
+.vsl-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+/* COMPETITOR CARDS */
+.comp{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .2s;}
+.comp:hover{border-color:rgba(0,191,255,.4);}
+.comp-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.comp-icon{width:44px;height:44px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.comp-name{font-size:14px;font-weight:700;color:var(--text);}
+.comp-handle{color:var(--accent);font-size:11px;}
+.comp-mkt{color:var(--muted);font-size:10px;}
+.comp-stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;}
+.cstat{text-align:center;}
+.cstat-v{font-size:14px;font-weight:800;color:var(--text);}
+.cstat-l{font-size:9px;color:var(--muted);text-transform:uppercase;}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.content{font-size:12px;color:#aaa;line-height:1.5;}
+/* INSIGHT BOXES */
+.insight{background:rgba(0,191,255,.04);border:1px solid rgba(0,191,255,.18);border-radius:8px;padding:14px;margin-bottom:10px;}
+.insight-l{color:var(--accent);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.gap{background:rgba(0,255,136,.04);border:1px solid rgba(0,255,136,.18);border-radius:8px;padding:14px;margin-bottom:10px;}
+.gap-l{color:var(--green);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.warn{background:rgba(255,170,0,.04);border:1px solid rgba(255,170,0,.18);border-radius:8px;padding:14px;margin-bottom:10px;}
+.warn-l{color:var(--yellow);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+/* QUOTE */
+.quote{border-left:3px solid var(--accent);padding:10px 14px;margin:10px 0;background:rgba(0,191,255,.03);border-radius:0 6px 6px 0;font-style:italic;color:#bbb;font-size:12px;}
+/* TABS */
+.tab-bar{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap;}
+.tab{padding:8px 16px;cursor:pointer;color:var(--muted);font-size:12px;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tp{display:none;}
+.tp.active{display:block;}
+/* HERO */
+.hero{padding:56px 0 40px;}
+.hero-badge{display:inline-block;padding:4px 12px;background:rgba(0,191,255,.1);border:1px solid rgba(0,191,255,.3);border-radius:20px;color:var(--accent);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px;}
+/* PATTERNS */
+.pattern-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.pat{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-size:11px;color:#aaa;}
+/* SCORE BAR */
+.sbar{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.sbar-l{width:150px;font-size:11px;color:var(--muted);flex-shrink:0;}
+.sbar-t{flex:1;height:5px;background:var(--bg3);border-radius:3px;}
+.sbar-f{height:100%;border-radius:3px;background:var(--accent);}
+/* MOBILE */
+@media(max-width:768px){
+.g2,.g3,.g4{grid-template-columns:1fr;}
+.vsl-2col{grid-template-columns:1fr;}
+.page{padding:0 14px;}
+h1{font-size:22px;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">TRADINVERSO</div>
+  <a href="#hero">Dashboard</a>
+  <a href="#mercado">Mercado</a>
+  <a href="#vsls">VSLs (29)</a>
+  <a href="#esp">Competidores ESP</a>
+  <a href="#eng">Competidores ENG</a>
+  <a href="#latam">LATAM/Otros</a>
+  <a href="#patrones">Patrones</a>
+  <a href="#huecos">Huecos</a>
+  <a href="#avatar">Avatar</a>
+  <a href="#acciones">Para Tradinverso</a>
+</nav>
+
+<!-- HERO -->
+<div id="hero" class="page">
+<div class="hero">
+  <div class="hero-badge">Análisis Competencia Mercado Trading · Mayo 2026</div>
+  <h1>250+ Competidores Analizados<br>29 VSLs Descompuestos</h1>
+  <p style="font-size:15px;color:var(--muted);max-width:700px;margin-bottom:32px;">Fuentes: Google Sheets "competencia 300 traders" · Miro Board (29 Google Docs VSL) · WebSearch (50+ competidores investigados). El análisis más completo del mercado de trading educación en español e inglés.</p>
+  <div class="g4">
+    <div class="stat"><div class="stat-n">250+</div><div class="stat-l">Perfiles IG mapeados</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--green)">29</div><div class="stat-l">VSLs analizados</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--yellow)">14</div><div class="stat-l">Huecos de mercado</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--red)">3</div><div class="stat-l">Amenazas críticas</div></div>
+  </div>
+</div>
+</div>
+
+<!-- MAPA MERCADO -->
+<section id="mercado">
+<div class="page">
+  <h2>Mapa del Mercado Trading Educación</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Segmentos, niveles de saturación y dónde está el dinero real en 2026.</p>
+  <div class="g3" style="margin-bottom:28px;">
+    <div class="card card-r">
+      <h3>Prop Firm / Funded</h3>
+      <p>El sub-nicho más saturado y más rentable. 80% del mercado ENG ya lo posiciona como foco central. ESP va 12-18 meses detrás. El avatar que pasa challenges pero quema la cuenta real es el cliente más valioso y más ignorado.</p>
+      <div style="margin-top:10px;"><span class="chip c-r">Saturación alta</span> <span class="chip c-g">Alto ticket</span></div>
+    </div>
+    <div class="card card-y">
+      <h3>Psicología del Trading</h3>
+      <p>Nicho emergente en ESP. Solo 3-4 competidores lo trabajan en profundidad. <strong>El Reflejo</strong> (1.190€) y <strong>hiramedina.scalper</strong> (109K IG) son los líderes. El dolor real del avatar es emocional, no técnico — y el mercado lo sigue atendiendo al revés.</p>
+      <div style="margin-top:10px;"><span class="chip c-y">Saturación media</span> <span class="chip c-a">Creciente</span></div>
+    </div>
+    <div class="card card-r">
+      <h3>SMC / ICT / Order Flow</h3>
+      <p>El meta-nicho más proliferado. 70%+ del mercado usa estos términos. En 2026 ya no es diferenciador — es el estándar. El avatar que lleva 2+ años en trading ya sabe todos estos conceptos y no le deben nada.</p>
+      <div style="margin-top:10px;"><span class="chip c-r">Hipersaturado</span> <span class="chip c-x">Ya no diferencia</span></div>
+    </div>
+    <div class="card card-a">
+      <h3>Penny Stocks / Acciones</h3>
+      <p>Nicho con competencia mínima en ESP. <strong>Fenix Capital (Fernando RDV)</strong> es el único posicionado así en el análisis. Anti-fondeo explícito. Capital propio real. Diferenciación de categoría total.</p>
+      <div style="margin-top:10px;"><span class="chip c-g">Baja competencia</span> <span class="chip c-a">Diferenciación alta</span></div>
+    </div>
+    <div class="card card-r">
+      <h3>Academia / Educación Base</h3>
+      <p>El más saturado históricamente. <strong>MDTAcademy</strong>, <strong>Belikethealgo</strong>, <strong>TraderLab</strong>. En 2026 el mercado migró hacia prop firms — las academias base pierden relevancia acelerada.</p>
+      <div style="margin-top:10px;"><span class="chip c-r">Saturación muy alta</span> <span class="chip c-y">Relevancia decayendo</span></div>
+    </div>
+    <div class="card card-p">
+      <h3>Copy Trading / Señales</h3>
+      <p><strong>Profitify</strong> (Copy Farming, $97/mes) + múltiples canales de Telegram. El modelo más escalable pero con mayor critica de mercado. Crea dependencia, no traders independientes. El avatar avanzado lo rechaza explícitamente.</p>
+      <div style="margin-top:10px;"><span class="chip c-p">Modelo en declive</span> <span class="chip c-y">Volumen alto</span></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card card-a">
+      <h3>Ciclo de Sofisticación — Mercado Inglés: Nivel 4 (Hipersaturado)</h3>
+      <p>El avatar inglés ha visto todo. Exige prueba verificable en tiempo real (no screenshots), mecanismo único con nombre propio (no "SMC" genérico), resultados de alumnos con nombres reales y cantidades. Los VSLs son estructuralmente muy avanzados. El benchmark es <strong>Hybrid Trader (dovy.fx)</strong>.</p>
+      <div class="quote">"A lot of people can get funded, but to get to a payout stage is what really matters." — Hybrid Trader</div>
+    </div>
+    <div class="card card-y">
+      <h3>Ciclo de Sofisticación — Mercado Español: Nivel 3 (Saturado en Proceso)</h3>
+      <p>El avatar español está alcanzando el nivel inglés con 12-18 meses de retraso. Ya no cree en "estrategias milagro" pero todavía puede ser captado con diferenciación moderada + prueba honesta. <strong>Ventana de oportunidad de 12-24 meses</strong> antes de que alcance nivel 4.</p>
+      <div class="quote">"Tu problema no es que te falte información. El problema es que tienes demasiada información, pero no tienes un camino." — AlessFutures</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- VSL ANÁLISIS -->
+<section id="vsls">
+<div class="page">
+  <h2>Análisis VSL — 29 Competidores Descompuestos</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Todos los VSLs analizados en profundidad desde los Google Docs del Miro board. Framework de 11 dimensiones.</p>
+
+  <!-- TABLA COMPARATIVA -->
+  <div style="overflow-x:auto;margin-bottom:32px;">
+  <table>
+  <thead><tr>
+    <th>Competidor</th><th>Mercado</th><th>Hook</th><th>Historia</th><th>Prueba</th><th>Mecanismo</th><th>Objeciones</th><th>Cierre</th><th>Global</th>
+  </tr></thead>
+  <tbody>
+  <tr><td><strong>Hybrid Trader (dovy.fx)</strong></td><td><span class="chip c-a">ENG</span></td><td class="s5">★★★★★</td><td class="s5">★★★★★</td><td class="s5">★★★★★</td><td class="s4">★★★★☆</td><td class="s4">★★★★☆</td><td class="s3">★★★☆☆</td><td><span class="chip c-g">TIER 1</span></td></tr>
+  <tr><td><strong>Fenix Capital (Fernando RDV)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s5">★★★★★</td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s5">★★★★★</td><td class="s5">★★★★★</td><td class="s3">★★★☆☆</td><td><span class="chip c-g">TIER 1</span></td></tr>
+  <tr><td><strong>Trader Reset (Cristian Toledano)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s5">★★★★★</td><td class="s3">★★★☆☆</td><td class="s4">★★★★☆</td><td class="s5">★★★★★</td><td><span class="chip c-g">TIER 1</span></td></tr>
+  <tr><td><strong>Mentoría VIP (hundredacademy)</strong></td><td><span class="chip c-p">LATAM</span></td><td class="s5">★★★★★</td><td class="s5">★★★★★</td><td class="s4">★★★★☆</td><td class="s4">★★★★☆</td><td class="s4">★★★★☆</td><td class="s3">★★★☆☆</td><td><span class="chip c-g">TIER 1</span></td></tr>
+  <tr><td><strong>Grupo Premium (sanchezzfx)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s5">★★★★★</td><td class="s3">★★★☆☆</td><td class="s5">★★★★★</td><td class="s4">★★★★☆</td><td class="s4">★★★★☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Swing Trading Lab (Alex G)</strong></td><td><span class="chip c-a">ENG</span></td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s4">★★★★☆</td><td class="s3">★★★☆☆</td><td class="s4">★★★★☆</td><td class="s1">★☆☆☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>AlessFutures (Alex Colón)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s4">★★★★☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Aaron Centelles</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s4">★★★★☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Cero a Fondeado (Nuno Duarte)</strong></td><td><span class="chip c-y">ESP/PT</span></td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s5">★★★★★</td><td class="s4">★★★★☆</td><td class="s5">★★★★★</td><td class="s3">★★★☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Streaming Trading (Xavi Ruiz)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s4">★★★★☆</td><td class="s2">★★☆☆☆</td><td class="s5">★★★★★</td><td class="s4">★★★★☆</td><td class="s4">★★★★☆</td><td class="s1">N/D</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Formación AST (Amigali)</strong></td><td><span class="chip c-p">LATAM</span></td><td class="s3">★★★☆☆</td><td class="s5">★★★★★</td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s5">★★★★★</td><td class="s2">★★☆☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>El Reflejo (Olga Paredes)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s5">★★★★★</td><td class="s4">★★★★☆</td><td class="s3">★★★☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Live in Trading (David Trullás)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Raúl Castro / MP Trading</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s4">★★★★☆</td><td class="s2">★★☆☆☆</td><td class="s4">★★★★☆</td><td class="s5">★★★★★</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Belikethealgo (Benjamín Carmona)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s1">★☆☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s5">★★★★★</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s1">★☆☆☆☆</td><td><span class="chip c-a">TIER 2</span></td></tr>
+  <tr><td><strong>Focus Program (lozano.fx)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Deen Trader (jaumemontfortfx)</strong></td><td><span class="chip c-y">ESP/Halal</span></td><td class="s1">★☆☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s5">★★★★★</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Método Trader (Jorge López/gpsotrader)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Fondea Pro (Meritrading)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Profitify (Copy Farming/mauristacks)</strong></td><td><span class="chip c-p">LATAM</span></td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s3">★★★☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Simple Trading (Magic Moreau)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Trading con Data (ashleyruiz)</strong></td><td><span class="chip c-p">LATAM</span></td><td class="s3">★★★☆☆</td><td class="s3">★★★☆☆</td><td class="s2">★★☆☆☆</td><td class="s4">★★★★☆</td><td class="s2">★★☆☆☆</td><td class="s2">★★☆☆☆</td><td><span class="chip c-x">TIER 3</span></td></tr>
+  <tr><td><strong>Prop Master (maldotrading)</strong></td><td><span class="chip c-y">ESP</span></td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td><span class="chip c-x">CIERRE SOLO</span></td></tr>
+  <tr><td><strong>Workshop $27 (santiagosimaleza)</strong></td><td><span class="chip c-p">LATAM</span></td><td class="s1">★☆☆☆☆</td><td class="s2">★★☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s3">★★★☆☆</td><td class="s1">★☆☆☆☆</td><td class="s3">★★★☆☆</td><td><span class="chip c-x">LOW TICKET</span></td></tr>
+  <tr><td><strong>Gorca Trading</strong></td><td><span class="chip c-y">ESP</span></td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td class="s1">★☆☆☆☆</td><td><span class="chip c-x">DESCRIPCIÓN</span></td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <!-- VSL DETALLE TOP 5 -->
+  <h3 style="margin-bottom:16px;">Análisis Detallado — Top Competidores</h3>
+
+  <div class="vsl">
+    <div class="vsl-hd">
+      <div><div style="font-size:15px;font-weight:700;">Hybrid Trader — dovy.fx (Dovydas Pinskus)</div><div style="color:var(--muted);font-size:11px;margin-top:3px;">288K IG · ENG · NQ/Gold/Dow · Prop Firm · $4.6M</div></div>
+      <span class="chip c-g">BENCHMARK MUNDIAL</span>
+    </div>
+    <div class="vsl-body">
+      <div class="vsl-2col">
+        <div>
+          <h4 style="color:var(--green);margin-bottom:10px;">Fortalezas — Por qué es el benchmark</h4>
+          <p>→ Hook: <em>"Let's get to BS"</em> — 5 palabras que eliminan el modo escepticismo antes de que se active. La apertura más efectiva de los 29 VSLs.</p>
+          <p>→ Prueba de resultados más densa del mercado: navegación en vivo en FTMO, $657K en 7 meses con fechas, nombres de alumnos + payouts reales verificables.</p>
+          <p>→ AI Fundamentals Dashboard — mecanismo genuinamente nuevo. Escanea noticias macro y las traduce en insights operativos. Nadie más lo tiene.</p>
+          <p>→ Historia perfecta: atleta D1 → dropout → loop pérdidas → sistema → $4.6M.</p>
+          <div class="quote">"I built a system that saved me from myself."</div>
+        </div>
+        <div>
+          <h4 style="color:var(--red);margin-bottom:10px;">Debilidades (explotables por Tradinverso)</h4>
+          <p>→ El AI Dashboard <strong>no se muestra en pantalla</strong> en ningún momento. Se describe pero nunca se demuestra.</p>
+          <p>→ Sin plazo concreto de resultado. El avatar no sabe cuándo puede esperar cambios.</p>
+          <p>→ Cierre sin urgencia real. "Small group" es escasez suave — el avatar la ignora.</p>
+          <p>→ Testimonios de alumnos son scrolling rápido sin historia. 20 nombres en 30 segundos vs una historia de 60 segundos de alumno.</p>
+          <p>→ "Libertad para trabajar desde cualquier lugar" — cierre genérico para avatar prop firm.</p>
+        </div>
+      </div>
+      <div class="sbar"><div class="sbar-l">Prueba verificable</div><div class="sbar-t"><div class="sbar-f" style="width:100%;"></div></div></div>
+      <div class="sbar"><div class="sbar-l">Historia personal</div><div class="sbar-t"><div class="sbar-f" style="width:100%;"></div></div></div>
+      <div class="sbar"><div class="sbar-l">Mecanismo único</div><div class="sbar-t"><div class="sbar-f" style="width:85%;"></div></div></div>
+      <div class="sbar"><div class="sbar-l">Urgencia cierre</div><div class="sbar-t"><div class="sbar-f" style="width:40%;background:var(--yellow);"></div></div></div>
+    </div>
+  </div>
+
+  <div class="vsl">
+    <div class="vsl-hd">
+      <div><div style="font-size:15px;font-weight:700;">Fenix Capital — Fernando RDV (Penny Stocks)</div><div style="color:var(--muted);font-size:11px;margin-top:3px;">ESP · Anti-Fondeo · Capital Propio · Penny Stocks Acciones USA</div></div>
+      <span class="chip c-a">MEJOR COPY ESP</span>
+    </div>
+    <div class="vsl-body">
+      <div class="vsl-2col">
+        <div>
+          <h4 style="color:var(--green);margin-bottom:10px;">Diferenciadores únicos</h4>
+          <div class="quote">"¿Sabes cuál es la verdadera razón por la que no estás ganando dinero? No es tu falta de disciplina, no es que te falte paciencia — es que el juego al que te han hecho jugar está amañado."</div>
+          <p>→ La sección de agitación del dolor es la mejor de todos los 29 VSLs analizados. Específica, sin exageración, con imágenes concretas que el avatar reconoce visceralmente.</p>
+          <p>→ <em>"Y no lo cuentas, porque explicárselo a alguien que no lo entiende es muchas veces más frustrante aún."</em> — nombra el dolor social del trader que nadie más nombra. Mejor frase de copy de los 29 VSLs.</p>
+          <p>→ Anti-fondeo explícito: "las cuentas de fondeo están diseñadas para hacerte fallar." En un mercado donde el 90% vende fondeo, es diferenciación radical.</p>
+          <p>→ Penny stocks = diferenciación de categoría total. No compite con ningún otro VSL.</p>
+        </div>
+        <div>
+          <h4 style="color:var(--red);margin-bottom:10px;">Gaps de conversión</h4>
+          <p>→ Sin prueba visual del mecanismo. Penny stocks con volumen institucional se declara pero nunca se demuestra en pantalla.</p>
+          <p>→ La objeción del riesgo de capital propio (500€ mínimos) no se atiende. Es la barrera más alta del VSL.</p>
+          <p>→ Sin precio. Sin garantía. El avatar no puede evaluar si puede permitírselo.</p>
+          <p>→ La objeción regulatoria de penny stocks en Europa (restricciones reales) no se menciona.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vsl">
+    <div class="vsl-hd">
+      <div><div style="font-size:15px;font-weight:700;">Trader Reset — Cristian Toledano</div><div style="color:var(--muted);font-size:11px;margin-top:3px;">ESP · 50€/mes comunidad + 799€ curso · Order Flow · Futuros · La landing más inteligente</div></div>
+      <span class="chip c-a">ARQUITECTURA BRILLANTE</span>
+    </div>
+    <div class="vsl-body">
+      <div class="vsl-2col">
+        <div>
+          <h4 style="color:var(--green);margin-bottom:10px;">Por qué destaca</h4>
+          <p>→ La arquitectura de entrada de bajo riesgo (50€/mes sin permanencia) es la decisión de producto más inteligente de los 29 analizados. El visitante prueba por 50€ antes de comprometerse con 799€.</p>
+          <p>→ Los testimonios son los más creíbles y específicos de toda la serie. Hablan de cambios de comportamiento concretos, no de dinero. "Aprendí cuándo NO operar" es más creíble que cualquier screenshot.</p>
+          <div class="quote">"No son capturas de pantalla de resultados. Son traders que cambiaron su forma de tomar decisiones."</div>
+          <p>→ Copy de entregables el más preciso: "Sin ediciones, sin retrospectiva. El proceso tal como ocurre." Y "Ves el análisis antes de que ocurra." — frases de diferenciación que ningún competidor usa.</p>
+        </div>
+        <div>
+          <h4 style="color:var(--red);margin-bottom:10px;">Gaps de conversión</h4>
+          <p>→ El mecanismo (Order Flow) no se explica para quien no lo conoce. La landing asume conocimiento.</p>
+          <p>→ Sin urgencia ni escasez para el curso de 799€. La membresía no la necesita, el curso sí.</p>
+          <p>→ Sin garantía para el curso de 799€. La membresía tiene garantía implícita (cancelas), el curso no.</p>
+          <p>→ El headline "Deja de operar solo. Empieza a operar con proceso." es el mejor cierre de toda la serie — pero la autoridad de Cristian aparece tarde en la landing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vsl">
+    <div class="vsl-hd">
+      <div><div style="font-size:15px;font-weight:700;">Mentoría VIP / hundredacademy</div><div style="color:var(--muted);font-size:11px;margin-top:3px;">LATAM · 30 plazas/mes · 4 días/semana directo · Psicología central · Plataforma propia</div></div>
+      <span class="chip c-y">MEJOR LATAM</span>
+    </div>
+    <div class="vsl-body">
+      <div class="vsl-2col">
+        <div>
+          <h4 style="color:var(--green);margin-bottom:10px;">Fortalezas</h4>
+          <div class="quote">"90-90-90: el 90% de traders va a perder el 90% de su dinero en los primeros 90 días."</div>
+          <p>→ El hook 90-90-90 es el mejor de todos los 29 VSLs. Estadística triple, formato memorable, incómodo y relevante.</p>
+          <p>→ Historia: 6 años, 3 perdiendo. Admitir 3 años de pérdidas antes de resultados es contracultural y genera una confianza que ninguna historia de éxito inmediato puede igualar.</p>
+          <p>→ Prueba: Miguel Ayala $120K acumulados, $67K último mes. Bernardo $40K/mes desde el mes 2. Nombres reales, cantidades concretas, timeframes reales.</p>
+          <p>→ Escasez real: 30 plazas/mes. Justificada por el modelo (directo diario con el mentor) — el avatar lo entiende como lógico.</p>
+        </div>
+        <div>
+          <h4 style="color:var(--red);margin-bottom:10px;">Gaps de conversión</h4>
+          <p>→ "Inmersión espiritual para traders" — no se explica. Para el avatar escéptico es el elemento más polarizante sin respuesta.</p>
+          <p>→ Sin garantía. Para $1,500-2,000+ sin garantía, el riesgo percibido es alto a pesar de todo el trabajo de prueba social.</p>
+          <p>→ El cierre no reconecta emocionalmente. Después de 9 minutos de construcción de deseo, el CTA va directo a la mecánica.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- COMPETIDORES ESP -->
+<section id="esp">
+<div class="page">
+  <h2>Mercado Español — 25 Competidores Clave</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Perfiles completos de los competidores más relevantes del mercado hispanohablante.</p>
+  <div class="g2">
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🎯</div><div><div class="comp-name">Hiram Medina</div><div class="comp-handle">@hiramedina.scalper</div><div class="comp-mkt">ESP · Scalping + Psicotrading · Nasdaq100</div></div><span class="p1">AMENAZA #1</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">109K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">Sí</div><div class="cstat-l">YouTube</div></div>
+        <div class="cstat"><div class="cstat-v">Psico+Scalp</div><div class="cstat-l">Nicho</div></div>
+      </div>
+      <div class="tags"><span class="chip c-r">Mayor audiencia ESP</span><span class="chip c-a">Psicotrading</span><span class="chip c-a">Nasdaq Scalping</span></div>
+      <div class="content"><p><strong>Posicionamiento:</strong> "Psicotrading + Scalping Nasdaq100." Combinación única en mercado español. Historia: "hace 7 años no tenía dinero para comer" — narrativa de transformación extrema.</p><p><strong>Monetización:</strong> beacons.ai → mentoría/programa. Modelo estándar.</p><p><strong>Debilidad:</strong> Sin mecanismo tecnológico diferenciador. Sin prueba verificable del sistema. Si Tradinverso supera en prueba de resultados y herramienta propia, lo puede flanquear.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">⚡</div><div><div class="comp-name">Benjamín Carmona</div><div class="comp-handle">@belikethealgo</div><div class="comp-mkt">ESP · SMC · 284 Trustpilot · 760€-3.000€</div></div><span class="p1">AMENAZA #2</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">38K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v" style="color:var(--green)">60K</div><div class="cstat-l">YouTube</div></div>
+        <div class="cstat"><div class="cstat-v" style="color:var(--green)">4.7★</div><div class="cstat-l">Trustpilot</div></div>
+      </div>
+      <div class="tags"><span class="chip c-g">284 reseñas verificables</span><span class="chip c-a">SMC</span><span class="chip c-y">3 niveles precio</span></div>
+      <div class="content"><p><strong>Posicionamiento:</strong> "Manipulación del Algoritmo Interbancario" — naming propio para SMC. 760€ Advance / 1.800€ Pro / 3.000€ Elite. Apertura Pro 01-05-2026 (urgencia real).</p><p><strong>Fortaleza única:</strong> 284 reseñas Trustpilot 4.7/5 — el activo de prueba social más poderoso y verificable del mercado español. Nadie más lo tiene.</p><p><strong>Debilidad:</strong> El VSL es el material más débil del ecosistema — no menciona el mecanismo real ni las 284 reseñas. Enorme gap entre producto y comunicación.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🔴</div><div><div class="comp-name">AlessFutures — Alex Colón</div><div class="comp-handle">@alesscolom</div><div class="comp-mkt">ESP · Futuros · Order Flow · Directo diario</div></div><span class="p1">COMPETIDOR DIRECTO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">50+</div><div class="cstat-l">Alumnos fond.</div></div>
+        <div class="cstat"><div class="cstat-v">3 años</div><div class="cstat-l">Directo diario</div></div>
+      </div>
+      <div class="tags"><span class="chip c-a">Directo diario</span><span class="chip c-x">Order Flow</span><span class="chip c-y">Futuros</span></div>
+      <div class="content"><p><strong>Mejor línea del mercado ESP:</strong> "Tu problema no es que te falte información. El problema es que tienes demasiada información, pero no tienes un camino."</p><p><strong>Fortaleza diferencial:</strong> 3 años operando en directo ante 100 personas cada día. Verificable, real, difícil de copiar.</p><p><strong>Debilidades:</strong> Mecanismo genérico (Order Flow = estándar), sin historia personal, cierre más débil del nicho ("te deseo mucha suerte"), proceso 3 pasos genera ansiedad de rechazo.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🧠</div><div><div class="comp-name">Aaron Centelles</div><div class="comp-handle">@aaroncentelles</div><div class="comp-mkt">ESP · Trader Estoico · Andorra · Prop Firm</div></div><span class="p1">AMENAZA #3</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">Sí</div><div class="cstat-l">YouTube</div></div>
+        <div class="cstat"><div class="cstat-v">Trifuerza</div><div class="cstat-l">Sistema</div></div>
+      </div>
+      <div class="tags"><span class="chip c-p">Estoicismo</span><span class="chip c-a">Sistema propio</span><span class="chip c-x">DM funnel</span></div>
+      <div class="content"><p><strong>Único con filosofía propia:</strong> "Camino del Trader Estoico." Trifuerza del Trader (Sistema + Mente + Escudo de Profits). Tatuajes Memento Mori y Amor Fati. Dragon Ball + Zelda como analogías. Identidad de marca fuerte.</p><p><strong>Historia real:</strong> 20kg ganados, caos universitario, 8h diarias, cambio vía disciplina y hábitos. Específica y creíble.</p><p><strong>Debilidades:</strong> Poco prueba concreta, vídeo de 1h20m (retención baja en IG), funnel muy básico (DM "camino").</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🏛️</div><div><div class="comp-name">Jorge Machado</div><div class="comp-handle">@sr.machadofx · @traderlabacademy</div><div class="comp-mkt">ESP · Day Trading · 1000+ estudiantes</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">32K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">1000+</div><div class="cstat-l">Estudiantes</div></div>
+        <div class="cstat"><div class="cstat-v">Sí</div><div class="cstat-l">YouTube</div></div>
+      </div>
+      <div class="content"><p>CEO de @traderlabacademy. Funnel: masterclass gratuita → "Trader Evolution". 1000+ estudiantes. Posicionamiento como academia estructurada, no persona individual. Menor conexión emocional.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🎓</div><div><div class="comp-name">Meritxell Campos</div><div class="comp-handle">@meritrading · FondeaPro</div><div class="comp-mkt">ESP · Mujer · Fundadora academia nº1 habla hispana</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">24K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">800+</div><div class="cstat-l">Alumnos</div></div>
+        <div class="cstat"><div class="cstat-v">300€/mes</div><div class="cstat-l">Precio entrada</div></div>
+      </div>
+      <div class="tags"><span class="chip c-g">Diferenciación género</span><span class="chip c-a">Prop firm</span><span class="chip c-x">5 mentores</span></div>
+      <div class="content"><p><strong>Fortaleza única:</strong> Mujer trader (diferenciador estructural en mercado 80% masculino). Honestidad: tasa de éxito 40% (declarada explícitamente). 6 meses para cuenta fondeada.</p><p><strong>Debilidad:</strong> Equipo de 17 personas aleja al avatar que quiere acceso directo al mentor. Señales incluidas generan desconfianza en avatar avanzado.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🎓</div><div><div class="comp-name">MDTAcademy</div><div class="comp-handle">@mdta.academy</div><div class="comp-mkt">ESP · Academia · Desde 2017 · Multi-activo</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">14K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v" style="color:var(--green)">4.9★</div><div class="cstat-l">Trustpilot</div></div>
+        <div class="cstat"><div class="cstat-v">Sí</div><div class="cstat-l">YouTube</div></div>
+      </div>
+      <div class="content"><p>Academia con alta reputación (4.9 Trustpilot) desde 2017. Posicionamiento general — no específico en prop firms. Sin personaje fuerte detrás. El sub-nicho academia básica pierde relevancia en 2026.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🌐</div><div><div class="comp-name">David Trullás</div><div class="comp-handle">@david.trullas · Live in Trading</div><div class="comp-mkt">ESP · 4x Campeón Futuros · Metodologías Patentadas USA</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">8.7K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">4x Campeón</div><div class="cstat-l">Futuros 2025-26</div></div>
+        <div class="cstat"><div class="cstat-v">+930%</div><div class="cstat-l">Récord absoluto</div></div>
+      </div>
+      <div class="tags"><span class="chip c-g">4x Campeón futuros</span><span class="chip c-a">3 metodologías patentadas</span></div>
+      <div class="content"><p><strong>Credencial única:</strong> 4x campeón de futuros intraday (WCTC). Récord absoluto +930%. Metodología Trullás, HLIT y Cibortex registradas en EE.UU. 25 años operando. Operar en futuros del Nasdaq y S&P.</p><p><strong>Debilidades:</strong> VSL sin resultados concretos, sin historia personal, sin urgencia. Solo 8.7K IG. La credencial de campeón no está en el VSL.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🧠</div><div><div class="comp-name">El Psicólogo del Trading</div><div class="comp-handle">@elpsicologodeltrading</div><div class="comp-mkt">ESP · Psicólogo Real · Swingtrading · 1000+ traders</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">1000+</div><div class="cstat-l">Traders ayudados</div></div>
+        <div class="cstat"><div class="cstat-v">Psicólogo</div><div class="cstat-l">Credencial real</div></div>
+      </div>
+      <div class="content"><p>Víctor C. Urrutia. Psicólogo especializado en traders, 8 años. Sesiones individuales + grupo. Backtesting emocional como mecanismo — el nombre más inteligente del nicho psi. No compite directamente en prop firms pero su audiencia es exactamente el avatar de Tradinverso.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">⚔️</div><div><div class="comp-name">Titanes del Trading</div><div class="comp-handle">@titanesdeltrading</div><div class="comp-mkt">ESP · Argentina · Pedro Bogni · 500+ estudiantes</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">12K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">500+</div><div class="cstat-l">Estudiantes</div></div>
+      </div>
+      <div class="content"><p>Pedro Bogni. Forex como foco. 300K fondeados. Argentina. Menos competencia directa si Tradinverso se posiciona en índices y prop firms específicos.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">📊</div><div><div class="comp-name">Iñigo Maldonado</div><div class="comp-handle">@maldotrading</div><div class="comp-mkt">ESP · 24 años · Prop Firm · "PROP MASTER"</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">~10K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">24 años</div><div class="cstat-l">Perfil</div></div>
+        <div class="cstat"><div class="cstat-v">~1M$</div><div class="cstat-l">Fondeos</div></div>
+      </div>
+      <div class="content"><p>"Vive del trading a los 24, comparte resultados diarios." Ángulo autenticidad + juventud. Programa Prop Master: acceso permanente, mentoría Forex e índices, 2 directos/semana. VSL solo 30 segundos (cierre, no VSL real) — enorme gap de conversión.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🔮</div><div><div class="comp-name">Cristian Toledano</div><div class="comp-handle">@cristian.toledano94 · Trader Reset</div><div class="comp-mkt">ESP · Order Flow · Futuros · 50€/mes · 799€ curso</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">2M+</div><div class="cstat-l">Gestiona USD</div></div>
+        <div class="cstat"><div class="cstat-v">+300</div><div class="cstat-l">Traders formados</div></div>
+      </div>
+      <div class="content"><p>Landing más técnicamente sólida del análisis. 50€/mes sin permanencia = barrera entrada mínima. Testimonios de comportamiento (no capturas de resultados) — estrategia de credibilidad auténtica. "No operamos intuición: operamos un sistema."</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">📈</div><div><div class="comp-name">Raúl Castro</div><div class="comp-handle">@tradingconraulcastro · Método MP Trading 3.0™</div><div class="comp-mkt">ESP · Forex · 20 años · Garantía acompañamiento</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">7</div><div class="cstat-l">Testimonios vídeo</div></div>
+        <div class="cstat"><div class="cstat-v">3 sem.</div><div class="cstat-l">Garantía</div></div>
+      </div>
+      <div class="content"><p>Funnel más limpio: VSL → 2 pasos → Calendly. La garantía de acompañamiento extendido ("si no ves resultados en 3 semanas te acompaño GRATIS") es la más psicológicamente inteligente del análisis — no devuelve dinero, se compromete más. 7 testimonios en vídeo con diversidad estratégica de perfiles.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🎓</div><div><div class="comp-name">Xavi Ruiz</div><div class="comp-handle">@streamingtrading7 · Streaming Trading</div><div class="comp-mkt">ESP · Small Caps USA · Track record auditado Quinfo · $810K</div></div><span class="p1">COMPETIDOR SERIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">$810K</div><div class="cstat-l">Track auditado</div></div>
+        <div class="cstat"><div class="cstat-v">15 años</div><div class="cstat-l">Experiencia</div></div>
+      </div>
+      <div class="tags"><span class="chip c-g">Track record externo verificable</span><span class="chip c-a">Small caps niche</span></div>
+      <div class="content"><p><strong>Credencial más sólida del ESP:</strong> Track record auditado en Quinfo ($810K). El único argumento de credibilidad verdaderamente verificable del mercado español. Destruye alternativas desde el primer bloque (fondeo, bots, señales = mentiras).</p><p><strong>Masterclass gratuita como funnel:</strong> más sofisticado que VSL directo. Ejemplo Volkswagen 2008 = el caso pedagógico más específico del mercado. Promesa: trader rentable en 180 días.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">💎</div><div><div class="comp-name">Nuno Duarte</div><div class="comp-handle">@nduartetrader · Cero a Fondeado</div><div class="comp-mkt">ESP/PT · 7.55% mensual 5 años · Panel FTMO en vivo</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">7.55%</div><div class="cstat-l">Mensual 5 años</div></div>
+        <div class="cstat"><div class="cstat-v">4 alumnos</div><div class="cstat-l">Casos detallados</div></div>
+      </div>
+      <div class="content"><p>El dato de credibilidad más sofisticado: 7.55% mensual en 5 años — moderado y estable, imposible de fabricar (quien quisiera impresionar diría 20-30%). Muestra cuenta perdida deliberadamente = transparencia radical. "Prefiero enseñarte cosas que no se pueden manipular" + abre panel de FTMO en cámara. Garantía: si no consigues el challenge, seguimos trabajando gratis.</p></div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- COMPETIDORES ENG -->
+<section id="eng">
+<div class="page">
+  <h2>Mercado Inglés — 15 Competidores Clave</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">El mercado inglés va 1-2 ciclos por delante del español. Estos son los estándares que el español alcanzará en 12-24 meses.</p>
+  <div class="g2">
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🤖</div><div><div class="comp-name">Dovydas Pinskus</div><div class="comp-handle">@dovy.fx · Hybrid Trader</div><div class="comp-mkt">ENG · NQ/Gold/Dow · AI Dashboard · $4.6M · 26 años</div></div><span class="p1">BENCHMARK GLOBAL</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">288K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">$4.6M</div><div class="cstat-l">Verificado</div></div>
+        <div class="cstat"><div class="cstat-v">AI</div><div class="cstat-l">Mecanismo único</div></div>
+      </div>
+      <div class="tags"><span class="chip c-g">AI Fundamentals Dashboard</span><span class="chip c-a">Prop Firm</span><span class="chip c-y">26 años</span></div>
+      <div class="content"><p>El VSL más efectivo del mercado mundial de trading educación. Combina: historia perfecta + prueba en tiempo real verificable + mecanismo tecnológico único (AI Dashboard que escanea noticias macro) + posicionamiento específico "de challenge a payout". La demostración siempre gana a la declaración.</p><p><strong>Lección clave:</strong> el AI Dashboard hace todo el trabajo de diferenciación. Sin él, es un VSL como los demás. Con él, es inalcanzable.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🏙️</div><div><div class="comp-name">Daniel Holmes</div><div class="comp-handle">@danielholmestrades</div><div class="comp-mkt">ENG · Dubai · Prop Firm · Discord · 500+ alumnos</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">99K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">500+</div><div class="cstat-l">Prop passers</div></div>
+        <div class="cstat"><div class="cstat-v">Discord</div><div class="cstat-l">Comunidad</div></div>
+      </div>
+      <div class="content"><p>Live trading desde Dubai, 500+ alumnos que pasaron challenges. Discord como hub de comunidad. Lifestyle Dubai + proof (500 alumnos). Sin YouTube activo visible — vulnerabilidad.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">📐</div><div><div class="comp-name">Milo Treloar</div><div class="comp-handle">@ictfinatic</div><div class="comp-mkt">ENG · ICT Smart Money · NQ · $4.15M funded · Whop signals</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">87K</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">$4.15M</div><div class="cstat-l">Funded profits</div></div>
+        <div class="cstat"><div class="cstat-v">Whop</div><div class="cstat-l">Monetización</div></div>
+      </div>
+      <div class="content"><p>Señales en Whop. Reseñas mixtas. Modelo de señales crea dependencia, no traders independientes. Punto de diferenciación para Tradinverso: "enseñamos a pescar, no damos el pez."</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">📈</div><div><div class="comp-name">Alex G</div><div class="comp-handle">@swingtradinglab · Swing Trading Lab</div><div class="comp-mkt">ENG · "Set and Forget" · 6000+ comunidad · Podcast verificable</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">6000+</div><div class="cstat-l">Comunidad</div></div>
+        <div class="cstat"><div class="cstat-v">100+</div><div class="cstat-l">Podcast alumnos</div></div>
+      </div>
+      <div class="tags"><span class="chip c-g">Set and Forget</span><span class="chip c-a">Sunday Swings</span><span class="chip c-y">Podcast verificable YT</span></div>
+      <div class="content"><p>Mejor naming del mercado ("Set and Forget"). Prueba más verificable: podcast público con 100+ entrevistas a alumnos en YouTube — nadie en España lo hace. Sunday Swings como diferenciador concreto.</p><p><strong>Debilidades:</strong> Avatar demasiado amplio, cierre más débil ("See you guys, take care"), sin prop firm como foco principal.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">💰</div><div><div class="comp-name">Raja Banks</div><div class="comp-handle">@realrajabanks (YouTube)</div><div class="comp-mkt">ENG · Price Action · Dominion Funding · $500K a éxito</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v">YouTube</div><div class="cstat-l">Canal activo</div></div>
+        <div class="cstat"><div class="cstat-v">Prop Firm</div><div class="cstat-l">Dominion Funding</div></div>
+      </div>
+      <div class="content"><p>Historia notable: de $500K en deuda a éxito en trading. Asociado con Dominion Funding (prop firm propia). Modelo de negocio integrado (educador + prop firm) — interesante para análisis de monetización de Tradinverso.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🟠</div><div><div class="comp-name">Orange Juice Trading</div><div class="comp-handle">@orangejuicetrading</div><div class="comp-mkt">ENG · YouTube · Prop Firm · ICT</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats"><div class="cstat"><div class="cstat-v">YouTube</div><div class="cstat-l">Canal</div></div></div>
+      <div class="content"><p>Presencia dual IG+YouTube. En el Google Sheet con canal YouTube listado. Prop firm e ICT como foco. Sin datos de métricas disponibles del WebSearch.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🌍</div><div><div class="comp-name">Profitify — Copy Farming</div><div class="comp-handle">@mauristacks</div><div class="comp-mkt">LATAM/ENG · $97/mes · 5.000+ miembros · México a USA</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v" style="color:var(--accent)">N/D</div><div class="cstat-l">IG</div></div>
+        <div class="cstat"><div class="cstat-v">$97</div><div class="cstat-l">Precio/mes</div></div>
+        <div class="cstat"><div class="cstat-v">5000+</div><div class="cstat-l">Miembros</div></div>
+      </div>
+      <div class="content"><p>"Copy Farming" = copiar operaciones en vivo durante 1h/día. $5.2M en 7 años. De vender pan en México a $97/mes membresía. Mercado de futuros (regulado vs Forex). Objeción no resuelta: "si ganas tanto del trading ¿por qué vendes membresías?"</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- LATAM -->
+<section id="latam">
+<div class="page">
+  <h2>LATAM / Nichos Específicos — Competidores Destacados</h2>
+  <div class="g3">
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🌙</div><div><div class="comp-name">Amigali (Ameyali Orea)</div><div class="comp-handle">@ameyali.orea · Formación AST</div><div class="comp-mkt">LATAM · Mujer · $1M fondeos en 90 días</div></div><span class="p2">MEDIO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v">$1M</div><div class="cstat-l">90 días fondeo</div></div>
+        <div class="cstat"><div class="cstat-v">$500K</div><div class="cstat-l">Alumnos sum.</div></div>
+      </div>
+      <div class="content"><p>Historia más honesta del análisis LATAM: admite network marketing como origen, $1K pedido prestado, $5K en mentor que no sirvió. "Diagnóstico de velas" = mejor naming de CTA del análisis. Mujer en nicho masculino = diferenciación estructural. 3 casos de alumnos con objeción integrada como narrativa.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🌐</div><div><div class="comp-name">Trading con Data</div><div class="comp-handle">@ashleyruiztrades</div><div class="comp-mkt">LATAM · Costa Rica · Modelo del Casino · $100K</div></div><span class="p3">BAJO</span></div>
+      <div class="comp-stats">
+        <div class="cstat"><div class="cstat-v">$200K</div><div class="cstat-l">Fondos FTMO</div></div>
+      </div>
+      <div class="content"><p>Mejor insight conceptual del análisis LATAM: "El modelo del casino." El trader necesita ventaja estadística como el casino (52.7% es suficiente). "Las opiniones no facturan — solo los datos." Frase más potente del insight técnico. Problema: tono de evento/red de mercadeo y lenguaje religioso aleja al avatar español/sofisticado.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🕌</div><div><div class="comp-name">Deen Trader</div><div class="comp-handle">@jaumemontfortfx</div><div class="comp-mkt">Halal · Nicho monopolístico · Musulmanes hispanohablantes</div></div><span class="p3">DISTINTO</span></div>
+      <div class="content"><p>Nicho prácticamente sin competencia: trading halal en español. Jaume, 19 años, Andorra. 180 días de acompañamiento. Diferenciador religioso = monopolio en su nicho. Principal debilidad: no explica QUÉ hace halal al sistema — la objeción más importante del avatar sin respuesta.</p></div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-top"><div class="comp-icon">🏦</div><div><div class="comp-name">Fenix Capital</div><div class="comp-handle">@fernando.rdv</div><div class="comp-mkt">ESP · Penny Stocks · Anti-Fondeo · Capital Propio</div></div><span class="p1">ÚNICA POSICIÓN</span></div>
+      <div class="content"><p>El único competidor del análisis explícitamente anti-fondeo con penny stocks de acciones USA. Mejor copy de agitación del dolor de todos los 29 VSLs: "el juego al que te han hecho jugar está amañado." La imagen del "casi" = dolor social del trader sin precedente en el análisis.</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PATRONES -->
+<section id="patrones">
+<div class="page">
+  <h2>Patrones Dominantes del Mercado</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Lo que todos hacen igual — y por tanto ya no diferencia a nadie.</p>
+  <div class="g2" style="margin-bottom:28px;">
+    <div>
+      <h3>Patrones de Funnel (universal en todos)</h3>
+      <div class="pattern-grid">
+        <span class="pat">Reel educativo → perfil → link bio → VSL → aplicación → llamada</span>
+        <span class="pat">VSL 8-15 min → CTA "30 segundos para aplicar"</span>
+        <span class="pat">Exclusividad artificial ("no para todos")</span>
+        <span class="pat">DM como filtro de cualificación</span>
+        <span class="pat">PDF/checklist como lead magnet</span>
+        <span class="pat">WhatsApp para seguimiento post-aplicación</span>
+        <span class="pat">Mentoría 1-1 → llamada de diagnóstico</span>
+        <span class="pat">Comunidad Discord/privada como entregable</span>
+      </div>
+    </div>
+    <div>
+      <h3>Patrones de Copy (todos dicen lo mismo)</h3>
+      <div class="pattern-grid">
+        <span class="pat">"El 95% de traders pierde porque..."</span>
+        <span class="pat">Villain: gurús con pantallazos editados</span>
+        <span class="pat">"No soy un gurú"</span>
+        <span class="pat">Prueba: capturas de P&L / prop payouts</span>
+        <span class="pat">Lifestyle: Andorra, Dubai, trabajo desde laptop</span>
+        <span class="pat">Testimonios: "antes perdía X, ahora gano Y"</span>
+        <span class="pat">"Plazas limitadas" sin número concreto</span>
+        <span class="pat">"El trading no es para todos"</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Lo que ya no diferencia en 2026</h3>
+  <div class="g3">
+    <div class="card card-r">
+      <h4>SMC / ICT / Order Flow</h4>
+      <p>El 70%+ del mercado lo menciona como "metodología profesional". Ya es el estándar, no el diferenciador. El avatar lo ha escuchado de 5 personas distintas antes de encontrarte.</p>
+    </div>
+    <div class="card card-r">
+      <h4>"No soy un gurú"</h4>
+      <p>Todos lo dicen. Incluso los gurús dicen "no soy un gurú". Ha perdido todo poder de diferenciación — es noise, no signal.</p>
+    </div>
+    <div class="card card-r">
+      <h4>"Consigue tu cuenta fondeada"</h4>
+      <p>Ya lo dice el 80% del mercado. Necesita aterrizarse en algo específico: "pasa de challenge a payout en X semanas con este sistema específico".</p>
+    </div>
+    <div class="card card-r">
+      <h4>Libertad financiera / lifestyle</h4>
+      <p>Playa + laptop + "sé dueño de tu tiempo". Es el cierre de cualquier infoproducto del planeta en 2026. No conecta como diferenciador — es expectativa base.</p>
+    </div>
+    <div class="card card-r">
+      <h4>Screenshots de ganancias</h4>
+      <p>El avatar de 2026 ya ha aprendido que las capturas se pueden editar. Escepicismo máximo. Solo el panel en vivo verificable convierte.</p>
+    </div>
+    <div class="card card-r">
+      <h4>Comunidad activa genérica</h4>
+      <p>Todos tienen "comunidad activa de traders". Sin un diferenciador específico (Sunday Swings, directo diario, panel en vivo), la comunidad no vende sola.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- HUECOS -->
+<section id="huecos">
+<div class="page">
+  <h2>14 Huecos de Mercado Detectados</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Oportunidades reales. Lo que nadie está haciendo bien todavía.</p>
+  <div class="g2">
+    <div>
+      <div class="gap">
+        <div class="gap-l">Hueco #1 — MÁXIMA PRIORIDAD</div>
+        <h4>VSL hispanohablante con prueba verificable en tiempo real</h4>
+        <p>Ningún competidor español combina: prueba en directo (no screenshots) + mecanismo con nombre propio + historia personal creíble + posicionamiento "de challenge a payout". Hybrid Trader lo hace en inglés. En español ese espacio está vacío.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #2 — MÁXIMA PRIORIDAD</div>
+        <h4>IA como diferenciador tecnológico en español</h4>
+        <p>dovy.fx tiene el "AI Fundamentals Dashboard". Nadie en español tiene herramienta propia con nombre. El concepto es nuevo y creíble para el mercado español de 2026.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #3 — ALTA PRIORIDAD</div>
+        <h4>Avatar hiper-específico: "trader que ya sabe pero no consistente en funded"</h4>
+        <p>Todos hablan al principiante o al "trader perdedor genérico". El avatar de "llevo 2 años, sé trading, paso challenges pero los quemo en cuenta real" no tiene nadie que le hable directamente en español.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #4 — ALTA PRIORIDAD</div>
+        <h4>Naming del método (solo "Set and Forget" y "Trifuerza" lo hacen bien)</h4>
+        <p>El único método con nombre memorable en todo el análisis son "Set and Forget" (Alex G) y "Trifuerza del Trader" (Aaron Centelles). En español el nicho está sin naming. Un nombre propio para el método de Tradinverso tiene coste cero.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #5 — ALTA PRIORIDAD</div>
+        <h4>Transparencia radical: mostrar los meses malos</h4>
+        <p>AlessFutures lo menciona pero no lo explota. Trader Reset lo hace en los testimonios. Nadie muestra un P&L mensual completo (pérdidas incluidas) de forma sistemática. Eso construye credibilidad a largo plazo.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #6</div>
+        <h4>Podcast con alumnos verificable en YouTube</h4>
+        <p>Swing Trading Lab tiene 100+ entrevistas con alumnos en YouTube. Ningún español lo hace. Es la prueba social más potente disponible porque es verificable por cualquier visitante antes de comprar.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #7</div>
+        <h4>El modelo del casino (ventaja estadística) en español</h4>
+        <p>Trading con Data (Costa Rica) lo usa brillantemente pero con envoltorio incorrecto (tono evento, lenguaje religioso). El concepto está disponible para quien lo entregue con credibilidad española.</p>
+      </div>
+    </div>
+    <div>
+      <div class="gap">
+        <div class="gap-l">Hueco #8</div>
+        <h4>De challenge a payout como posicionamiento central</h4>
+        <p>Todos hablan de "pasar el challenge". Hybrid Trader dice: "mucha gente pasa el challenge, lo que importa es llegar al payout". El avatar más cualificado y más dispuesto a pagar es el que ya pasa pero no llega al payout.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #9</div>
+        <h4>Garantía de acompañamiento (no devolución)</h4>
+        <p>Raúl Castro: "si no ves resultados en 3 semanas te acompaño GRATIS hasta que los consigas" — la garantía más psicológicamente inteligente del análisis. Nadie más lo hace así en el español de alto ticket.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #10</div>
+        <h4>Escalado de capital como narrativa (no solo "primer payout")</h4>
+        <p>Todos hablan de "pasar el challenge" y "primer payout". Aaron Centelles habla de gestionar 500K en fondeos. Nadie narra el escalado como objetivo progresivo (10K→50K→200K fondeos).</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #11</div>
+        <h4>Dolor social del trader ("no lo cuentas")</h4>
+        <p>Fenix Capital (Fernando RDV): "No lo cuentas, porque explicárselo a alguien que no lo entiende es muchas veces más frustrante aún." — El dolor social del trader que nadie más nombra. En inglés tampoco lo usa nadie excepto él.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #12</div>
+        <h4>Track record auditado externo en español</h4>
+        <p>Xavi Ruiz usa Quinfo ($810K auditado). Nadie más en español tiene credencial verificable externa. La diferencia entre "te digo que gano" y "aquí está el panel verificable" es abismal en conversión.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #13</div>
+        <h4>Content de proceso (no de resultado)</h4>
+        <p>Todos publican capturas de ganancias. Nadie publica el proceso real de un día/mes con decisiones, errores y ajustes. El contenido de proceso tiene engagement superior y genera confianza real.</p>
+      </div>
+      <div class="gap">
+        <div class="gap-l">Hueco #14</div>
+        <h4>Psicotrading + Sistema + Prop Firm (combinación sin ocupar)</h4>
+        <p>El psicólogo del trading trabaja la mente pero no prop firms. Hiramedina trabaja scalping + psicología pero sin sistema estadístico. La combinación de los tres no la ocupa nadie en español.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- AVATAR -->
+<section id="avatar">
+<div class="page">
+  <h2>Avatar Consolidado del Mercado Trading 2026</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Sintetizado de 29 VSLs analizados, 250 perfiles y 50 competidores investigados.</p>
+  <div class="g2" style="margin-bottom:24px;">
+    <div class="card">
+      <h3>Perfil Demográfico</h3>
+      <ul style="list-style:none;color:#bbb;line-height:2;font-size:13px;">
+        <li>→ <strong>Edad:</strong> 22-35 años (núcleo 25-30)</li>
+        <li>→ <strong>Género:</strong> 75-80% masculino</li>
+        <li>→ <strong>Situación:</strong> trabaja o estudia, no vive del trading</li>
+        <li>→ <strong>Geografía ESP:</strong> España, México, Argentina, Colombia</li>
+        <li>→ <strong>Experiencia:</strong> 1-3 años, ha perdido dinero real</li>
+        <li>→ <strong>Historial:</strong> ha comprado 2-4 cursos/mentorías antes</li>
+        <li>→ <strong>Nivel:</strong> solution-aware avanzado — no busca aprender qué es el trading, busca el que finalmente le funcione</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Ciclo Vital del Avatar</h3>
+      <p><strong>Fase 1:</strong> YouTube → demo → emoción → cuenta real</p>
+      <p><strong>Fase 2:</strong> Primer curso → primeros resultados → confianza</p>
+      <p><strong>Fase 3:</strong> Pérdidas → más cursos → más señales → frustración</p>
+      <p><strong>Fase 4:</strong> Prop firms → pasa challenges → quema cuentas reales</p>
+      <p><strong>Fase 5 (el avatar de Tradinverso):</strong> Harto de gurús, busca sistema real, prueba verificable, sistema que no dependa de su estado emocional</p>
+      <div class="quote">"Llevas ya bastante tiempo en el trading y todavía no eres rentable y no es por culpa de la estrategia, simplemente nadie te está corrigiendo." — Grupo Premium</div>
+    </div>
+  </div>
+  <div class="g3" style="margin-bottom:24px;">
+    <div class="card card-r">
+      <h3>Dolores Explícitos</h3>
+      <ul style="list-style:none;color:#bbb;line-height:1.9;font-size:12px;">
+        <li>→ Pierde la semana ganadora en un día</li>
+        <li>→ Pasa challenges pero quema la cuenta real</li>
+        <li>→ Ha gastado dinero en cursos que no funcionaron</li>
+        <li>→ Sabe entrar pero no gestiona la operación</li>
+        <li>→ No sabe por qué el precio se mueve realmente</li>
+        <li>→ Sus emociones (FOMO, avaricia) lo destruyen</li>
+        <li>→ Sin consistencia — montaña rusa de resultados</li>
+        <li>→ Entra en fondeo y siente reglas artificiales que no tiene en demo</li>
+      </ul>
+    </div>
+    <div class="card card-r">
+      <h3>Dolores Implícitos (nadie los nombra)</h3>
+      <ul style="list-style:none;color:#bbb;line-height:1.9;font-size:12px;">
+        <li>→ <strong>Vergüenza</strong> de haber perdido dinero — no lo cuenta</li>
+        <li>→ <strong>Soledad</strong>: nadie en su entorno lo entiende</li>
+        <li>→ Miedo a fracasar y tener que dejarlo</li>
+        <li>→ Miedo a quedarse atrás viendo avanzar a otros</li>
+        <li>→ Pérdida de estatus ante familia/amigos</li>
+        <li>→ Inseguridad sobre su propia capacidad</li>
+        <li>→ Ansiedad frente al gráfico en tiempo real</li>
+        <li>→ Agotamiento de haber intentado todo</li>
+        <li>→ La rabia y vergüenza mezcladas (Fenix Capital lo nombra solo)</li>
+      </ul>
+    </div>
+    <div class="card card-g">
+      <h3>Deseos Reales</h3>
+      <ul style="list-style:none;color:#bbb;line-height:1.9;font-size:12px;">
+        <li>→ <strong>Consistencia</strong>, no un gran trade</li>
+        <li>→ Entender el mercado, no adivinar</li>
+        <li>→ Un sistema que funcione sin su estado emocional</li>
+        <li>→ Payouts reales y escalado progresivo</li>
+        <li>→ Máximo 2-3h al día de trading</li>
+        <li>→ Sentirse capaz y competente</li>
+        <li>→ Poder contarlo — que alguien lo entienda</li>
+        <li>→ Salir del ciclo course → fail → course → fail</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Lenguaje del Mercado — Cómo Habla el Avatar</h3>
+    <div class="pattern-grid">
+      <span class="pat">fondeo / fondeado</span><span class="pat">payout / retiro</span><span class="pat">challenge / fase 1 / fase 2</span><span class="pat">prop firm</span><span class="pat">FTMO / Apex / TopStep</span><span class="pat">gestión de riesgo</span><span class="pat">drawdown</span><span class="pat">winrate</span><span class="pat">break even</span><span class="pat">stop loss / stop out</span><span class="pat">quema la cuenta</span><span class="pat">consistencia</span><span class="pat">sistema</span><span class="pat">edge</span><span class="pat">ratio R:R</span><span class="pat">Smart Money / ICT / SMC</span><span class="pat">order flow</span><span class="pat">liquidez</span><span class="pat">Fair Value Gap</span><span class="pat">order block</span><span class="pat">sesión Londres / NY</span><span class="pat">operativa en vivo</span><span class="pat">directo</span><span class="pat">vivir del trading</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ACCIONES PARA TRADINVERSO -->
+<section id="acciones">
+<div class="page">
+  <h2>Conclusiones Estratégicas para Tradinverso</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">Todo el análisis traducido en acciones concretas.</p>
+
+  <!-- GRAN INSIGHT -->
+  <div style="padding:24px;background:var(--bg2);border:1px solid rgba(0,191,255,.4);border-radius:10px;margin-bottom:32px;">
+    <h3 style="margin-bottom:12px;">La Conclusión más Importante</h3>
+    <p style="color:#ddd;font-size:15px;line-height:1.7;margin-bottom:12px;">El mercado español de trading educación está en el punto de inflexión entre saturación y hipersofisticación. El avatar ya no cree en promesas — exige prueba. <strong>El primer competidor en español que combine prueba verificable en tiempo real + mecanismo propio con nombre + herramienta tecnológica + posicionamiento específico "de challenge a payout" va a dominar el nicho durante los próximos 2-3 años.</strong></p>
+    <p style="color:var(--accent);font-size:15px;font-weight:700;">Ese competidor puede ser Tradinverso. El hueco existe. La ventana es ahora.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:32px;">
+    <div>
+      <h3>El VSL que Tradinverso tiene que construir</h3>
+      <div class="insight">
+        <div class="insight-l">La fórmula que no existe en español todavía</div>
+        <p><strong>Hook:</strong> Nombrar el dolor social del trader ("no lo cuentas") — el mejor copy de Fenix Capital</p>
+        <p><strong>Historia:</strong> Personal, específica, con punto de inflexión claro (el momento en que todo cambió)</p>
+        <p><strong>Prueba:</strong> Panel en vivo verificable — no screenshots. Aunque sea 5 minutos de pantalla real</p>
+        <p><strong>Mecanismo:</strong> Nombre propio. No "SMC", no "Order Flow" — algo propio de Tradinverso</p>
+        <p><strong>Posicionamiento:</strong> "De challenge a payout consistente" — no "pasar el challenge"</p>
+        <p><strong>Herramienta:</strong> Un dashboard, tool, o proceso documentado con nombre (aunque simple)</p>
+        <p><strong>Garantía:</strong> Acompañamiento extendido (modelo Raúl Castro) — no devolución</p>
+        <p><strong>Cierre:</strong> Consecuencia de no actuar en 30 días + imagen de identidad específica</p>
+      </div>
+    </div>
+    <div>
+      <h3>Modelo de Negocio Recomendado</h3>
+      <div class="card card-g">
+        <h4 style="color:var(--green);">Arquitectura probada por los mejores</h4>
+        <p style="color:#bbb;"><strong>Frontend:</strong> Contenido gratuito (Reels + YouTube) → Lead magnet → VSL masterclass</p>
+        <p style="color:#bbb;"><strong>Entrada bajo riesgo:</strong> Comunidad 50-97€/mes (modelo Trader Reset) — sin permanencia</p>
+        <p style="color:#bbb;"><strong>Mid ticket:</strong> Programa 30 días / "de challenge a payout" / 600-800€</p>
+        <p style="color:#bbb;"><strong>High ticket:</strong> Mentoría 1-1 / 1.500-3.000€ con garantía de acompañamiento</p>
+        <p style="color:#bbb;"><strong>Backend:</strong> Podcast de alumnos (modelo Alex G) como máquina de prueba social permanente</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:16px;">Plan de Acción — 10 Prioridades</h3>
+  <div style="overflow-x:auto;margin-bottom:32px;">
+  <table>
+  <thead><tr><th>Prioridad</th><th>Acción</th><th>Por qué</th><th>Modelo de referencia</th></tr></thead>
+  <tbody>
+  <tr><td><span class="p1">URGENTE</span></td><td><strong>Crear nombre propio para el método</strong></td><td>Solo "Set and Forget", "Trifuerza del Trader" y "Copy Farming" tienen naming. Coste cero, diferenciación máxima.</td><td>Alex G + Aaron Centelles</td></tr>
+  <tr><td><span class="p1">URGENTE</span></td><td><strong>Grabar y publicar resultados en tiempo real (no screenshots)</strong></td><td>El avatar de 2026 no cree en screenshots. Abrir el panel de la prop firm en pantalla = la diferencia entre "dice" y "demuestra".</td><td>Hybrid Trader (★★★★★) · Nuno Duarte</td></tr>
+  <tr><td><span class="p1">URGENTE</span></td><td><strong>Posicionarse en "de challenge a payout" (no solo "pasar el challenge")</strong></td><td>"Mucha gente pasa el challenge. Lo que importa es llegar al payout." — El avatar más cualificado y más dispuesto a pagar.</td><td>Hybrid Trader</td></tr>
+  <tr><td><span class="p1">URGENTE</span></td><td><strong>Nombrar el dolor social: "no lo cuentas"</strong></td><td>El dolor más específico y menos explotado del mercado. Solo Fenix Capital lo nombra. Nadie más.</td><td>Fernando RDV (mejor copy)</td></tr>
+  <tr><td><span class="p2">ALTO</span></td><td><strong>Crear podcast/serie de entrevistas con alumnos en YouTube</strong></td><td>Ningún español lo hace. Es la prueba social más potente y más difícil de fabricar. Cada episodio es credibilidad permanente.</td><td>Swing Trading Lab (100+ episodios)</td></tr>
+  <tr><td><span class="p2">ALTO</span></td><td><strong>Separarse de ICT/SMC/Order Flow como términos de posicionamiento</strong></td><td>70% del mercado los usa. Ya no diferencia. El mecanismo propio con nombre sí.</td><td>Análisis patrones</td></tr>
+  <tr><td><span class="p2">ALTO</span></td><td><strong>Arquitectura de entrada bajo riesgo (50-97€/mes)</strong></td><td>Modelo Trader Reset: el visitante prueba 50€ antes de 799€. La barrera de entrada más baja del análisis. Funciona.</td><td>Cristian Toledano (mejor landing)</td></tr>
+  <tr><td><span class="p2">ALTO</span></td><td><strong>Añadir garantía de acompañamiento (no devolución)</strong></td><td>"Si en X semanas no ves resultados, seguimos contigo sin coste adicional." Elimina la barrera sin comprometer el negocio.</td><td>Raúl Castro (mejor garantía)</td></tr>
+  <tr><td><span class="p3">MEDIO</span></td><td><strong>Publicar P&L mensual completo (incluyendo meses malos)</strong></td><td>AlessFutures lo menciona. Trader Reset lo hace en testimonios. Nadie lo hace sistemáticamente. Transparencia radical = credibilidad real.</td><td>AlessFutures + hueco #5</td></tr>
+  <tr><td><span class="p3">MEDIO</span></td><td><strong>Construir herramienta/dashboard propio (aunque sea simple)</strong></td><td>Hybrid Trader tiene el AI Dashboard. Nadie en español tiene herramienta propia con nombre. El naming importa más que la tecnología.</td><td>Hybrid Trader (diferenciador #1)</td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <!-- DIFERENCIADORES CLAVE -->
+  <div class="g3" style="margin-bottom:32px;">
+    <div class="card card-g">
+      <h3>Lo que Tradinverso puede tener que nadie más tiene</h3>
+      <ul style="list-style:none;color:#bbb;line-height:2;font-size:12px;">
+        <li>→ Nombre de método propio (coste cero)</li>
+        <li>→ Panel en vivo en pantalla (no screenshots)</li>
+        <li>→ Podcast de alumnos en YouTube</li>
+        <li>→ Garantía de acompañamiento</li>
+        <li>→ Herramienta/dashboard con nombre propio</li>
+        <li>→ Posicionamiento "de challenge a payout"</li>
+        <li>→ Transparencia de meses malos incluidos</li>
+      </ul>
+    </div>
+    <div class="card card-y">
+      <h3>Lo que hay que evitar absolutamente</h3>
+      <ul style="list-style:none;color:#bbb;line-height:2;font-size:12px;">
+        <li>→ "No soy un gurú" — cliché total</li>
+        <li>→ Screenshots de P&L sin contexto</li>
+        <li>→ Escasez artificial ("plazas limitadas" sin número)</li>
+        <li>→ "Libertad financiera desde la playa"</li>
+        <li>→ SMC/ICT/Order Flow como diferenciadores</li>
+        <li>→ Cierre con "Te deseo mucha suerte"</li>
+        <li>→ Promesas de "ganancias a diario"</li>
+      </ul>
+    </div>
+    <div class="card card-a">
+      <h3>Los insights más potentes de los 29 VSLs</h3>
+      <ul style="list-style:none;color:#bbb;line-height:2;font-size:12px;">
+        <li>→ <em>"El juego al que te han hecho jugar está amañado"</em> (Fenix)</li>
+        <li>→ <em>"No lo cuentas porque nadie lo entiende"</em> (Fenix)</li>
+        <li>→ <em>"I built a system that saved me from myself"</em> (Hybrid)</li>
+        <li>→ <em>"90-90-90"</em> hook (Mentoría VIP)</li>
+        <li>→ <em>"Ves el análisis antes de que ocurra"</em> (Trader Reset)</li>
+        <li>→ <em>"2 meses cuando solo lo hubiera llevado 2 años"</em> (AST)</li>
+        <li>→ <em>"Deja de operar solo. Empieza a operar con proceso."</em> (T.Reset)</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="color:var(--muted);font-size:11px;margin-top:24px;">Análisis compilado por Claude (Anthropic) para TRADINVERSO · Fuentes: Google Sheets "competencia 300 traders" (250 perfiles IG), Miro Board (29 Google Docs con análisis VSL completos), WebSearch (50+ competidores investigados) · Mayo 2026 · tradinverso@gmail.com</p>
+</div>
+</section>
+
+<script>
+// Nav highlight on scroll
+const sections=document.querySelectorAll('section[id],div[id]');
+const links=document.querySelectorAll('nav a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id;});
+  links.forEach(l=>{l.classList.remove('act');if(l.getAttribute('href')==='#'+cur)l.classList.add('act');});
+});
+function setAct(el){links.forEach(l=>l.classList.remove('act'));el.classList.add('act');}
+document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',function(){setAct(this);}));
+</script>
+</body>
+</html>

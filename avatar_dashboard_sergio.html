@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Avatar Sergio — Tradinverso</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; }
+
+  .header {
+    background: linear-gradient(135deg, #1a0000 0%, #2d0000 50%, #1a0000 100%);
+    border-bottom: 3px solid #cc0000;
+    padding: 32px 40px;
+    text-align: center;
+  }
+  .header h1 { font-size: 2.2rem; color: #ff2020; letter-spacing: 2px; text-transform: uppercase; }
+  .header .subtitle { color: #aaa; margin-top: 8px; font-size: 1rem; }
+  .header .tagline {
+    margin-top: 16px;
+    background: #1a0000;
+    border: 1px solid #cc0000;
+    border-radius: 8px;
+    padding: 12px 24px;
+    display: inline-block;
+    font-size: 1.05rem;
+    color: #ff6666;
+    font-style: italic;
+  }
+
+  nav {
+    background: #111;
+    border-bottom: 1px solid #333;
+    padding: 12px 40px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  nav button {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  nav button:hover, nav button.active {
+    background: #cc0000;
+    border-color: #cc0000;
+    color: white;
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  .card {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card-red { border-top: 3px solid #cc0000; }
+  .card-orange { border-top: 3px solid #ff6600; }
+  .card-green { border-top: 3px solid #00aa44; }
+  .card-blue { border-top: 3px solid #0066cc; }
+  .card-purple { border-top: 3px solid #8800cc; }
+  .card-yellow { border-top: 3px solid #ccaa00; }
+
+  .card h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    margin-bottom: 12px;
+  }
+  .card h2 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    margin: 3px;
+  }
+  .pill-red { background: #2a0000; border: 1px solid #cc0000; color: #ff6666; }
+  .pill-green { background: #002a10; border: 1px solid #00aa44; color: #44ff88; }
+  .pill-orange { background: #2a1000; border: 1px solid #ff6600; color: #ffaa44; }
+  .pill-blue { background: #00102a; border: 1px solid #0066cc; color: #44aaff; }
+  .pill-gray { background: #1a1a1a; border: 1px solid #444; color: #aaa; }
+  .pill-purple { background: #1a0028; border: 1px solid #8800cc; color: #cc66ff; }
+
+  .quote {
+    background: #0d0d0d;
+    border-left: 3px solid #cc0000;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #ccc;
+    font-size: 0.9rem;
+    margin: 6px 0;
+  }
+
+  .metric-big {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #cc0000;
+    line-height: 1;
+  }
+  .metric-label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #cc0000;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .timeline-line {
+    border-left: 2px dashed #333;
+    margin-left: 5px;
+    padding-left: 24px;
+  }
+
+  .bucle-box {
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 16px;
+    background: #0d0d0d;
+    margin-bottom: 12px;
+  }
+  .bucle-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0;
+    font-size: 0.88rem;
+  }
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #cc0000;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .arrow { color: #cc0000; font-size: 1rem; }
+
+  .objecion-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+    background: #0d0d0d;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #222;
+  }
+  .objecion-icon { font-size: 1.2rem; }
+  .objecion-text { font-size: 0.88rem; line-height: 1.5; }
+  .objecion-respuesta { font-size: 0.8rem; color: #44ff88; margin-top: 4px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: #1a0000; color: #ff6666; padding: 10px; text-align: left; border-bottom: 2px solid #cc0000; }
+  td { padding: 10px; border-bottom: 1px solid #1a1a1a; vertical-align: top; }
+  tr:hover td { background: #111; }
+
+  .progress-bar {
+    background: #1a1a1a;
+    border-radius: 4px;
+    height: 8px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #cc0000, #ff4444);
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ff2020;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2a0000;
+    padding-bottom: 10px;
+  }
+
+  .vs-box {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .vs-label {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #cc0000;
+    text-align: center;
+    padding-top: 20px;
+  }
+  .bad-box { border: 1px solid #cc0000; border-radius: 10px; padding: 16px; background: #120000; }
+  .good-box { border: 1px solid #00aa44; border-radius: 10px; padding: 16px; background: #001208; }
+  .bad-box h4 { color: #ff4444; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; }
+  .good-box h4 { color: #44ff88; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; }
+  .bad-box li, .good-box li { font-size: 0.85rem; margin-bottom: 6px; list-style: none; padding-left: 16px; position: relative; }
+  .bad-box li::before { content: '✗'; color: #cc0000; position: absolute; left: 0; }
+  .good-box li::before { content: '✓'; color: #44ff88; position: absolute; left: 0; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .container { padding: 20px; }
+    nav { padding: 10px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎯 Dashboard Avatar — Tradinverso</h1>
+  <div class="subtitle">Sergio · Trader de Fondeo Frustrado · 20–40 años · España</div>
+  <div class="tagline">"Llevo 2 años y sigo igual. Necesito un sistema que funcione de verdad."</div>
+</div>
+
+<nav>
+  <button class="active" onclick="showTab('perfil')">👤 Perfil</button>
+  <button onclick="showTab('dolores')">🔴 Dolores</button>
+  <button onclick="showTab('deseos')">🟢 Deseos</button>
+  <button onclick="showTab('bucles')">🔄 Bucles Psicológicos</button>
+  <button onclick="showTab('objeciones')">🛡️ Objeciones</button>
+  <button onclick="showTab('compra')">💳 Comportamiento Compra</button>
+  <button onclick="showTab('confianza')">🤝 Confianza / Desconfianza</button>
+  <button onclick="showTab('marketing')">📣 Marketing Accionable</button>
+</nav>
+
+<!-- ===================== PERFIL ===================== -->
+<div id="perfil" class="section active">
+<div class="container">
+  <div class="section-title">👤 Perfil Completo del Avatar</div>
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card card-red">
+      <h3>Edad</h3>
+      <div class="metric-big">20–40</div>
+      <div class="metric-label">Mayoritariamente hombres</div>
+    </div>
+    <div class="card card-orange">
+      <h3>Ingresos mensuales</h3>
+      <div class="metric-big">1.2K€</div>
+      <div class="metric-label">Rango 1.000–1.500€/mes</div>
+    </div>
+    <div class="card card-blue">
+      <h3>Dinero quemado</h3>
+      <div class="metric-big">~3K€</div>
+      <div class="metric-label">En mentorías + cuentas</div>
+    </div>
+    <div class="card card-purple">
+      <h3>Tiempo perdido</h3>
+      <div class="metric-big">2 años</div>
+      <div class="metric-label">Sin resultados consistentes</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <h3>Situación actual en trading</h3>
+      <div style="margin-bottom:10px">
+        <span class="pill pill-orange">CFDs</span>
+        <span class="pill pill-orange">Divisas</span>
+        <span class="pill pill-orange">Índices</span>
+        <span class="pill pill-orange">Materias primas</span>
+        <span class="pill pill-blue">Scalping / Day Trading</span>
+        <span class="pill pill-blue">Intradía</span>
+      </div>
+      <p style="font-size:0.88rem; color:#bbb; line-height:1.6">Opera <strong>sin gestión de riesgo</strong>, sin plan y sin sistema. Quiere explorar futuros. Horarios: apertura Londres (08:00–10:30) y Nueva York (15:30–17:30). Define "mal resultado" como &lt;50% de acierto o menos de 5% mensual.</p>
+    </div>
+    <div class="card">
+      <h3>Rutina diaria tipo</h3>
+      <div class="timeline-line">
+        <div class="timeline-item"><div class="timeline-dot"></div><div><strong>09:00–14:00</strong> Trabajo (horas de mercado perdidas)</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div><strong>13:00–15:00</strong> ⭐ Consume contenido (comida)</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div><strong>16:00–20:00</strong> Trabajo (tarde)</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div><strong>19:00–22:00</strong> ⭐ Consume contenido (noche / YouTube largo)</div></div>
+      </div>
+      <p style="font-size:0.8rem; color:#888; margin-top:8px">Necesita al menos 1h diaria disponible. Necesita un sistema que no requiera estar pegado al gráfico todo el día.</p>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-red">
+      <h3>Identidad actual (cómo se ve)</h3>
+      <div class="quote">"Soy trabajador y disciplinado, pero me falta algo."</div>
+      <div class="quote">"Quizás el trading no es para mí."</div>
+      <div class="quote">"Si todos lo consiguen y yo no, el problema soy yo."</div>
+    </div>
+    <div class="card card-green">
+      <h3>Identidad deseada (en quién quiere convertirse)</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:2">
+        <li>✅ Alguien que opera con tranquilidad</li>
+        <li>✅ Trader rentable que hace retiros</li>
+        <li>✅ Persona que demuestra que puede</li>
+        <li>✅ Alguien que dejó su trabajo</li>
+        <li>✅ Referente para quienes empiezan</li>
+      </ul>
+    </div>
+    <div class="card card-blue">
+      <h3>Redes sociales y consumo</h3>
+      <div style="margin-bottom:8px">
+        <span class="pill pill-red">📱 Instagram (principal)</span>
+        <span class="pill pill-orange">▶️ YouTube (secundario)</span>
+        <span class="pill pill-gray">TikTok</span>
+      </div>
+      <p style="font-size:0.83rem; color:#bbb">Sigue: Alex Ruiz, Casper SMC, Maldotrading, Cluty, Gerard García, Meritrading, Machado. Formato #1: Reels. Para en el scroll cuando ve: operaciones en vivo, resultados, emociones que reconoce en sí mismo.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== DOLORES ===================== -->
+<div id="dolores" class="section">
+<div class="container">
+  <div class="section-title">🔴 Mapa de Dolores</div>
+
+  <div class="card card-red" style="margin-bottom:20px">
+    <h3>Dolor Raíz (el que lo mueve todo)</h3>
+    <div class="quote" style="font-size:1rem">"No consigo resultados, no soy rentable, y esto está afectando a toda mi vida. Siento frustración, rabia y decepción conmigo mismo, pero sé que quiero lograrlo. Necesito un sistema claro."</div>
+    <div style="margin-top:12px"><span style="color:#888; font-size:0.8rem">Intensidad del dolor:</span>
+      <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+      <span style="font-size:0.75rem; color:#cc0000">8/10 — Puede llegar a 10 si sigue quemando cuentas sin sistema</span>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card card-red">
+      <h3>Dolores Prácticos</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:1.9">
+        <li>🔥 No pasa cuentas de fondeo</li>
+        <li>🔥 Quema challenges por ansia / rabia</li>
+        <li>🔥 No tiene sistema definido</li>
+        <li>🔥 Gestión del riesgo nula (regla 1% obsoleta)</li>
+        <li>🔥 Se adelanta a entradas, no cumple el plan</li>
+        <li>🔥 Sin límite diario → entra en bucle destructivo</li>
+        <li>🔥 No lleva registro</li>
+        <li>🔥 Salta de estrategia en estrategia</li>
+        <li>🔥 Sus horarios laborales bloquean operativa</li>
+      </ul>
+    </div>
+    <div class="card card-orange">
+      <h3>Dolores Emocionales</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:1.9">
+        <li>💀 Frustración crónica</li>
+        <li>💀 Culpa / vergüenza</li>
+        <li>💀 Rabia tras un stop → bucle de venganza</li>
+        <li>💀 Ansiedad / miedo</li>
+        <li>💀 "Me siento incapaz"</li>
+        <li>💀 Impotencia</li>
+        <li>💀 Cansancio mental</li>
+        <li>💀 Autoestima por los suelos</li>
+        <li>💀 Sensación de fracaso</li>
+      </ul>
+    </div>
+    <div class="card card-purple">
+      <h3>Dolores Sociales</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:1.9">
+        <li>👥 Discusiones con pareja/familia</li>
+        <li>👥 Entorno incrédulo ("es una estafa")</li>
+        <li>👥 Vergüenza de admitir que no avanza</li>
+        <li>👥 FOMO al ver a otros con resultados</li>
+        <li>👥 Necesidad de validación exterior</li>
+        <li>👥 "Todos se fondean y yo no"</li>
+        <li>👥 Presión económica</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <h3>Frases Literales de Dolor (usar en contenido)</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:8px">
+      <div class="quote" style="flex:1; min-width:200px">"No valgo para el trading, no consigo nada con ninguna estrategia."</div>
+      <div class="quote" style="flex:1; min-width:200px">"Soy un puto desastre, no lo voy a conseguir."</div>
+      <div class="quote" style="flex:1; min-width:200px">"¿Por qué todos sí y yo no lo consigo?"</div>
+      <div class="quote" style="flex:1; min-width:200px">"Mi cabeza me mata."</div>
+      <div class="quote" style="flex:1; min-width:200px">"Le dedico muchas horas y no veo resultados."</div>
+      <div class="quote" style="flex:1; min-width:200px">"Lo que gano en 2 semanas lo hundo en 1 día."</div>
+      <div class="quote" style="flex:1; min-width:200px">"Estoy harto de pasar por academias y no cambiar."</div>
+      <div class="quote" style="flex:1; min-width:200px">"Mi círculo no me apoya, estoy solo."</div>
+    </div>
+  </div>
+
+  <div class="card card-red">
+    <h3>Consecuencias si NO se resuelve</h3>
+    <div class="grid-3">
+      <div><strong style="color:#ff4444">En 6 meses:</strong><p style="font-size:0.85rem; color:#bbb; margin-top:6px">Deja el trading de lado. Sigue interesado pero siente que pierde el tiempo.</p></div>
+      <div><strong style="color:#ff4444">En 1 año:</strong><p style="font-size:0.85rem; color:#bbb; margin-top:6px">Abandona el trading por imposible. No tiene estructura y ya no puede más.</p></div>
+      <div><strong style="color:#ff4444">Lo que pierde:</strong><p style="font-size:0.85rem; color:#bbb; margin-top:6px">La libertad y el sueño de poder vivir del trading. Su validación interna y externa.</p></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== DESEOS ===================== -->
+<div id="deseos" class="section">
+<div class="container">
+  <div class="section-title">🟢 Mapa de Deseos y Aspiraciones</div>
+
+  <div class="card card-green" style="margin-bottom:20px">
+    <h3>Deseo Raíz</h3>
+    <div class="quote" style="font-size:1rem; border-color:#00aa44">"Quiero ser rentable, fondearme y ganar dinero con el trading, y adaptarlo a mi vida."</div>
+    <div style="margin-top:12px; font-size:0.85rem; color:#aaa">Deseo visible: <em>quiero ser rentable</em> · Deseo oculto: <em>demostrarme a mí mismo que no soy el problema</em></div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card card-green">
+      <h3>Deseos Prácticos</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:2">
+        <li>✅ Pasar cuentas de fondeo</li>
+        <li>✅ Hacer retiros mensuales constantes</li>
+        <li>✅ Sistema claro que le dé confianza</li>
+        <li>✅ Operar sin estar todo el día en el gráfico</li>
+        <li>✅ Llegar a 3.000€/mes en retiros</li>
+        <li>✅ Alcanzar seis cifras de capital fondeado</li>
+        <li>✅ Imprimir y publicar su diploma (primer hito)</li>
+      </ul>
+    </div>
+    <div class="card card-blue">
+      <h3>Deseos Emocionales</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:2">
+        <li>💙 Operar en calma y confianza</li>
+        <li>💙 Paz mental</li>
+        <li>💙 Orgullo de sí mismo</li>
+        <li>💙 Satisfacción de haberlo conseguido</li>
+        <li>💙 Euforia de ser bueno en algo</li>
+        <li>💙 Alivio de lograrlo</li>
+        <li>💙 Sentirse capaz</li>
+      </ul>
+    </div>
+    <div class="card card-purple">
+      <h3>Deseos Sociales / Identitarios</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:2">
+        <li>💜 Ser visto como "trader rentable"</li>
+        <li>💜 Validación de familia y entorno</li>
+        <li>💜 Demostrar que puede hacerlo</li>
+        <li>💜 Dejar su trabajo actual</li>
+        <li>💜 Libertad de tiempo y económica</li>
+        <li>💜 Dar consejos a quienes empiezan</li>
+        <li>💜 No depender de jefes ni horarios</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <h3>Vida Ideal — Día Perfecto</h3>
+    <p style="font-size:0.9rem; color:#bbb; line-height:1.8">Se levanta sabiendo que no tiene jefe. Analiza el mercado, hace su trabajo porque le gusta, opera con calma. Tiene tiempo libre para lo que quiere: viajar, hacer deporte, caminar. Vive donde quiere, rodeado de gente que le aporta. El trading no es un estrés, es la herramienta que le da esa vida.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3>Frases Literales de Deseo (usar en contenido)</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:8px">
+      <div class="quote" style="flex:1; min-width:180px; border-color:#00aa44">"Quiero ser rentable."</div>
+      <div class="quote" style="flex:1; min-width:180px; border-color:#00aa44">"Quiero fondearme de una vez."</div>
+      <div class="quote" style="flex:1; min-width:180px; border-color:#00aa44">"Ojalá ganar dinero y dejar mi trabajo."</div>
+      <div class="quote" style="flex:1; min-width:180px; border-color:#00aa44">"Quiero vivir con libertad, y el trading me lo dará."</div>
+      <div class="quote" style="flex:1; min-width:180px; border-color:#00aa44">"Quiero hacer retiros constantes."</div>
+      <div class="quote" style="flex:1; min-width:180px; border-color:#00aa44">"Estoy deseando mostrar validación a mi familia."</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== BUCLES ===================== -->
+<div id="bucles" class="section">
+<div class="container">
+  <div class="section-title">🔄 Bucles Psicológicos y Patrones</div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card card-red">
+      <h3>Bucle Principal (El que explica todo)</h3>
+      <div class="bucle-box">
+        <div class="bucle-step"><div class="step-num">1</div><div>Cree que hace todo bien</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div><div style="color:#888; font-size:0.8rem">Situación repetida</div></div>
+        <div class="bucle-step"><div class="step-num">2</div><div>No tiene resultados → "Esto no funciona"</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div></div>
+        <div class="bucle-step"><div class="step-num">3</div><div>Emoción: Decepción + Rabia</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div></div>
+        <div class="bucle-step"><div class="step-num">4</div><div>Acción: Quema cuenta / Cambia estrategia / Busca algo mejor</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div></div>
+        <div class="bucle-step"><div class="step-num">5</div><div>Vuelve al inicio sin ser rentable 🔁</div></div>
+      </div>
+    </div>
+
+    <div class="card card-orange">
+      <h3>Bucle de Autosabotaje (Cuando está cerca de lograrlo)</h3>
+      <div class="bucle-box">
+        <div class="bucle-step"><div class="step-num">1</div><div>Ejecuta el método, sigue instrucciones, tiene buenos resultados</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div></div>
+        <div class="bucle-step"><div class="step-num">2</div><div>Pensamiento: "Ahora sí lo voy a lograr, ya gano dinero"</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div></div>
+        <div class="bucle-step"><div class="step-num">3</div><div>Aparece la avaricia o el miedo a lograrlo</div></div>
+        <div class="bucle-step"><div class="arrow">↓</div></div>
+        <div class="bucle-step"><div class="step-num">4</div><div>Estando tan cerca, no lo logra. Vuelve al bucle de "no valgo"</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card">
+      <h3>Patrón: Inicio Fuerte → Abandono</h3>
+      <div style="font-size:0.85rem; line-height:1.9; color:#bbb">
+        <div>🚀 <strong>Activa:</strong> Ilusión por encontrar "la estrategia perfecta"</div>
+        <div>📚 <strong>Primeros días:</strong> Estudia, backtestea, se ilusiona</div>
+        <div>📉 <strong>Cuando baja emoción:</strong> Opera para querer ganar rápido</div>
+        <div>💔 <strong>Excusa abandono:</strong> Pierde 2 días seguidos</div>
+        <div>🔁 <strong>Resultado:</strong> Abandona y entra en bucle</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Patrón: Info-adicción</h3>
+      <div style="font-size:0.85rem; line-height:1.9; color:#bbb">
+        <div>📱 <strong>Qué consume:</strong> Instagram, mentores con resultados</div>
+        <div>🔍 <strong>Qué busca sentir:</strong> Que encontró al mentor perfecto</div>
+        <div>🚫 <strong>Qué le impide ejecutar:</strong> Miedo a que sea igual que lo anterior</div>
+        <div>🤥 <strong>Se justifica:</strong> "No va a valer de nada"</div>
+        <div>😔 <strong>Siente después:</strong> Arrepentimiento por no entrar</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Patrón: Mecanismo de Escape</h3>
+      <div style="font-size:0.85rem; line-height:1.9; color:#bbb">
+        <div>📺 Vuelve a consumir contenido que no le ayuda</div>
+        <div>💀 Abandona unos días</div>
+        <div>💸 Compra otra cuenta y le mete todo el riesgo</div>
+        <div>😤 Cambia de estrategia buscando "la que ahora sí va"</div>
+        <div>👀 Ve resultados de otros y se frustra más</div>
+        <div>🎭 Se autosabotea revisando sus trades malos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>10 Patrones de Pensamiento Recurrentes (lo que se dice siempre)</h3>
+    <div style="display:flex; flex-wrap:wrap; gap:8px">
+      <span class="pill pill-red">"Tengo que cambiar algo"</span>
+      <span class="pill pill-red">"Siempre la cago cuando mejor estoy"</span>
+      <span class="pill pill-red">"Necesito un método efectivo y claro"</span>
+      <span class="pill pill-red">"La psicología es lo más importante"</span>
+      <span class="pill pill-red">"Ya no sé qué hacer ni dónde ir"</span>
+      <span class="pill pill-red">"Quiero fondearme de una vez"</span>
+      <span class="pill pill-red">"Estoy viendo resultados por todos lados y yo no tengo"</span>
+      <span class="pill pill-red">"Quizás el trading no es para mí"</span>
+      <span class="pill pill-red">"Mi vida no está hecha para el trading"</span>
+      <span class="pill pill-red">"Mira este tío, qué bien vive... ¿es él o la academia?"</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== OBJECIONES ===================== -->
+<div id="objeciones" class="section">
+<div class="container">
+  <div class="section-title">🛡️ Objeciones y Cómo Romperlas</div>
+
+  <div class="objecion-item">
+    <div class="objecion-icon">💸</div>
+    <div class="objecion-text">
+      <strong>El precio es demasiado</strong> — "Uff, 1.500€ ahora... es demasiado." / "Ya he gastado mucho en formaciones."
+      <div class="objecion-respuesta">✅ Respuesta: "Si esto funciona, lo recuperas en 2 retiros. Si una carrera cuesta 20.000€, esto por 1.500€ te va a cambiar la vida. Es una inversión, no un gasto."</div>
+    </div>
+  </div>
+  <div class="objecion-item">
+    <div class="objecion-icon">🔥</div>
+    <div class="objecion-text">
+      <strong>Me enseñarán lo mismo que en las otras academias</strong> — "Ya probé y no funcionó."
+      <div class="objecion-respuesta">✅ Respuesta: "Tu problema no era la estrategia: era operar sin sistema adaptado a fondeo. Aquí no te enseñamos lo de siempre — te damos estructura para pasar challenges y hacer retiros."</div>
+    </div>
+  </div>
+  <div class="objecion-item">
+    <div class="objecion-icon">🤔</div>
+    <div class="objecion-text">
+      <strong>"Me lo pienso y decido"</strong> — Procrastinación de decisión (tarda 1–7 días)
+      <div class="objecion-respuesta">✅ Respuesta: La urgencia real no es "plazas limitadas" — es el coste de seguir igual: más cuentas quemadas, más tiempo perdido, más distancia de tu objetivo.</div>
+    </div>
+  </div>
+  <div class="objecion-item">
+    <div class="objecion-icon">❓</div>
+    <div class="objecion-text">
+      <strong>"No sé si esto me va a cambiar"</strong> — Desconfianza derivada de experiencias pasadas
+      <div class="objecion-respuesta">✅ Respuesta: Testimonios reales + certificados de challenge + capturas de retiros de alumnos. "Tenemos alumnos que llevaban años como tú, y en 2–3 meses se han fondeado."</div>
+    </div>
+  </div>
+  <div class="objecion-item">
+    <div class="objecion-icon">👀</div>
+    <div class="objecion-text">
+      <strong>"David no muestra retiros tan grandes como otros"</strong> — Comparación con competidores que muestran más lifestyle
+      <div class="objecion-respuesta">✅ Respuesta: Los que muestran lambos y playas te venden el sueño, no el proceso. Nosotros te mostramos la realidad: pérdidas incluidas, proceso real, vida normal.</div>
+    </div>
+  </div>
+  <div class="objecion-item">
+    <div class="objecion-icon">⏱️</div>
+    <div class="objecion-text">
+      <strong>"No me decís que seré rentable rápido"</strong> — Expectativas de tiempos irreales
+      <div class="objecion-respuesta">✅ Respuesta: "No prometemos tiempos porque somos honestos. Pero alumnos que llevaban 2 años sin pasar un challenge, en 2–3 meses lo han logrado con nuestro sistema."</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3>Creencias Contradictorias (las más peligrosas)</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px">
+      <div class="quote">"Solo veo vendehumos... pero joder, cómo viven."</div>
+      <div class="quote">"Las cuentas de fondeo son una estafa... pero es el camino."</div>
+      <div class="quote">"David parece humilde... pero Enrique Morís me promete rapidez."</div>
+      <div class="quote">"Ya he perdido mucho dinero... pero ahora es el momento."</div>
+      <div class="quote">"La psicología es una mentira... pero quemo cuentas por mi cabeza."</div>
+      <div class="quote">"¿Pagar otra academia? No. Pero necesito encontrar el camino."</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== COMPRA ===================== -->
+<div id="compra" class="section">
+<div class="container">
+  <div class="section-title">💳 Comportamiento de Compra</div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card card-orange">
+      <h3>Perfil de Comprador</h3>
+      <div style="margin-bottom:12px">
+        <span class="pill pill-red">🔥 Quemado (compró antes, salió mal)</span>
+        <span class="pill pill-red">🔍 Escéptico (necesita pruebas)</span>
+        <span class="pill pill-orange">⚖️ Decisión 50/50 Emoción + Lógica</span>
+      </div>
+      <p style="font-size:0.85rem; color:#bbb">Viene de otras academias donde no tuvo resultados. Desconfía pero tiene urgencia interna. Compra cuando siente conexión real con el mentor y ve que "esta vez es diferente".</p>
+    </div>
+    <div class="card card-blue">
+      <h3>Rango de Precio Cómodo</h3>
+      <div class="metric-big" style="color:#0088ff">750–1.500€</div>
+      <div class="metric-label">Zona de confort</div>
+      <div style="margin-top:12px; font-size:0.83rem; color:#bbb">
+        <div>❌ Menos de 1.000€ → "Demasiado bueno para ser verdad"</div>
+        <div>✅ 1.500€ → "Caro pero creíble"</div>
+        <div>Sensibilidad: <strong>Media</strong> — Si ve valor, paga</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <h3>Proceso de Compra Típico (6 pasos)</h3>
+    <div style="display:flex; gap:0; overflow-x:auto; padding-bottom:8px">
+      <div style="flex:1; min-width:140px; text-align:center; padding:12px">
+        <div style="background:#cc0000; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold">1</div>
+        <div style="font-size:0.8rem; color:#bbb">Ve Reels o vídeos en YouTube → Nos sigue</div>
+      </div>
+      <div style="align-self:center; color:#444; font-size:1.5rem">→</div>
+      <div style="flex:1; min-width:140px; text-align:center; padding:12px">
+        <div style="background:#cc0000; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold">2</div>
+        <div style="font-size:0.8rem; color:#bbb">Ve historias, testimonios, reseñas y lifestyle</div>
+      </div>
+      <div style="align-self:center; color:#444; font-size:1.5rem">→</div>
+      <div style="flex:1; min-width:140px; text-align:center; padding:12px">
+        <div style="background:#cc0000; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold">3</div>
+        <div style="font-size:0.8rem; color:#bbb">Coge confianza porque ve al mentor como real</div>
+      </div>
+      <div style="align-self:center; color:#444; font-size:1.5rem">→</div>
+      <div style="flex:1; min-width:140px; text-align:center; padding:12px">
+        <div style="background:#cc0000; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold">4</div>
+        <div style="font-size:0.8rem; color:#bbb">Se interesa por Tradinverso</div>
+      </div>
+      <div style="align-self:center; color:#444; font-size:1.5rem">→</div>
+      <div style="flex:1; min-width:140px; text-align:center; padding:12px">
+        <div style="background:#cc0000; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold">5</div>
+        <div style="font-size:0.8rem; color:#bbb">Contesta historia o reel → Abre DM</div>
+      </div>
+      <div style="align-self:center; color:#444; font-size:1.5rem">→</div>
+      <div style="flex:1; min-width:140px; text-align:center; padding:12px">
+        <div style="background:#00aa44; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-weight:bold">6</div>
+        <div style="font-size:0.8rem; color:#bbb">Finalmente compra ✅</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-green">
+      <h3>Qué Dispara la Compra (Triggers)</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:2">
+        <li>⚡ Ve resultados de alumnos que activan FOMO</li>
+        <li>⚡ Siente que es SU sitio ("estos son los míos")</li>
+        <li>⚡ Conecta emocionalmente con David</li>
+        <li>⚡ Ve transparencia sin venta directa</li>
+        <li>⚡ Cree en el mecanismo único que se ofrece</li>
+        <li>⚡ Quema otra cuenta → busca solución urgente</li>
+        <li>⚡ Ve profesionalidad + cercanía combinadas</li>
+        <li>⚡ La señal definitiva: "¿Cómo pago?"</li>
+      </ul>
+    </div>
+    <div class="card card-red">
+      <h3>Qué Frena la Compra</h3>
+      <ul style="list-style:none; font-size:0.85rem; line-height:2">
+        <li>🛑 El precio</li>
+        <li>🛑 Venir de otras formaciones que fallaron</li>
+        <li>🛑 Miedo a que sea lo mismo de siempre</li>
+        <li>🛑 David no tan activo o cercano</li>
+        <li>🛑 Urgencia artificial de plazas</li>
+        <li>🛑 Promesas de tiempo irreal</li>
+        <li>🛑 No ver testimonios suficientes</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== CONFIANZA ===================== -->
+<div id="confianza" class="section">
+<div class="container">
+  <div class="section-title">🤝 Confianza vs. Desconfianza</div>
+
+  <div class="vs-box" style="margin-bottom:20px">
+    <div class="bad-box">
+      <h4>❌ Qué genera DESCONFIANZA (alejan al avatar)</h4>
+      <ul>
+        <li>Lambos, Rolex, lujos, vidas en Dubai</li>
+        <li>Solo operaciones ganadoras sin explicar el proceso</li>
+        <li>No mostrar pérdidas ni parte negativa</li>
+        <li>Urgencia artificial de plazas o tiempo</li>
+        <li>Frases como "serás rentable rápidamente"</li>
+        <li>No mostrar cómo opera el mentor</li>
+        <li>No mostrar nada de la academia / comunidad</li>
+        <li>Conversación → meterle prisa para comprar</li>
+        <li>Solo resultados positivos sin proceso</li>
+        <li>Perfil demasiado influencer / postureo</li>
+      </ul>
+    </div>
+    <div class="vs-label">VS</div>
+    <div class="good-box">
+      <h4>✅ Qué genera CONFIANZA (le hacen avanzar)</h4>
+      <ul>
+        <li>Mentor que parece natural / normal / cercano</li>
+        <li>Vida normal, no influencer</li>
+        <li>Testimonios reales con contexto y proceso</li>
+        <li>Muestra operaciones ganadoras Y perdedoras</li>
+        <li>Habla claro y directo, sin tecnicismos</li>
+        <li>Hace lo que dice, coherencia total</li>
+        <li>Reseñas externas (Trustpilot)</li>
+        <li>Certificados de challenge de alumnos</li>
+        <li>Capturas de retiros / pagos reales</li>
+        <li>Comunidad activa y visible</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <h3>Pruebas Sociales que más impactan (ordenadas por efectividad)</h3>
+    <table>
+      <thead><tr><th>#</th><th>Tipo de Prueba</th><th>Por qué funciona</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Testimonios reales de alumnos (con proceso, no solo resultado)</td><td>Activa la señal "Quiero lograr lo que ellos logran. ¿Cómo pago?"</td></tr>
+        <tr><td>2</td><td>Certificados de challenge superado</td><td>Prueba tangible, imposible de falsificar fácilmente</td></tr>
+        <tr><td>3</td><td>Capturas de retiros / pagos de alumnos</td><td>Prueba de dinero real ganado</td></tr>
+        <tr><td>4</td><td>Clips del mentor operando en directo</td><td>Demuestra que es trader de verdad, no solo formador</td></tr>
+        <tr><td>5</td><td>Antes / después de alumnos</td><td>Le permite verse a sí mismo en la historia</td></tr>
+        <tr><td>6</td><td>Capturas de comunidad activa</td><td>Muestra que no estará solo</td></tr>
+        <tr><td>7</td><td>Reseñas externas (Trustpilot)</td><td>Validación fuera del ecosistema del mentor</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-blue">
+    <h3>Valor Raíz del Avatar (lo que guía todas sus decisiones)</h3>
+    <div class="quote" style="border-color:#0066cc; font-size:0.95rem">"Busco un mentor transparente que lleve una vida como la que yo quiero: normal, viviendo del trading y con libertad. Odio el postureo porque lo considero vendehúmos y necesito que me transmita esa cercanía además de resultados reales."</div>
+    <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px">
+      <span class="pill pill-blue">🕊️ Libertad</span>
+      <span class="pill pill-blue">🏋️ Ser productivo</span>
+      <span class="pill pill-blue">🧠 Independencia</span>
+      <span class="pill pill-blue">☮️ Tranquilidad</span>
+      <span class="pill pill-blue">🎯 Ambición</span>
+      <span class="pill pill-gray">❌ NO tolera: Postureo</span>
+      <span class="pill pill-gray">❌ NO tolera: Mentiras</span>
+      <span class="pill pill-gray">❌ NO tolera: Vendehumos</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== MARKETING ===================== -->
+<div id="marketing" class="section">
+<div class="container">
+  <div class="section-title">📣 Guía de Marketing Accionable</div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card card-green">
+      <h3>✅ 3 COSAS QUE DEBEN ESTAR SÍ O SÍ</h3>
+      <div style="font-size:1rem; line-height:2.2">
+        <div>🟢 <strong>TRANSPARENCIA</strong> — proceso real, pérdidas incluidas</div>
+        <div>🟢 <strong>MÉTODO EFECTIVO</strong> — sistema claro, no estrategia de moda</div>
+        <div>🟢 <strong>DIFERENCIA VISIBLE</strong> — demostrar que esto no es lo de siempre</div>
+      </div>
+    </div>
+    <div class="card card-red">
+      <h3>❌ 3 COSAS QUE NUNCA DEBES HACER</h3>
+      <div style="font-size:1rem; line-height:2.2">
+        <div>🔴 <strong>PROMESAS DE TIEMPO</strong> — "serás rentable en X semanas"</div>
+        <div>🔴 <strong>METER PRISA</strong> — urgencia artificial de plazas</div>
+        <div>🔴 <strong>DAVID INACTIVO</strong> — si el mentor desaparece, se rompe la confianza</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <h3>Hooks que Funcionan por Tipo</h3>
+    <table>
+      <thead><tr><th>Tipo de Hook</th><th>Ejemplo Real</th><th>Por qué Para el Scroll</th></tr></thead>
+      <tbody>
+        <tr><td>🎯 Dolor / Frustración</td><td>"Cansado de no lograrlo"</td><td>Reconoce su emoción dominante</td></tr>
+        <tr><td>🤔 Curiosidad / Misterio</td><td>"Así se fondean mis alumnos en 3 meses"</td><td>Activa FOMO + esperanza</td></tr>
+        <tr><td>👊 Polémica / Enemigo común</td><td>"Todo esto que ves no es trading… (vendehumos)"</td><td>Valida su escepticismo</td></tr>
+        <tr><td>📖 Historia personal</td><td>"Y así quemaba cuentas hace 3 años"</td><td>Se ve reflejado en la historia</td></tr>
+        <tr><td>🏆 Prueba social</td><td>"En 3 meses, 20 alumnos fondeados"</td><td>Activa "¿Cómo pago?"</td></tr>
+        <tr><td>✅ Promesa directa</td><td>"Esto cambió mi forma de ver el fondeo"</td><td>Da esperanza sin prometer tiempos</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card card-blue">
+      <h3>Mejores Formatos por Plataforma</h3>
+      <div style="font-size:0.85rem; line-height:2">
+        <div><strong>Instagram:</strong> Reels #1 · Stories #2 · Carruseles #3</div>
+        <div><strong>YouTube:</strong> Vlogs de proceso · Operativas explicadas · Entrevistas a alumnos</div>
+        <div><strong>DM:</strong> Responder historias sobre resultados → apertura natural</div>
+      </div>
+    </div>
+    <div class="card card-purple">
+      <h3>3 Temas de Contenido más Efectivos</h3>
+      <div style="font-size:0.85rem; line-height:2">
+        <div>🧠 <strong>Psicológico</strong> — psicotrading, bucles, autosabotaje</div>
+        <div>📊 <strong>Técnico real</strong> — operativas explicadas con pérdidas y ganancias</div>
+        <div>🎬 <strong>Proceso de vida real</strong> — el día a día como trader, sin postureo</div>
+      </div>
+    </div>
+    <div class="card card-yellow">
+      <h3>Nivel de Conciencia del Avatar</h3>
+      <div style="font-size:0.85rem; color:#bbb; line-height:1.8; margin-bottom:10px">
+        Nivel 3 de 5: <strong>Consciente de soluciones</strong>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+      <div style="font-size:0.8rem; color:#888; margin-top:8px">Conoce opciones pero desconfía. Ya probó cosas. Está en modo "¿esto será diferente?". Necesita ver pruebas antes de decidir.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Cómo Comunicar la Solución — Marco Estratégico</h3>
+    <table>
+      <thead><tr><th>Lo que piensa el avatar</th><th>Lo que debes comunicar</th></tr></thead>
+      <tbody>
+        <tr><td>"No es que no valgas. Es que no te han enseñado el proceso correcto."</td><td>Énfasis en sistema, no en estrategia mágica</td></tr>
+        <tr><td>"El problema no es la psicología sola. Es no tener un sistema que la elimine."</td><td>Mostrar que el sistema resuelve el psicotrading</td></tr>
+        <tr><td>"Vas a fondearte si sigues el proceso. No damos tiempos, pero alumnos con 2 años sin pasar lo lograron en 2–3 meses."</td><td>Promesa realista + evidencia de alumnos</td></tr>
+        <tr><td>"El precio es una inversión en ti y en tu vida, no un gasto."</td><td>Reencuadre del precio con la libertad que da</td></tr>
+        <tr><td>"Esto no es una estrategia del mentor. Es un sistema que tú adaptas."</td><td>Diferenciación clave vs. competidores</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

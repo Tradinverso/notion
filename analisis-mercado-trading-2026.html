@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Estratégico - Mercado Formación Trading 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --green: #00C853;
+  --green-dark: #009624;
+  --green-light: #B9F6CA;
+  --blue: #2979FF;
+  --blue-dark: #0D47A1;
+  --blue-light: #BBDEFB;
+  --black: #0A0A0A;
+  --dark: #141414;
+  --dark2: #1E1E1E;
+  --dark3: #2A2A2A;
+  --white: #F5F5F5;
+  --gray: #9E9E9E;
+  --red: #FF5252;
+  --orange: #FF9100;
+  --yellow: #FFD600;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.noise {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* HEADER */
+.hero {
+  padding: 60px 0 40px;
+  border-bottom: 1px solid var(--dark3);
+  margin-bottom: 40px;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -50%; right: -50%;
+  height: 400px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,200,83,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.hero h1 span { color: var(--green); }
+.hero .subtitle {
+  font-size: 16px;
+  color: var(--gray);
+  max-width: 700px;
+}
+.badge {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge-green { background: rgba(0,200,83,0.15); color: var(--green); border: 1px solid rgba(0,200,83,0.3); }
+.badge-blue { background: rgba(41,121,255,0.15); color: var(--blue); border: 1px solid rgba(41,121,255,0.3); }
+.badge-red { background: rgba(255,82,82,0.15); color: var(--red); border: 1px solid rgba(255,82,82,0.3); }
+.badge-orange { background: rgba(255,145,0,0.15); color: var(--orange); border: 1px solid rgba(255,145,0,0.3); }
+.badge-yellow { background: rgba(255,214,0,0.15); color: var(--yellow); border: 1px solid rgba(255,214,0,0.3); }
+
+/* NAV */
+.nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  position: sticky;
+  top: 0;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--dark3);
+}
+.nav button {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 8px 14px;
+  border: 1px solid var(--dark3);
+  background: var(--dark);
+  color: var(--gray);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.nav button:hover, .nav button.active {
+  background: var(--green);
+  color: var(--black);
+  border-color: var(--green);
+}
+
+/* SECTIONS */
+.section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-desc {
+  color: var(--gray);
+  font-size: 14px;
+  margin-bottom: 32px;
+  max-width: 700px;
+}
+
+/* CARDS */
+.card {
+  background: var(--dark);
+  border: 1px solid var(--dark3);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--dark3); }
+.card h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card p, .card li {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.7;
+}
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+.card li {
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+}
+.card li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+/* TABLE */
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--dark3);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px 16px;
+  text-align: left;
+  background: var(--dark2);
+  color: var(--green);
+  border-bottom: 1px solid var(--dark3);
+  white-space: nowrap;
+}
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: #ccc;
+}
+tr:hover td { background: rgba(0,200,83,0.03); }
+
+/* METER */
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+.meter-bar {
+  height: 6px;
+  border-radius: 3px;
+  flex: 1;
+  max-width: 100px;
+  background: var(--dark3);
+  overflow: hidden;
+}
+.meter-fill { height: 100%; border-radius: 3px; }
+.meter-label { font-size: 11px; color: var(--gray); min-width: 30px; }
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin: 2px;
+  background: var(--dark3);
+  color: var(--gray);
+}
+.tag-green { background: rgba(0,200,83,0.12); color: var(--green); }
+.tag-red { background: rgba(255,82,82,0.12); color: var(--red); }
+.tag-blue { background: rgba(41,121,255,0.12); color: var(--blue); }
+
+/* STAT */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat {
+  background: var(--dark);
+  border: 1px solid var(--dark3);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.stat-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--green);
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 4px;
+}
+
+/* HIGHLIGHT BOX */
+.highlight {
+  border-left: 3px solid var(--green);
+  padding: 16px 20px;
+  background: rgba(0,200,83,0.05);
+  border-radius: 0 8px 8px 0;
+  margin: 16px 0;
+}
+.highlight-blue {
+  border-left-color: var(--blue);
+  background: rgba(41,121,255,0.05);
+}
+.highlight-red {
+  border-left-color: var(--red);
+  background: rgba(255,82,82,0.05);
+}
+.highlight p { font-size: 14px; color: #ddd; }
+.highlight strong { color: var(--white); }
+
+/* ARCHETYPE CARD */
+.archetype {
+  background: var(--dark);
+  border: 1px solid var(--dark3);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.archetype::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.archetype.a-green::before { background: var(--green); }
+.archetype.a-blue::before { background: var(--blue); }
+.archetype.a-red::before { background: var(--red); }
+.archetype.a-orange::before { background: var(--orange); }
+.archetype.a-yellow::before { background: var(--yellow); }
+.archetype h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.archetype .pct {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+.archetype .desc {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 60px;
+  padding: 30px 0;
+  border-top: 1px solid var(--dark3);
+  text-align: center;
+  font-size: 12px;
+  color: var(--gray);
+}
+
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .nav { gap: 4px; }
+  .nav button { font-size: 10px; padding: 6px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge badge-green">ANÁLISIS DE MERCADO 2026</div>
+  <h1>Formación de Trading:<br><span>Mapa Estratégico</span></h1>
+  <p class="subtitle">Análisis profundo de +200 competidores. Saturación, huecos de mercado, nuevos ciclos y propuesta de posicionamiento diferencial para tu avatar: el trader frustrado que ya compró formación y no obtiene resultados.</p>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button class="active" onclick="showSection('overview')">PANORAMA</button>
+  <button onclick="showSection('archetypes')">ARQUETIPOS</button>
+  <button onclick="showSection('saturation')">SATURACIÓN</button>
+  <button onclick="showSection('gaps')">HUECOS</button>
+  <button onclick="showSection('cycles')">NUEVOS CICLOS</button>
+  <button onclick="showSection('angles')">ÁNGULOS</button>
+  <button onclick="showSection('strategy')">ESTRATEGIA</button>
+  <button onclick="showSection('product')">PRODUCTO</button>
+  <button onclick="showSection('content')">CONTENIDO</button>
+  <button onclick="showSection('hooks')">HOOKS</button>
+</div>
+
+<!-- ===================== SECTION: OVERVIEW ===================== -->
+<div class="section active" id="overview">
+  <div class="section-title">📊 Panorama del Mercado</div>
+  <p class="section-desc">Estado actual del mercado de formación de trading en español — datos clave, contexto y conclusiones de alto nivel tras analizar +200 perfiles.</p>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-number">200+</div>
+      <div class="stat-label">Competidores analizados</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">90%</div>
+      <div class="stat-label">Usan el mismo mensaje</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">5-10%</div>
+      <div class="stat-label">Pass rate en prop firms</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">~33%</div>
+      <div class="stat-label">Prop firms desaparecidas 2024-25</div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <p><strong>Conclusión clave:</strong> El mercado de formación de trading está en un punto de inflexión. La industria de prop firms se profesionalizó en 2025 (80-100 firmas cerradas), la IA está creando un nuevo ciclo, y el avatar "trader frustrado que ya compró formación" es el segmento más grande y peor atendido del mercado. Casi nadie le habla directamente — todos siguen cazando principiantes.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🏭 Estado del Mercado de Prop Firms</h3>
+      <ul>
+        <li>Un tercio de las prop firms han desaparecido entre 2023-2025</li>
+        <li>Solo 5-10% pasan las evaluaciones; solo 7% de los que pasan hacen retiro</li>
+        <li>Regulación inminente: CFTC, FCA y ASIC están actuando</li>
+        <li>Migración de forex CFD a futuros regulados</li>
+        <li>Pagos globales superaron $325M en 2025</li>
+        <li>El modelo evoluciona: de "challenge fees" a retención de traders a largo plazo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🤖 Ciclo IA en Trading</h3>
+      <ul>
+        <li>AI trading bots se han convertido en mainstream en 2026</li>
+        <li>80%+ de traders retail con bots pierden vs buy-and-hold</li>
+        <li>Multi-Agent AI y LLMs integrados en análisis de sentimiento</li>
+        <li>Oportunidad masiva: la educación NO ha incorporado IA de forma real</li>
+        <li>Nadie enseña a usar IA como herramienta (no como "bot mágico")</li>
+        <li>El que domine "IA + trading education" captura el próximo ciclo</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: ARCHETYPES ===================== -->
+<div class="section" id="archetypes">
+  <div class="section-title">🎭 Arquetipos de Competidores</div>
+  <p class="section-desc">Los +200 competidores de tu lista se agrupan en 7 arquetipos que representan el 95% del mercado. No necesitas fichas individuales — necesitas entender estos patrones.</p>
+
+  <div class="grid-2">
+    <div class="archetype a-green">
+      <h4>1. EL LIFESTYLE TRADER</h4>
+      <div class="pct" style="color:var(--green)">~35%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> extratrades_, ashleyruiz____, rajabanks, ceejaylife<br><br>
+        <strong>Qué venden:</strong> Cursos + comunidad. Precio medio €200-€1000.<br>
+        <strong>Posicionamiento:</strong> Aspiracional — coches, viajes, libertad financiera.<br>
+        <strong>Avatar:</strong> Principiantes y gente que quiere "cambiar de vida".<br>
+        <strong>Contenido:</strong> Reels de resultados, capturas de P&L, lifestyle shots.<br>
+        <strong>Debilidad crítica:</strong> No hablan al trader frustrado. Repiten promesas quemadas. Su contenido genera desconfianza en tu avatar.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag tag-red">Saturado</span>
+        <span class="tag">Principiantes</span>
+        <span class="tag">Lifestyle</span>
+      </div>
+    </div>
+
+    <div class="archetype a-blue">
+      <h4>2. EL TÉCNICO/EDUCATOR</h4>
+      <div class="pct" style="color:var(--blue)">~25%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> belikethealgo, ictfinatic, casper_smc, mdta.academy<br><br>
+        <strong>Qué venden:</strong> Cursos estructurados + mentoría. €500-€3000.<br>
+        <strong>Posicionamiento:</strong> Educativo — SMC, ICT, Wyckoff, Order Flow.<br>
+        <strong>Avatar:</strong> Intermedios que buscan "el método correcto".<br>
+        <strong>Contenido:</strong> Chart analysis, markup videos, backtesting.<br>
+        <strong>Debilidad:</strong> Más contenido ≠ mejores resultados. Acumulan conocimiento sin ejecución. No resuelven el problema real: la implementación.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag tag-blue">Competido</span>
+        <span class="tag">Intermedios</span>
+        <span class="tag">SMC/ICT</span>
+      </div>
+    </div>
+
+    <div class="archetype a-orange">
+      <h4>3. EL SEÑALERO/COPIER</h4>
+      <div class="pct" style="color:var(--orange)">~12%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> Canales de señales, grupos de Telegram, copy trading.<br><br>
+        <strong>Qué venden:</strong> Señales + acceso a grupo. €30-€200/mes.<br>
+        <strong>Posicionamiento:</strong> "Solo copia y gana".<br>
+        <strong>Avatar:</strong> Gente sin tiempo o sin ganas de aprender.<br>
+        <strong>Contenido:</strong> Screenshots de trades ganadores, capturas de retiros.<br>
+        <strong>Debilidad:</strong> Modelo insostenible. No genera habilidad. Alta tasa de churn. Tu avatar ya se quemó con esto.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag tag-red">Tóxico</span>
+        <span class="tag">Dependencia</span>
+        <span class="tag">Bajo valor</span>
+      </div>
+    </div>
+
+    <div class="archetype a-yellow">
+      <h4>4. EL PSICOTRADER</h4>
+      <div class="pct" style="color:var(--yellow)">~8%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> psicologiaytrading, chelopsicotrading, lucilapsicotrader, clau.psicotrade<br><br>
+        <strong>Qué venden:</strong> Mentoría psicológica + contenido de mindset. €300-€1500.<br>
+        <strong>Posicionamiento:</strong> "El problema no es la estrategia, es tu mente".<br>
+        <strong>Avatar:</strong> Traders intermedios frustrados.<br>
+        <strong>Contenido:</strong> Carruseles, storytelling, frases motivacionales.<br>
+        <strong>Debilidad:</strong> Hablan del problema pero no dan la solución operativa completa. Psicología sin sistema = más frustración.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag tag-green">Oportunidad parcial</span>
+        <span class="tag">Mindset</span>
+        <span class="tag">Frustración</span>
+      </div>
+    </div>
+
+    <div class="archetype a-green">
+      <h4>5. EL PROP FIRM COACH</h4>
+      <div class="pct" style="color:var(--green)">~8%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> fondeapro, propfirmkid, orionfunded.es, alphatraderfirm<br><br>
+        <strong>Qué venden:</strong> Programa enfocado en pasar challenges. €200-€800.<br>
+        <strong>Posicionamiento:</strong> "Te fondeo" / "Pasa el challenge".<br>
+        <strong>Avatar:</strong> Traders que quieren capital sin arriesgar el suyo.<br>
+        <strong>Contenido:</strong> Resultados de fondeo, tips de reglas, comparativas de firms.<br>
+        <strong>Debilidad:</strong> Enfocados en el challenge, no en mantener la cuenta. Tasa de éxito real bajísima. No enseñan sostenibilidad.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag tag-blue">Creciendo</span>
+        <span class="tag">Fondeo</span>
+        <span class="tag">Challenges</span>
+      </div>
+    </div>
+
+    <div class="archetype a-red">
+      <h4>6. EL INFLUENCER GENÉRICO</h4>
+      <div class="pct" style="color:var(--red)">~7%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> Cuentas de memes, motivación genérica, repost de gráficos.<br><br>
+        <strong>Qué venden:</strong> Poco definido. Afiliados, shoutouts, cursos low-ticket.<br>
+        <strong>Posicionamiento:</strong> Entretenimiento/comunidad.<br>
+        <strong>Avatar:</strong> Curiosos, principiantes absolutos.<br>
+        <strong>Contenido:</strong> Memes, motivación, contenido viral genérico.<br>
+        <strong>Debilidad:</strong> Cero profundidad. Audiencia de baja calidad para venta. No compiten contigo.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag tag-red">Irrelevante</span>
+        <span class="tag">Bajo LTV</span>
+      </div>
+    </div>
+
+    <div class="archetype a-blue">
+      <h4>7. EL ACADÉMICO/INSTITUCIONAL</h4>
+      <div class="pct" style="color:var(--blue)">~5%</div>
+      <div class="desc">
+        <strong>Ejemplos tipo:</strong> TBS, Instituto BME, UNED, academias con sede física.<br><br>
+        <strong>Qué venden:</strong> Programas largos, certificaciones. €500-€5000+.<br>
+        <strong>Posicionamiento:</strong> Formación seria, rigurosa, con respaldo institucional.<br>
+        <strong>Avatar:</strong> Gente que quiere credenciales o carrera en finanzas.<br>
+        <strong>Debilidad:</strong> Demasiado teórico. Lento. No enfocado en resultados prácticos ni fondeo. Tu avatar no quiere más teoría.
+      </div>
+      <div style="margin-top:12px">
+        <span class="tag">Institucional</span>
+        <span class="tag">Teoría</span>
+        <span class="tag">Largo plazo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:24px">
+    <p><strong>Patrón oculto:</strong> NINGUNO de los 7 arquetipos está diseñado específicamente para tu avatar (trader que ya compró formación, no consigue resultados, desconfía de promesas). El psicotrader se acerca pero no ofrece solución operativa. El prop firm coach se acerca pero no enseña sostenibilidad. Ahí está tu hueco.</p>
+  </div>
+</div>
+
+<!-- ===================== SECTION: SATURATION ===================== -->
+<div class="section" id="saturation">
+  <div class="section-title">🔴 Mapa de Saturación</div>
+  <p class="section-desc">Mensajes, promesas y formatos que están quemados en el mercado. Lo que tu avatar ya NO cree.</p>
+
+  <div class="card">
+    <h3>🚫 Promesas Quemadas (tu avatar las rechaza activamente)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Promesa</th><th>Saturación</th><th>Reacción del Avatar</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>"Gana X€ al día/mes operando"</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:95%;background:var(--red)"></div></div><div class="meter-label">95%</div></div></td><td>Desconfianza inmediata</td></tr>
+          <tr><td>"Libertad financiera con trading"</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:92%;background:var(--red)"></div></div><div class="meter-label">92%</div></div></td><td>Ojo en blanco, scroll</td></tr>
+          <tr><td>"Método/sistema infalible"</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:90%;background:var(--red)"></div></div><div class="meter-label">90%</div></div></td><td>Ya probó 5 "sistemas"</td></tr>
+          <tr><td>"De 0 a fondeado en X semanas"</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:88%;background:var(--red)"></div></div><div class="meter-label">88%</div></div></td><td>Sabe que es cherry-picking</td></tr>
+          <tr><td>"Solo necesitas 1-2 horas al día"</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:85%;background:var(--orange)"></div></div><div class="meter-label">85%</div></div></td><td>Lo intentó y no funcionó así</td></tr>
+          <tr><td>"Mi estrategia tiene 80%+ win rate"</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:82%;background:var(--orange)"></div></div><div class="meter-label">82%</div></div></td><td>Sabe que WR sin contexto no sirve</td></tr>
+          <tr><td>Screenshots de P&L gigantes</td><td><div class="meter"><div class="meter-bar"><div class="meter-fill" style="width:80%;background:var(--orange)"></div></div><div class="meter-label">80%</div></div></td><td>"Eso es demo" / "Eso es suerte"</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📛 Mensajes Sobreutilizados</h3>
+      <ul>
+        <li>"El trading es el negocio del siglo XXI"</li>
+        <li>"Yo estuve donde tú estás" (sin especificar)</li>
+        <li>"Smart Money / liquidez / manipulación"</li>
+        <li>"Mentalidad de trader ganador"</li>
+        <li>"Consistencia" (palabra vacía sin definir)</li>
+        <li>"Comunidad de traders" (Discord/Telegram genérico)</li>
+        <li>"Acceso de por vida" al curso</li>
+        <li>"Mentores fondeados" (sin verificar)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>📛 Formatos Saturados</h3>
+      <ul>
+        <li>Reel de "mi día como trader" (lifestyle repetitivo)</li>
+        <li>Carrusel de "3 errores que cometen los traders"</li>
+        <li>Screenshot de trade ganador + "mi sistema funciona"</li>
+        <li>Video tutorial de markup genérico sin contexto</li>
+        <li>Story de "últimas plazas" en modo permanente</li>
+        <li>Testimonios en formato captura de WhatsApp</li>
+        <li>Antes/después financiero sin verificar</li>
+        <li>"Clase gratuita" que es pitch de venta disfrazado</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: GAPS ===================== -->
+<div class="section" id="gaps">
+  <div class="section-title">🟢 Huecos de Mercado</div>
+  <p class="section-desc">Necesidades no cubiertas, problemas que nadie resuelve, oportunidades que nadie está explotando.</p>
+
+  <div class="grid-2">
+    <div class="card" style="border-color: var(--green)">
+      <h3 style="color:var(--green)">💎 HUECO #1: El "segundo intento" del trader</h3>
+      <p>Nadie tiene un producto diseñado específicamente para gente que YA fracasó en trading. Todos siguen vendiendo "aprende trading desde cero". Tu avatar no necesita aprender — necesita desaprender los malos hábitos y construir sobre lo que ya sabe. <strong>No existe un "programa de recuperación" para traders.</strong></p>
+    </div>
+    <div class="card" style="border-color: var(--green)">
+      <h3 style="color:var(--green)">💎 HUECO #2: IA como herramienta de trading real</h3>
+      <p>Todo el mundo habla de "bots de IA" pero nadie enseña a usar IA como asistente de trading: para backtesting automatizado, journaling inteligente, análisis de patrones personales, detección de sesgo, revisión de setups. <strong>El trader que aprenda a pilotar IA tendrá ventaja sobre el 95%.</strong></p>
+    </div>
+    <div class="card" style="border-color: var(--green)">
+      <h3 style="color:var(--green)">💎 HUECO #3: Acompañamiento post-fondeo</h3>
+      <p>Todo el mercado se enfoca en "pasar el challenge". Nadie acompaña la fase más difícil: mantener la cuenta fondeada y escalar. Datos: solo 7% de los que pasan hacen retiro. <strong>El verdadero negocio está en el "después del fondeo".</strong></p>
+    </div>
+    <div class="card" style="border-color: var(--green)">
+      <h3 style="color:var(--green)">💎 HUECO #4: Diagnóstico antes de formación</h3>
+      <p>Nadie diagnostica al trader antes de venderle. Todos venden el mismo curso a todos. Un trader con problema de psicología necesita algo diferente a uno con problema de estrategia. <strong>No existe un "assessment" personalizado en el mercado.</strong></p>
+    </div>
+    <div class="card" style="border-color: var(--green)">
+      <h3 style="color:var(--green)">💎 HUECO #5: Programa adaptado a quien trabaja</h3>
+      <p>El 90% del contenido asume que operas intradía frente a la pantalla 4+ horas. Tu avatar tiene trabajo, familia, vida. Nadie ha diseñado un sistema de trading verdaderamente optimizado para operar en 30-60 minutos reales, con sesiones específicas y reglas de "no operar".</p>
+    </div>
+    <div class="card" style="border-color: var(--green)">
+      <h3 style="color:var(--green)">💎 HUECO #6: Transparencia radical de resultados</h3>
+      <p>Nadie muestra resultados REALES de alumnos con métricas verificables (no capturas de WhatsApp). Nadie publica datos agregados: "de 200 alumnos, 34 se fondearon en X tiempo". <strong>El primero que lo haga rompe la confianza del mercado.</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: CYCLES ===================== -->
+<div class="section" id="cycles">
+  <div class="section-title">🔄 Nuevos Ciclos de Mercado</div>
+  <p class="section-desc">Tendencias emergentes que están reconfigurando el mercado y que deberías capturar antes que nadie.</p>
+
+  <div class="card">
+    <h3>🔮 Ciclo 1: IA + Trading (CONFIRMADO — en fase de adopción temprana)</h3>
+    <ul>
+      <li><strong>Qué está pasando:</strong> Bots de IA, LLMs para análisis, herramientas de backtesting automatizado están explotando en 2026</li>
+      <li><strong>El dato clave:</strong> 80%+ de retail traders con bots pierden dinero porque no saben configurarlos ni gestionar riesgo</li>
+      <li><strong>La oportunidad:</strong> No vender bots — enseñar a USAR IA como copiloto. Journaling con IA, detección de patrones, análisis de sesgo, optimización de setups</li>
+      <li><strong>Posición ganadora:</strong> "No reemplazamos al trader con IA — potenciamos al trader CON IA"</li>
+      <li><strong>Ventana de oportunidad:</strong> 12-18 meses antes de saturación</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔮 Ciclo 2: Profesionalización de Prop Firms (EN CURSO)</h3>
+    <ul>
+      <li><strong>Qué está pasando:</strong> 33% de prop firms desaparecieron. FTMO compró OANDA. Regulación viene de CFTC/FCA</li>
+      <li><strong>Migración masiva</strong> de forex CFD hacia futuros regulados</li>
+      <li><strong>Behavioral analytics:</strong> Las prop firms ahora detectan si operas diferente en eval vs funded</li>
+      <li><strong>La oportunidad:</strong> Enseñar a operar "funded-account-ready" desde el día 1, no optimizar para pasar challenges</li>
+      <li><strong>El que entienda las nuevas reglas y enseñe adaptación tendrá demanda constante</strong></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔮 Ciclo 3: Desconfianza del Consumidor (ACELERANDO)</h3>
+    <ul>
+      <li><strong>Qué está pasando:</strong> Tu avatar ha comprado 2-5 formaciones sin resultado. Desconfía activamente</li>
+      <li><strong>Comportamiento:</strong> Busca pruebas antes de comprar. Investiga más. Compara. Pide garantías reales</li>
+      <li><strong>La oportunidad:</strong> Posicionarte como "anti-gurú". Transparencia total. Datos reales. Garantía de resultado o acompañamiento extendido</li>
+      <li><strong>Narrativa ganadora:</strong> "Si ya gastaste dinero en formación y no funcionó, el problema no eras tú"</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🔮 Ciclo 4: Trading como Skill Profesional, no Lifestyle (EMERGENTE)</h3>
+    <ul>
+      <li><strong>Qué está pasando:</strong> El mercado madura. Gen Z y millennials ven trading como skill laboral, no como "ser tu propio jefe"</li>
+      <li><strong>Comparación:</strong> Como pasó con programación: de "hazte millonario programando" a "aprende una skill empleable"</li>
+      <li><strong>La oportunidad:</strong> Posicionar trading como habilidad profesional con carrera path definida (fondeo → escalar → gestión)</li>
+      <li><strong>Narrativa:</strong> "Trading no es un estilo de vida, es una competencia profesional medible"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== SECTION: ANGLES ===================== -->
+<div class="section" id="angles">
+  <div class="section-title">⚡ Ángulos Diferenciales</div>
+  <p class="section-desc">Ángulos de marketing que NADIE está usando. Mensajes contraintuitivos. Narrativas disruptivas.</p>
+
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid var(--green)">
+      <h3>1. "NO APRENDAS MÁS TRADING"</h3>
+      <p>Contraintuitivo. Tu avatar no necesita más información — necesita implementación y desaprendizaje. El ángulo es: "Ya sabes suficiente. El problema es otro." Esto rompe el patrón de todo el mercado que vende más conocimiento.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <h3>2. "LA FORMACIÓN TE FALLÓ, TÚ NO"</h3>
+      <p>Valida al avatar en vez de culparlo. El mercado dice "el problema es tu disciplina/mentalidad". Tú dices: "El producto que compraste no estaba diseñado para que funcionara." Esto crea alianza instantánea.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <h3>3. "DIAGNÓSTICO ANTES DE CURA"</h3>
+      <p>Nadie diagnostica. Todos venden el mismo paquete. Ofrecer un diagnóstico gratuito (tipo quiz/assessment) que identifica EL problema específico de cada trader. Esto genera leads cualificados y confianza brutal.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <h3>4. "TU TRADING CON IA" (no bots)</h3>
+      <p>No vender automatización — vender potenciación. Usar IA para que el trader sea mejor, no para reemplazarlo. Journal automatizado, detección de patrones, análisis de sesgo. El copiloto, no el piloto automático.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <h3>5. "RESULTADOS VERIFICABLES O TE DEVOLVEMOS"</h3>
+      <p>Garantía atada a proceso, no a resultado. "Si completas el programa y aplicas el sistema durante 90 días sin mejorar tus métricas, te devolvemos o extendemos." Nadie lo hace. Es el diferenciador nuclear.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <h3>6. "EL PROGRAMA ANTI-CURSO"</h3>
+      <p>Posicionarse contra los cursos. "Esto no es un curso, es un sistema de implementación con acompañamiento." Renombrar todo: no "módulos" sino "sprints". No "lecciones" sino "protocolos". El lenguaje cambia la percepción.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <h3>7. "DATOS PÚBLICOS DE ALUMNOS"</h3>
+      <p>Publicar un dashboard (anónimo) de métricas reales de alumnos. Win rate promedio, drawdown, % fondeados, tiempo promedio. Nadie tiene esto. Es la prueba social definitiva para un avatar que desconfía de testimonios.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <h3>8. "TRADING EN 47 MINUTOS"</h3>
+      <p>Número específico, no "1-2 horas". Sistema diseñado para una ventana operativa ultra-definida. Con checklist, setup predefinido, reglas de "no operar hoy". Para quien tiene trabajo y vida real.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: STRATEGY ===================== -->
+<div class="section" id="strategy">
+  <div class="section-title">🎯 Propuesta Estratégica</div>
+  <p class="section-desc">Posicionamiento, diferenciación y dirección estratégica recomendada para tu programa.</p>
+
+  <div class="highlight">
+    <p><strong>POSICIONAMIENTO RECOMENDADO:</strong><br>"El programa de trading para traders que ya fracasaron — con IA como copiloto, foco en fondeo sostenible, y resultados verificables."</p>
+  </div>
+
+  <div class="card">
+    <h3>🏗️ Pilares de Posicionamiento</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Pilar</th><th>Mercado Actual</th><th>Tú</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Público</strong></td><td>Principiantes / "todos"</td><td>Traders que ya compraron formación sin resultados</td></tr>
+          <tr><td><strong>Promesa</strong></td><td>"Aprende trading"</td><td>"Arregla tu trading roto y fondéate de forma sostenible"</td></tr>
+          <tr><td><strong>Formato</strong></td><td>Curso + comunidad genérica</td><td>Sistema de implementación con diagnóstico + IA + acompañamiento</td></tr>
+          <tr><td><strong>Prueba</strong></td><td>Screenshots y testimonios</td><td>Dashboard público de métricas reales de alumnos</td></tr>
+          <tr><td><strong>Tecnología</strong></td><td>Ninguna / Discord</td><td>IA integrada: journaling, análisis de sesgo, detección de patrones</td></tr>
+          <tr><td><strong>Garantía</strong></td><td>Ninguna / "satisfacción"</td><td>Garantía atada a proceso: mejora medible o extensión gratis</td></tr>
+          <tr><td><strong>Post-venta</strong></td><td>Abandono después de compra</td><td>Acompañamiento post-fondeo incluido</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>✅ Creencias que Instalar</h3>
+      <ul>
+        <li>"Si ya aprendiste y no funcionó, el problema era el producto, no tú"</li>
+        <li>"Más formación no es la solución — implementación guiada sí"</li>
+        <li>"La IA no reemplaza traders, pero el trader con IA destroza al que va sin ella"</li>
+        <li>"Fondearse es solo el 20% — mantener la cuenta es el 80%"</li>
+        <li>"El trading es una skill medible, no un estilo de vida"</li>
+        <li>"Resultados sin datos son solo historias"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>❌ Creencias que Romper</h3>
+      <ul>
+        <li>"Necesitas más conocimiento para ser rentable"</li>
+        <li>"Si no funcionó, es porque no tienes disciplina"</li>
+        <li>"El trading requiere estar pegado a la pantalla"</li>
+        <li>"Los bots de IA operan solos y ganan dinero"</li>
+        <li>"Pasar un challenge = ser trader rentable"</li>
+        <li>"Necesitas una estrategia de win rate alto"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: PRODUCT ===================== -->
+<div class="section" id="product">
+  <div class="section-title">📦 Diseño del Producto</div>
+  <p class="section-desc">Qué incluir, qué eliminar, y qué añadir que nadie tiene.</p>
+
+  <div class="card">
+    <h3>🏗️ Estructura del Programa Ideal</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Fase</th><th>Qué incluye</th><th>Duración</th><th>Diferenciador</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>0. Diagnóstico</strong></td><td>Assessment personalizado: identifica si el problema es estrategia, psicología, gestión de riesgo o ejecución</td><td>Pre-ingreso</td><td><span class="tag tag-green">ÚNICO</span></td></tr>
+          <tr><td><strong>1. Reset</strong></td><td>Desaprender malos hábitos. Eliminar "ruido" de formaciones anteriores. Simplificación radical</td><td>2 semanas</td><td><span class="tag tag-green">ÚNICO</span></td></tr>
+          <tr><td><strong>2. Sistema</strong></td><td>UNA estrategia. UNA sesión operativa (47 min). UN par/instrumento. Reglas claras de operar/no operar</td><td>4 semanas</td><td><span class="tag tag-blue">MEJORADO</span></td></tr>
+          <tr><td><strong>3. IA Copilot</strong></td><td>Configurar herramientas IA: journal automatizado, detección de patrones, análisis de sesgo post-trade</td><td>2 semanas</td><td><span class="tag tag-green">ÚNICO</span></td></tr>
+          <tr><td><strong>4. Fondeo</strong></td><td>Preparación específica para challenge con reglas adaptadas a la prop firm elegida + plan de contingencia</td><td>4 semanas</td><td><span class="tag tag-blue">MEJORADO</span></td></tr>
+          <tr><td><strong>5. Sostenimiento</strong></td><td>Acompañamiento post-fondeo: gestión de cuenta fondeada, escalar sin romper reglas, psicología del "ya tengo capital"</td><td>Ongoing</td><td><span class="tag tag-green">ÚNICO</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>➕ QUÉ AÑADIR (nadie lo tiene)</h3>
+      <ul>
+        <li>Diagnóstico pre-programa con assessment automatizado</li>
+        <li>Fase de "Reset/Desaprendizaje" explícita</li>
+        <li>IA integrada como copiloto (no bot de trading)</li>
+        <li>Dashboard público de métricas de alumnos</li>
+        <li>Acompañamiento post-fondeo</li>
+        <li>Protocolo de "no operar" (días malos, news, etc.)</li>
+        <li>Garantía atada a proceso medible</li>
+        <li>Sesión operativa ultra-definida (47 min max)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>➖ QUÉ ELIMINAR</h3>
+      <ul>
+        <li>Módulos extensos de "historia del forex"</li>
+        <li>Análisis de 10 timeframes diferentes</li>
+        <li>Múltiples estrategias "para que elijas"</li>
+        <li>Comunidad Discord/Telegram sin estructura</li>
+        <li>Señales o trades en vivo como gancho</li>
+        <li>Contenido de lifestyle/motivación dentro del programa</li>
+        <li>Teoría que ya saben (el avatar no es principiante)</li>
+        <li>"Acceso de por vida" sin estructura temporal</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: CONTENT ===================== -->
+<div class="section" id="content">
+  <div class="section-title">📱 Estrategia de Contenido</div>
+  <p class="section-desc">Tipos de piezas, formatos y enfoque diferencial para atraer al avatar correcto.</p>
+
+  <div class="card">
+    <h3>📐 Framework de Contenido: 4 Pilares</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Pilar</th><th>Objetivo</th><th>% del contenido</th><th>Formato</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>VALIDACIÓN</strong></td><td>Que el avatar sienta "este me entiende"</td><td>35%</td><td>Storytelling, carruseles, reels hablando a cámara</td></tr>
+          <tr><td><strong>EDUCACIÓN CONTRAINTUITIVA</strong></td><td>Romper creencias. Generar "aha moments"</td><td>30%</td><td>Reels cortos de concepto, threads, posts de texto fuerte</td></tr>
+          <tr><td><strong>PRUEBA</strong></td><td>Demostrar que funciona con datos reales</td><td>20%</td><td>Métricas de alumnos, casos de estudio, dashboard</td></tr>
+          <tr><td><strong>IA + TRADING</strong></td><td>Posicionarte como el experto en este cruce</td><td>15%</td><td>Tutoriales de herramientas IA, demos, comparativas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🎬 Piezas que DEBES crear</h3>
+      <ul>
+        <li><strong>Serie "Lo que nadie te dijo":</strong> verdades incómodas del mercado de formación</li>
+        <li><strong>"Diagnóstico en vivo":</strong> analizar el trading de un alumno real (anónimo) y mostrar el proceso</li>
+        <li><strong>"IA vs Trader":</strong> comparar cómo analiza un setup un trader solo vs con IA como copiloto</li>
+        <li><strong>"El Anti-Testimonial":</strong> alumnos contando qué NO funcionó antes y qué cambió</li>
+        <li><strong>"47 minutos":</strong> operar en vivo tu sesión completa, sin cortes, mostrando la brevedad</li>
+        <li><strong>Dashboard mensual:</strong> publicar métricas reales del grupo (anonimizadas)</li>
+        <li><strong>"La fórmula del fracaso":</strong> deconstruir por qué los cursos típicos no funcionan</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🚫 Contenido que NO debes hacer</h3>
+      <ul>
+        <li>Screenshots de P&L personales</li>
+        <li>Lifestyle content (coches, viajes, relojes)</li>
+        <li>Motivación genérica ("no te rindas")</li>
+        <li>Markups de gráficos sin contexto de implementación</li>
+        <li>"Clase gratuita" como pitch disfrazado</li>
+        <li>Contenido para principiantes (repele a tu avatar)</li>
+        <li>Análisis de mercado diario (no es tu posicionamiento)</li>
+        <li>Entrevistas con otros "traders de Instagram"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: HOOKS ===================== -->
+<div class="section" id="hooks">
+  <div class="section-title">🪝 Hooks Diferenciales</div>
+  <p class="section-desc">Aperturas y ganchos diseñados específicamente para capturar la atención de tu avatar — el trader frustrado.</p>
+
+  <div class="grid-3">
+    <div class="card" style="border-top:2px solid var(--green)">
+      <h3>VALIDACIÓN</h3>
+      <p style="font-size:13px; color:#ccc; line-height:1.8">
+        "Si ya compraste un curso de trading y sigues sin resultados, no eres tú. Es el producto."<br><br>
+        "Llevas 2 años aprendiendo trading. ¿Cuántos más necesitas?"<br><br>
+        "El 90% de los cursos de trading están diseñados para venderse, no para que funcionen."<br><br>
+        "¿Cuántas estrategias necesitas aprender antes de darte cuenta de que ese no es el problema?"<br><br>
+        "Has probado SMC, ICT, Wyckoff, Elliott, Price Action... y sigues perdiendo. ¿Te has preguntado por qué?"
+      </p>
+    </div>
+    <div class="card" style="border-top:2px solid var(--blue)">
+      <h3>CONTRAINTUITIVO</h3>
+      <p style="font-size:13px; color:#ccc; line-height:1.8">
+        "No necesitas aprender más trading. Necesitas dejar de operar como te enseñaron."<br><br>
+        "La mejor operación de hoy es la que NO hiciste."<br><br>
+        "El win rate no importa. Y si esto te sorprende, es parte del problema."<br><br>
+        "Fondearse es fácil. Mantener la cuenta es donde el 93% fracasa."<br><br>
+        "La IA no va a reemplazar a los traders. Va a reemplazar a los traders que no usen IA."
+      </p>
+    </div>
+    <div class="card" style="border-top:2px solid var(--orange)">
+      <h3>PROVOCACIÓN</h3>
+      <p style="font-size:13px; color:#ccc; line-height:1.8">
+        "Tu mentor de trading no opera. Y lo sabes."<br><br>
+        "Los screenshots de P&L que ves en Instagram son de cuentas demo."<br><br>
+        "Si tu formador necesita venderte un curso, ¿por qué no vive del trading?"<br><br>
+        "El 95% de 'traders fondeados' en Instagram perdieron la cuenta en menos de 30 días."<br><br>
+        "Tu problema no es la estrategia. Es que nadie te diagnosticó antes de venderte."
+      </p>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-top:24px">
+    <p><strong>Regla de oro para tus hooks:</strong> El primer segundo debe hacer que tu avatar piense "este sabe lo que he vivido". No vendes esperanza — vendes comprensión. La esperanza viene después, cuando demuestres con datos que hay una salida diferente.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  ANÁLISIS ESTRATÉGICO — Mercado de Formación Trading 2026 · Basado en +200 competidores, datos de prop firms, tendencias IA y comportamiento del consumidor · Documento de uso interno
+</div>
+
+</div><!-- /container -->
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: document.getElementById('nav').offsetTop - 20, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
