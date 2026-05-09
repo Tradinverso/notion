@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tradinverso — Dashboard de Historias</title>
+<style>
+:root {
+  --bg:#0f0f0f;--bg2:#181818;--bg3:#222;--bg4:#2a2a2a;
+  --red:#bd0a0a;--redl:#e01212;--redb:rgba(189,10,10,0.12);
+  --txt:#ffffff;--muted:#777;--border:#2a2a2a;
+  --green:#2dc75c;--yellow:#f5a623;--blue:#4a9eff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;}
+
+/* HEADER */
+.hdr{background:var(--bg2);border-bottom:2px solid var(--red);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr-logo h1{font-size:19px;font-weight:800;}
+.hdr-logo span{color:var(--red);}
+.hdr-logo small{display:block;font-size:11px;color:var(--muted);margin-top:2px;}
+.hdr-actions{display:flex;gap:8px;}
+.btn{padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;}
+.btn-p{background:var(--red);color:#fff;}
+.btn-p:hover{background:var(--redl);}
+.btn-o{background:transparent;color:var(--txt);border:1px solid var(--border);}
+.btn-o:hover{border-color:var(--red);color:var(--red);}
+.btn-sm{padding:6px 12px;font-size:12px;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:20px 28px;}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 14px;text-align:center;transition:border-color .2s;}
+.sc:hover{border-color:var(--red);}
+.sv{font-size:34px;font-weight:900;line-height:1;color:#fff;}
+.sv.r{color:var(--red);}
+.sv.g{color:var(--green);}
+.sv.y{color:var(--yellow);}
+.sl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:6px;}
+.ss{font-size:10px;color:var(--muted);margin-top:3px;}
+.prog{height:4px;border-radius:2px;background:var(--bg4);margin-top:8px;overflow:hidden;}
+.progf{height:100%;border-radius:2px;background:var(--red);transition:width .5s;}
+
+/* CHARTS ROW */
+.charts{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:12px;padding:0 28px 20px;}
+.cc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.ct{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;}
+
+/* CSS Bar chart */
+.bar-chart{display:flex;flex-direction:column;gap:8px;}
+.bar-item{display:flex;align-items:center;gap:8px;font-size:11px;}
+.bar-label{min-width:90px;color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-track{flex:1;height:14px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;background:var(--red);transition:width .5s;}
+.bar-val{min-width:24px;color:var(--txt);font-weight:700;}
+
+/* Donut chart via CSS */
+.donut-wrap{display:flex;flex-direction:column;gap:6px;}
+.donut-row{display:flex;align-items:center;gap:8px;font-size:11px;}
+.donut-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.donut-name{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.donut-pct{font-weight:700;color:var(--txt);}
+.donut-bar{width:100%;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin-top:3px;}
+.donut-fill{height:100%;border-radius:4px;transition:width .5s;}
+
+/* Week timeline */
+.week-track{display:flex;flex-direction:column;gap:6px;}
+.wk-row{display:flex;align-items:center;gap:8px;font-size:11px;}
+.wk-label{min-width:60px;color:var(--muted);}
+.wk-bar{flex:1;height:18px;background:var(--bg4);border-radius:3px;overflow:hidden;position:relative;}
+.wk-fill{height:100%;border-radius:3px;background:var(--green);display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:#000;transition:width .5s;}
+
+/* FILTERS */
+.filters{padding:0 28px 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.fl{font-size:11px;color:var(--muted);}
+select.fs,input.fs{background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--txt);padding:7px 10px;font-size:12px;}
+select.fs:focus,input.fs:focus{outline:none;border-color:var(--red);}
+input.fs{min-width:200px;}
+
+/* TABLE */
+.tsec{padding:0 28px 20px;}
+.shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.stit{font-size:15px;font-weight:700;}
+.twrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:var(--bg3);padding:10px 12px;text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;cursor:pointer;user-select:none;}
+thead th:hover{color:var(--red);}
+tbody tr{border-top:1px solid var(--border);transition:background .1s;}
+tbody tr:hover{background:var(--redb);}
+td{padding:9px 12px;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis;}
+.wr td{background:rgba(189,10,10,.07);color:var(--red);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:6px 12px;}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;}
+.bt{background:rgba(45,199,92,.15);color:#2dc75c;}
+.bv{background:rgba(189,10,10,.2);color:#ff5555;}
+.bp{background:rgba(245,166,35,.15);color:#f5a623;}
+.bn{background:rgba(100,100,255,.15);color:#8888ff;}
+.ba{background:rgba(255,200,50,.15);color:#ffc832;}
+.bc{background:rgba(200,200,200,.08);color:#999;}
+.bvd{background:rgba(189,10,10,.3);color:#ff7777;}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;}
+.dp{background:var(--green);}
+.dd{background:var(--yellow);}
+.db{background:var(--muted);}
+.abt{background:none;border:none;color:var(--muted);cursor:pointer;padding:3px 7px;border-radius:4px;font-size:12px;}
+.abt:hover{background:var(--bg3);color:var(--txt);}
+
+/* BOTTOM ANALYTICS */
+.anrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 28px 20px;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.li{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.li:last-child{border-bottom:none;}
+.lir{font-size:17px;font-weight:800;color:var(--red);min-width:26px;}
+.lii{flex:1;padding:0 10px;}
+.lit{font-weight:600;margin-bottom:1px;}
+.lim{font-size:10px;color:var(--muted);}
+.liv{font-size:18px;font-weight:800;color:var(--green);}
+.liv.y{color:var(--yellow);}
+.liv.m{color:var(--muted);font-size:13px;}
+.empty-li{color:var(--muted);font-size:11px;padding:12px 0;line-height:1.6;}
+
+/* RECS */
+.rsec{padding:0 28px 32px;}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:12px;}
+.rec{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:14px;}
+.ret{font-weight:700;font-size:12px;margin-bottom:5px;}
+.red{font-size:11px;color:var(--muted);line-height:1.6;}
+
+/* MODAL */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;}
+.ov.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:700px;max-width:95vw;max-height:92vh;overflow-y:auto;padding:26px;}
+.modal h2{font-size:17px;margin-bottom:18px;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.fi{display:flex;flex-direction:column;gap:5px;}
+.fi.full{grid-column:1/-1;}
+.fi label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.fi input,.fi select,.fi textarea{background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--txt);padding:8px 10px;font-size:12px;font-family:inherit;}
+.fi textarea{resize:vertical;min-height:70px;}
+.fi input:focus,.fi select:focus,.fi textarea:focus{outline:none;border-color:var(--red);}
+.sep{grid-column:1/-1;border:none;border-top:1px solid var(--border);margin:2px 0;}
+.fact{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
+.emp{text-align:center;padding:40px;color:var(--muted);}
+.emp h3{color:var(--txt);font-size:14px;margin-bottom:6px;}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(3,1fr);}
+  .charts{grid-template-columns:1fr;}
+  .anrow{grid-template-columns:1fr;}
+  .stats,.charts,.filters,.tsec,.anrow,.rsec{padding-left:14px;padding-right:14px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">
+    <h1>Tradinverso — <span>Historias</span></h1>
+    <small>Dashboard de seguimiento y optimización · datos guardados en el navegador</small>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn btn-o btn-sm" onclick="exportD()">⬇ Exportar</button>
+    <button class="btn btn-o btn-sm" onclick="importD()">⬆ Importar</button>
+    <button class="btn btn-p" onclick="openM()">+ Nueva Historia</button>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="charts">
+  <div class="cc"><div class="ct">Distribución por categoría</div><div id="ch1" class="donut-wrap"></div></div>
+  <div class="cc"><div class="ct">Chats por estructura (publicadas)</div><div id="ch2" class="bar-chart"></div></div>
+  <div class="cc"><div class="ct">Historias publicadas por semana</div><div id="ch3" class="week-track"></div></div>
+</div>
+
+<div class="filters">
+  <span class="fl">Filtrar:</span>
+  <select class="fs" id="fCat" onchange="renderT()">
+    <option value="">Todas las categorías</option>
+    <option>CTA Valor Tráfico</option><option>CTA Valor Venta</option>
+    <option>Programa</option><option>Venta Directa</option>
+    <option>Conexión Emocional</option><option>Autoridad / Testimonios</option>
+    <option>Valor / Nutrición</option>
+  </select>
+  <select class="fs" id="fEst" onchange="renderT()">
+    <option value="">Todos los estados</option>
+    <option>Publicada</option><option>Pendiente</option><option>Borrador</option>
+  </select>
+  <select class="fs" id="fSem" onchange="renderT()"><option value="">Todas las semanas</option></select>
+  <input class="fs" id="fQ" placeholder="Buscar título o dolor..." oninput="renderT()">
+</div>
+
+<div class="tsec">
+  <div class="shdr">
+    <div class="stit">Todas las Historias</div>
+    <span id="cnt" style="font-size:11px;color:var(--muted)"></span>
+  </div>
+  <div class="twrap">
+    <table>
+      <thead><tr>
+        <th onclick="srt('semana')">Semana</th>
+        <th onclick="srt('fecha')">Fecha</th>
+        <th>Título</th>
+        <th onclick="srt('categoria')">Categoría</th>
+        <th>Estructura</th>
+        <th>Dolor / Ángulo</th>
+        <th>CTA</th>
+        <th onclick="srt('chats')" style="text-align:center">Chats</th>
+        <th onclick="srt('resp')" style="text-align:center">Resp.</th>
+        <th>Estado</th>
+        <th style="text-align:center">Guión</th>
+        <th style="text-align:center">IMG</th>
+        <th style="text-align:center">Mat.</th>
+        <th>Acciones</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="anrow">
+  <div class="card"><div class="ct">🏆 Top historias por chats generados</div><div id="topC"></div></div>
+  <div class="card"><div class="ct">📐 Estructuras más usadas</div><div id="topE"></div></div>
+</div>
+<div class="anrow" style="padding-top:0">
+  <div class="card"><div class="ct">🎯 Dolores / ángulos que más convierten</div><div id="topD"></div></div>
+  <div class="card"><div class="ct">📊 Rendimiento por categoría</div><div id="topR"></div></div>
+</div>
+
+<div class="rsec">
+  <div class="stit">💡 Patrones detectados y recomendaciones</div>
+  <div class="rgrid" id="recs"></div>
+</div>
+
+<!-- MODAL -->
+<div class="ov" id="ov" onclick="closeBg(event)">
+<div class="modal">
+  <h2 id="mtit">Nueva Historia</h2>
+  <div class="fg">
+    <div class="fi full"><label>Título *</label><input id="f_t" placeholder="Ej: AIDA — Fondeos fase 2 — Protocolo exposición"></div>
+    <div class="fi"><label>Fecha de publicación</label><input type="date" id="f_fecha"></div>
+    <div class="fi"><label>Semana</label><input id="f_sem" placeholder="Ej: Mayo S2"></div>
+    <div class="fi"><label>Categoría</label>
+      <select id="f_cat" onchange="updSub()">
+        <option value="">Seleccionar...</option>
+        <option>CTA Valor Tráfico</option><option>CTA Valor Venta</option>
+        <option>Programa</option><option>Venta Directa</option>
+        <option>Conexión Emocional</option><option>Autoridad / Testimonios</option>
+        <option>Valor / Nutrición</option>
+      </select>
+    </div>
+    <div class="fi"><label>Estructura / Sub-tipo</label><select id="f_sub"><option>—</option></select></div>
+    <div class="fi full"><label>Dolor / Ángulo</label><input id="f_dolor" placeholder="Ej: Fondeos fallados en fase 2 por gestión emocional post-racha verde"></div>
+    <div class="fi"><label>¿Lleva recurso?</label>
+      <select id="f_rec" onchange="togR()"><option value="no">No</option><option value="si">Sí</option></select>
+    </div>
+    <div class="fi" id="tRG" style="display:none"><label>Tipo recurso</label>
+      <select id="f_trec"><option>LOOM</option><option>PDF</option><option>Template</option><option>Miro</option><option>Otro</option></select>
+    </div>
+    <div class="fi full" id="lRG" style="display:none"><label>Link al recurso</label><input type="url" id="f_lrec" placeholder="https://..."></div>
+    <div class="fi"><label>CTA (keyword)</label><input id="f_cta" placeholder="Escribe FONDEO en DMs"></div>
+    <div class="fi"><label>¿Ligada a reel?</label>
+      <select id="f_reel"><option value="no">No</option><option value="si">Sí</option></select>
+    </div>
+    <hr class="sep">
+    <div class="fi"><label>Estado guión</label>
+      <select id="f_sg"><option>Pendiente</option><option>En proceso</option><option>Listo ✅</option></select>
+    </div>
+    <div class="fi"><label>Imágenes IA</label>
+      <select id="f_si"><option>Pendiente</option><option>Creadas ✅</option></select>
+    </div>
+    <div class="fi"><label>Material para subir</label>
+      <select id="f_sm"><option>Pendiente</option><option>Listo ✅</option></select>
+    </div>
+    <div class="fi"><label>Estado general</label>
+      <select id="f_est"><option>Borrador</option><option>Pendiente</option><option>Publicada</option></select>
+    </div>
+    <hr class="sep">
+    <div class="fi"><label>Chats generados</label><input type="number" id="f_ch" value="0" min="0"></div>
+    <div class="fi"><label>Respuestas al recurso</label><input type="number" id="f_rr" value="0" min="0"></div>
+    <div class="fi"><label>Agendas generadas</label><input type="number" id="f_ag" value="0" min="0"></div>
+    <div class="fi"><label>Views estimadas</label><input type="number" id="f_vw" value="0" min="0"></div>
+    <div class="fi full"><label>Notas de rendimiento</label>
+      <textarea id="f_no" placeholder="Qué funcionó, qué no, ángulo a replicar, copy que más respondió..."></textarea>
+    </div>
+  </div>
+  <div class="fact">
+    <button class="btn btn-o" onclick="closeM()">Cancelar</button>
+    <button class="btn btn-p" onclick="saveH()">Guardar</button>
+  </div>
+</div>
+</div>
+
+<input type="file" id="impF" accept=".json" style="display:none" onchange="handleImp(event)">
+
+<script>
+// ===== STATE =====
+let hs = JSON.parse(localStorage.getItem('td_hs') || '[]');
+let eid = null, sf = 'fecha', sd = -1;
+
+const SUBS = {
+  'CTA Valor Tráfico':['AIDA','P-S','One Story','P.A.S','A-D-V','4 U\'s Formula'],
+  'CTA Valor Venta':['E1 — Caso éxito + Mecanismo','E2 — Testimonio + Mecanismo','E3 — Mec. + Stack Testimonios','P.A.S.T.O.R'],
+  'Programa':['Mecanismo','Validación de Mecanismo','Stack de Valor'],
+  'Venta Directa':['Venta Directa — Hook + Dolor + Ángulo'],
+  'Conexión Emocional':['Vida personal / Sin estructura'],
+  'Autoridad / Testimonios':['Hook + 3 Testimonios + CTA opcional'],
+  'Valor / Nutrición':['Mecanismo Educativa (sin CTA)','Stack de Testimonios (sin CTA)']
+};
+
+const CCOL = {
+  'CTA Valor Tráfico':'#2dc75c','CTA Valor Venta':'#ff4444','Programa':'#f5a623',
+  'Venta Directa':'#ff7777','Conexión Emocional':'#aaa','Autoridad / Testimonios':'#ffc832','Valor / Nutrición':'#8888ff'
+};
+
+const CBD = {
+  'CTA Valor Tráfico':'bt','CTA Valor Venta':'bv','Programa':'bp',
+  'Venta Directa':'bvd','Conexión Emocional':'bc','Autoridad / Testimonios':'ba','Valor / Nutrición':'bn'
+};
+
+function save(){ localStorage.setItem('td_hs', JSON.stringify(hs)); }
+
+// ===== MODAL =====
+function openM(id=null){
+  eid=id;
+  document.getElementById('mtit').textContent = id?'Editar Historia':'Nueva Historia';
+  if(id){
+    const h=hs.find(x=>x.id===id); if(!h) return;
+    sv('f_t',h.t||''); sv('f_fecha',h.fecha||''); sv('f_sem',h.sem||'');
+    sv('f_cat',h.cat||''); updSub(); sv('f_sub',h.sub||'');
+    sv('f_dolor',h.dolor||''); sv('f_rec',h.rec?'si':'no');
+    sv('f_trec',h.trec||'LOOM'); sv('f_lrec',h.lrec||'');
+    sv('f_cta',h.cta||''); sv('f_reel',h.reel?'si':'no');
+    sv('f_sg',h.sg||'Pendiente'); sv('f_si',h.si||'Pendiente');
+    sv('f_sm',h.sm||'Pendiente'); sv('f_est',h.est||'Borrador');
+    sv('f_ch',h.chats||0); sv('f_rr',h.resp||0);
+    sv('f_ag',h.ag||0); sv('f_vw',h.vw||0);
+    sv('f_no',h.notas||''); togR();
+  } else {
+    document.querySelectorAll('.modal input:not([type=file]),.modal select,.modal textarea').forEach(el=>{
+      if(el.type==='number') el.value=0; else if(el.tagName==='SELECT') el.selectedIndex=0; else el.value='';
+    }); updSub(); togR();
+  }
+  document.getElementById('ov').classList.add('open');
+}
+function sv(id,v){ const e=document.getElementById(id); if(e) e.value=v; }
+function gv(id){ return document.getElementById(id)?.value||''; }
+function gn(id){ return parseInt(document.getElementById(id)?.value)||0; }
+function closeM(){ document.getElementById('ov').classList.remove('open'); eid=null; }
+function closeBg(e){ if(e.target.id==='ov') closeM(); }
+function updSub(){
+  const cat=gv('f_cat'), sel=document.getElementById('f_sub');
+  sel.innerHTML=(SUBS[cat]||['—']).map(o=>`<option>${o}</option>`).join('');
+}
+function togR(){
+  const on=gv('f_rec')==='si';
+  document.getElementById('tRG').style.display=on?'flex':'none';
+  document.getElementById('lRG').style.display=on?'flex':'none';
+}
+function saveH(){
+  const t=gv('f_t').trim(); if(!t){alert('El título es obligatorio');return;}
+  const h={id:eid||Date.now(),t,fecha:gv('f_fecha'),sem:gv('f_sem'),
+    cat:gv('f_cat'),sub:gv('f_sub'),dolor:gv('f_dolor'),
+    rec:gv('f_rec')==='si',trec:gv('f_trec'),lrec:gv('f_lrec'),
+    cta:gv('f_cta'),reel:gv('f_reel')==='si',
+    sg:gv('f_sg'),si:gv('f_si'),sm:gv('f_sm'),est:gv('f_est'),
+    chats:gn('f_ch'),resp:gn('f_rr'),ag:gn('f_ag'),vw:gn('f_vw'),
+    notas:gv('f_no')};
+  if(eid){ const i=hs.findIndex(x=>x.id===eid); if(i>-1) hs[i]=h; }
+  else hs.push(h);
+  save(); closeM(); render();
+}
+function delH(id){ if(!confirm('¿Eliminar?')) return; hs=hs.filter(x=>x.id!==id); save(); render(); }
+
+// ===== RENDER =====
+function filtered(){
+  const c=gv('fCat'),e=gv('fEst'),s=gv('fSem'),q=gv('fQ').toLowerCase();
+  return hs.filter(h=>{
+    if(c&&h.cat!==c) return false;
+    if(e&&h.est!==e) return false;
+    if(s&&h.sem!==s) return false;
+    if(q&&!h.t?.toLowerCase().includes(q)&&!h.dolor?.toLowerCase().includes(q)) return false;
+    return true;
+  }).sort((a,b)=>{
+    const va=a[sf]||'',vb=b[sf]||'';
+    return va<vb?sd:va>vb?-sd:0;
+  });
+}
+function srt(f){ sf===f?sd*=-1:(sf=f,sd=-1); renderT(); }
+
+function renderStats(){
+  const total=hs.length, pub=hs.filter(h=>h.est==='Publicada');
+  const tCh=hs.reduce((s,h)=>s+(h.chats||0),0);
+  const tAg=hs.reduce((s,h)=>s+(h.ag||0),0);
+  const tRr=hs.reduce((s,h)=>s+(h.resp||0),0);
+  const ctaN=hs.filter(h=>h.cat&&!['Valor / Nutrición','Conexión Emocional'].includes(h.cat)).length;
+  const ctaP=total>0?Math.round(ctaN/total*100):0;
+  const avg=pub.length>0?(tCh/pub.length).toFixed(1):0;
+  document.getElementById('stats').innerHTML=`
+    <div class="sc"><div class="sv">${total}</div><div class="sl">Total historias</div><div class="ss">${pub.length} publicadas</div></div>
+    <div class="sc"><div class="sv g">${tCh}</div><div class="sl">Chats generados</div><div class="ss">avg ${avg}/pub.</div></div>
+    <div class="sc"><div class="sv y">${tAg}</div><div class="sl">Agendas</div><div class="ss">desde historias</div></div>
+    <div class="sc"><div class="sv">${tRr}</div><div class="sl">Resp. recursos</div><div class="ss">keywords</div></div>
+    <div class="sc"><div class="sv ${ctaP>40?'y':'r'}">${ctaP}%</div><div class="sl">% con CTA</div><div class="ss">meta ~30%</div><div class="prog"><div class="progf" style="width:${Math.min(ctaP,100)}%;background:${ctaP>40?'var(--yellow)':'var(--red)'}"></div></div></div>
+    <div class="sc"><div class="sv r">${hs.filter(h=>h.sg!=='Listo ✅'&&h.est!=='Publicada').length}</div><div class="sl">Guiones pendientes</div><div class="ss">por terminar</div></div>
+  `;
+}
+
+function renderCharts(){
+  const pub=hs.filter(h=>h.est==='Publicada');
+  // Chart 1: Categories donut
+  const cC={};
+  hs.forEach(h=>{ if(h.cat) cC[h.cat]=(cC[h.cat]||0)+1; });
+  const maxC=Math.max(...Object.values(cC),1);
+  document.getElementById('ch1').innerHTML=Object.entries(cC).length
+    ?Object.entries(cC).sort((a,b)=>b[1]-a[1]).map(([n,c])=>`
+      <div class="donut-row">
+        <div class="donut-dot" style="background:${CCOL[n]||'#555'}"></div>
+        <div class="donut-name">${n.replace('CTA Valor ','')}</div>
+        <div class="donut-pct">${c}</div>
+      </div>
+      <div class="donut-bar"><div class="donut-fill" style="width:${Math.round(c/maxC*100)}%;background:${CCOL[n]||'#555'}"></div></div>
+    `).join('')
+    :'<div style="color:var(--muted);font-size:11px;padding:8px 0">Sin datos todavía</div>';
+
+  // Chart 2: Chats by structure
+  const eC={};
+  pub.forEach(h=>{ if(h.sub&&(h.chats||0)>0){ eC[h.sub]=(eC[h.sub]||0)+(h.chats||0); } });
+  const sorted=Object.entries(eC).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  const maxE=sorted.length?sorted[0][1]:1;
+  document.getElementById('ch2').innerHTML=sorted.length
+    ?sorted.map(([n,c])=>`
+      <div class="bar-item">
+        <div class="bar-label">${n.replace(' — ',' ').substring(0,14)}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/maxE*100)}%"></div></div>
+        <div class="bar-val">${c}</div>
+      </div>
+    `).join('')
+    :'<div style="color:var(--muted);font-size:11px;padding:8px 0">Publica historias y registra chats</div>';
+
+  // Chart 3: by week
+  const wC={};
+  pub.forEach(h=>{ if(h.sem) wC[h.sem]=(wC[h.sem]||0)+1; });
+  const wSorted=Object.entries(wC).sort((a,b)=>a[0].localeCompare(b[0])).slice(-8);
+  const maxW=wSorted.length?Math.max(...wSorted.map(x=>x[1])):1;
+  document.getElementById('ch3').innerHTML=wSorted.length
+    ?wSorted.map(([n,c])=>`
+      <div class="wk-row">
+        <div class="wk-label">${n}</div>
+        <div class="wk-bar"><div class="wk-fill" style="width:${Math.round(c/maxW*100)}%;min-width:${c>0?'30px':'0'}">${c>0?c:''}</div></div>
+      </div>
+    `).join('')
+    :'<div style="color:var(--muted);font-size:11px;padding:8px 0">Sin datos de semanas todavía</div>';
+}
+
+function renderT(){
+  const f=filtered();
+  document.getElementById('cnt').textContent=`${f.length} historias`;
+  const weeks={};
+  f.forEach(h=>{ const w=h.sem||'Sin semana'; if(!weeks[w]) weeks[w]=[]; weeks[w].push(h); });
+  let html='';
+  if(!f.length){
+    html=`<tr><td colspan="14"><div class="emp"><h3>Sin historias</h3><p>Haz clic en "+ Nueva Historia" para empezar a registrar.</p></div></td></tr>`;
+  } else {
+    Object.entries(weeks).forEach(([w,items])=>{
+      html+=`<tr class="wr"><td colspan="14">📅 ${w} — ${items.length} historia${items.length!==1?'s':''}</td></tr>`;
+      items.forEach(h=>{
+        const bc=CBD[h.cat]||'';
+        const dc=h.est==='Publicada'?'dp':h.est==='Pendiente'?'dd':'db';
+        const gi=h.sg==='Listo ✅'?'✅':h.sg==='En proceso'?'🟡':'⬜';
+        const ii=h.si==='Creadas ✅'?'✅':'⬜';
+        const mi=h.sm==='Listo ✅'?'✅':'⬜';
+        html+=`<tr>
+          <td>${h.sem||'—'}</td>
+          <td>${h.fecha||'—'}</td>
+          <td title="${h.t||''}" style="font-weight:600">${(h.t||'—').substring(0,28)}${(h.t||'').length>28?'…':''}</td>
+          <td><span class="badge ${bc}">${(h.cat||'—').replace('CTA Valor ','').replace('Autoridad / ','Auth/')}</span></td>
+          <td style="color:var(--muted)">${(h.sub||'—').substring(0,18)}</td>
+          <td title="${h.dolor||''}" style="color:var(--muted)">${(h.dolor||'—').substring(0,28)}${(h.dolor||'').length>28?'…':''}</td>
+          <td style="color:var(--muted)">${(h.cta||'—').substring(0,16)}…</td>
+          <td style="text-align:center;font-weight:700;color:${(h.chats||0)>0?'var(--green)':'var(--muted)'}">${h.chats||0}</td>
+          <td style="text-align:center;color:var(--muted)">${h.resp||0}</td>
+          <td><span class="dot ${dc}"></span>${h.est||'Borrador'}</td>
+          <td style="text-align:center">${gi}</td>
+          <td style="text-align:center">${ii}</td>
+          <td style="text-align:center">${mi}</td>
+          <td>
+            <button class="abt" onclick="openM(${h.id})" title="Editar">✏️</button>
+            <button class="abt" onclick="delH(${h.id})" title="Eliminar">🗑️</button>
+            ${h.lrec?`<a href="${h.lrec}" target="_blank" class="abt" title="Recurso">🔗</a>`:''}
+          </td>
+        </tr>`;
+      });
+    });
+  }
+  document.getElementById('tbody').innerHTML=html;
+}
+
+function renderAnalytics(){
+  const pub=hs.filter(h=>h.est==='Publicada');
+  // Top chats
+  const top=[...pub].sort((a,b)=>(b.chats||0)-(a.chats||0)).slice(0,5);
+  document.getElementById('topC').innerHTML=top.length&&(top[0].chats||0)>0
+    ?top.map((h,i)=>`<div class="li"><div class="lir">#${i+1}</div><div class="lii"><div class="lit">${(h.t||'—').substring(0,35)}</div><div class="lim">${h.sub||'—'} · ${h.sem||'—'}</div></div><div class="liv">${h.chats}</div></div>`).join('')
+    :'<div class="empty-li">Publica historias y registra los chats generados para ver el ranking de mejores historias.</div>';
+
+  // Top structures
+  const eC={};
+  hs.forEach(h=>{ if(h.sub) eC[h.sub]=(eC[h.sub]||0)+1; });
+  const te=Object.entries(eC).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  document.getElementById('topE').innerHTML=te.length
+    ?te.map(([n,c],i)=>`<div class="li"><div class="lir">#${i+1}</div><div class="lii"><div class="lit">${n}</div></div><div class="liv y">${c}x</div></div>`).join('')
+    :'<div class="empty-li">Sin datos todavía.</div>';
+
+  // Top dolores
+  const dC={};
+  pub.forEach(h=>{ if(h.dolor&&(h.chats||0)>0){ const k=h.dolor.substring(0,50); dC[k]=(dC[k]||0)+(h.chats||0); } });
+  const td=Object.entries(dC).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('topD').innerHTML=td.length
+    ?td.map(([d,c],i)=>`<div class="li"><div class="lir">#${i+1}</div><div class="lii"><div class="lit" style="font-size:11px">${d}…</div></div><div class="liv m">${c} ch</div></div>`).join('')
+    :'<div class="empty-li">Sin datos todavía.</div>';
+
+  // Rendimiento por cat
+  const cP={};
+  pub.forEach(h=>{ if(!h.cat) return; if(!cP[h.cat]) cP[h.cat]={ch:0,n:0}; cP[h.cat].ch+=(h.chats||0); cP[h.cat].n++; });
+  const rc=Object.entries(cP).sort((a,b)=>(b[1].ch/Math.max(b[1].n,1))-(a[1].ch/Math.max(a[1].n,1)));
+  document.getElementById('topR').innerHTML=rc.length
+    ?rc.map(([c,d])=>`<div class="li"><div class="lii"><div class="lit"><span class="badge ${CBD[c]||''}" style="font-size:9px">${c.replace('CTA Valor ','')}</span></div><div class="lim">${d.n} hist. publicadas</div></div><div class="liv m">${(d.ch/Math.max(d.n,1)).toFixed(1)} ch/hist</div></div>`).join('')
+    :'<div class="empty-li">Marca historias como "Publicada" y registra resultados.</div>';
+}
+
+function renderRecs(){
+  const pub=hs.filter(h=>h.est==='Publicada'), total=hs.length, recs=[];
+  if(!total){
+    recs.push({t:'📊 Empieza aquí',d:'Añade tu primera historia con "+ Nueva Historia". Cuando publiques, marca el estado como "Publicada" y registra los chats generados para que el dashboard calcule recomendaciones.'});
+  } else {
+    const ctaN=hs.filter(h=>h.cat&&!['Valor / Nutrición','Conexión Emocional'].includes(h.cat)).length;
+    const ctaP=Math.round(ctaN/total*100);
+    if(ctaP>40) recs.push({t:`⚠️ Demasiados CTAs — ${ctaP}%`,d:`El ideal es ~30% (5 de cada 16). Añade más historias de Valor/Nutrición y Conexión Emocional para no quemar la audiencia.`});
+    else if(ctaP<18) recs.push({t:`💡 Puedes activar más CTAs — ${ctaP}%`,d:`Tienes margen para añadir más CTAs de tráfico. La meta es ~30%.`});
+    else recs.push({t:`✅ Balance de CTAs óptimo — ${ctaP}%`,d:`Tu distribución está en el rango ideal. Mantén este ritmo.`});
+
+    const eC={};
+    pub.forEach(h=>{ if(h.sub&&(h.chats||0)>0) eC[h.sub]=(eC[h.sub]||0)+(h.chats||0); });
+    const bE=Object.entries(eC).sort((a,b)=>b[1]-a[1])[0];
+    if(bE) recs.push({t:`🏆 Estructura ganadora: ${bE[0]}`,d:`Esta estructura genera más chats (${bE[1]} en total). Priorízala las próximas semanas y prueba variaciones del mismo dolor.`});
+
+    const sinR=pub.filter(h=>!(h.chats||0)&&!(h.ag||0));
+    if(sinR.length>=3){ const eS={}; sinR.forEach(h=>{if(h.sub)eS[h.sub]=(eS[h.sub]||0)+1;}); const wE=Object.entries(eS).sort((a,b)=>b[1]-a[1])[0]; if(wE) recs.push({t:`📉 Revisar: ${wE[0]}`,d:`${wE[1]} historias sin resultados. Cambia el ángulo, el hook o el diseño visual.`}); }
+
+    const dC={};
+    pub.forEach(h=>{ if(h.dolor&&(h.chats||0)>0){ const k=h.dolor.substring(0,50); dC[k]=(dC[k]||0)+(h.chats||0); } });
+    const bD=Object.entries(dC).sort((a,b)=>b[1]-a[1])[0];
+    if(bD) recs.push({t:`🎯 Dolor que más convierte`,d:`"${bD[0]}…" genera más chats. Crea variaciones con este ángulo usando diferentes estructuras (AIDA, P.A.S, A-D-V).`});
+
+    const bH=pub.filter(h=>(h.chats||0)>=5).sort((a,b)=>(b.chats||0)-(a.chats||0))[0];
+    if(bH) recs.push({t:`🚀 Escalar: ${(bH.t||'').substring(0,30)}…`,d:`Generó ${bH.chats} chats. Para escalarla: cambia el ángulo/dolor manteniendo la estructura, repite en 3 semanas con diseño diferente.`});
+
+    const nutP=Math.round(hs.filter(h=>h.cat==='Valor / Nutrición').length/Math.max(total,1)*100);
+    if(nutP<25) recs.push({t:`🔥 Más nutrición — solo ${nutP}%`,d:`Menos del 25% de tus historias son de nutrición. Añade Mecanismo Educativa y Stack de Testimonios esta semana para calentar la audiencia.`});
+  }
+  document.getElementById('recs').innerHTML=recs.map(r=>`<div class="rec"><div class="ret">${r.t}</div><div class="red">${r.d}</div></div>`).join('');
+}
+
+function updSemFilter(){
+  const sems=[...new Set(hs.map(h=>h.sem).filter(Boolean))].sort();
+  const sel=document.getElementById('fSem'), cur=sel.value;
+  sel.innerHTML='<option value="">Todas las semanas</option>'+sems.map(s=>`<option${s===cur?' selected':''}>${s}</option>`).join('');
+}
+
+function render(){
+  renderStats(); renderCharts(); renderT(); renderAnalytics(); renderRecs(); updSemFilter();
+}
+
+// Export / Import
+function exportD(){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(hs,null,2)],{type:'application/json'}));
+  a.download=`historias_tradinverso_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+function importD(){ document.getElementById('impF').click(); }
+function handleImp(e){
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(Array.isArray(d)&&confirm(`Importar ${d.length} historias? Reemplaza los datos actuales.`)){ hs=d; save(); render(); } } catch{ alert('Archivo inválido'); } };
+  r.readAsText(f); e.target.value='';
+}
+
+// INIT
+render();
+</script>
+</body>
+</html>
