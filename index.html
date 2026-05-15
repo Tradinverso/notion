@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tradinverso · Dashboards</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --bg-card-hover: #1c2330;
+    --border: #30363d;
+    --border-hover: #58a6ff;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #7ee787;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(88,166,255,0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 110%, rgba(126,231,135,0.08), transparent);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 24px;
+    line-height: 1.5;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  header { margin-bottom: 48px; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(88,166,255,0.1);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid rgba(88,166,255,0.3);
+    margin-bottom: 16px;
+  }
+  .badge::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 8px var(--accent-2);
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 0%, #8b949e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 600px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    min-height: 160px;
+  }
+
+  /* Loading state */
+  .skeleton {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .skeleton-line {
+    height: 12px;
+    border-radius: 6px;
+    background: var(--border);
+    margin-bottom: 10px;
+  }
+  .skeleton-line.short { width: 60%; }
+  .skeleton-line.long  { width: 90%; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  /* Cards */
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 10px;
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+  .card h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+    padding-right: 20px;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    flex-grow: 1;
+  }
+  .card .file {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    padding: 4px 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: inline-block;
+    word-break: break-all;
+  }
+  .arrow {
+    position: absolute;
+    top: 20px; right: 20px;
+    color: var(--text-muted);
+    transition: transform 0.18s ease, color 0.18s ease;
+  }
+  .card:hover .arrow { color: var(--accent); transform: translate(2px,-2px); }
+
+  /* Error */
+  .error-box {
+    grid-column: 1 / -1;
+    padding: 20px;
+    background: rgba(248,81,73,0.1);
+    border: 1px solid rgba(248,81,73,0.3);
+    border-radius: 12px;
+    color: #f85149;
+    font-size: 14px;
+  }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    body { padding: 32px 16px; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="badge">Tradinverso</span>
+    <h1>Dashboards</h1>
+    <p class="subtitle">Accede a todos los paneles del repositorio. Se actualiza solo cuando subes nuevos archivos.</p>
+  </header>
+
+  <main class="grid" id="grid">
+    <!-- skeletons mientras carga -->
+    <div class="skeleton"><div class="skeleton-line short"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
+    <div class="skeleton"><div class="skeleton-line short"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
+    <div class="skeleton"><div class="skeleton-line short"></div><div class="skeleton-line long"></div><div class="skeleton-line long"></div></div>
+  </main>
+
+  <footer>
+    <p>Repositorio: <a href="https://github.com/Tradinverso/notion" target="_blank" rel="noopener">github.com/Tradinverso/notion</a></p>
+  </footer>
+
+</div>
+
+<script>
+const REPO = "Tradinverso/notion";
+const API  = `https://api.github.com/repos/${REPO}/contents`;
+
+// Icono según palabras clave en el nombre
+function pickIcon(name) {
+  const n = name.toLowerCase();
+  if (n.includes("trading") || n.includes("mercado")) return "📈";
+  if (n.includes("competen"))                          return "🏆";
+  if (n.includes("avatar")  || n.includes("sergio"))  return "👤";
+  if (n.includes("historia"))                         return "📖";
+  if (n.includes("nutricion") || n.includes("nutri")) return "🥗";
+  if (n.includes("finanz")  || n.includes("finance")) return "💰";
+  if (n.includes("report")  || n.includes("informe")) return "📊";
+  return "📄";
+}
+
+// Nombre legible: quitar extensión, reemplazar guiones/guiones bajos, capitalizar
+function prettyName(filename) {
+  return filename
+    .replace(/\.html$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, c => c.toUpperCase())
+    .trim();
+}
+
+async function loadFiles() {
+  const grid = document.getElementById("grid");
+  try {
+    const res = await fetch(API);
+    if (!res.ok) throw new Error(`GitHub API: ${res.status}`);
+    const files = await res.json();
+
+    const htmlFiles = files.filter(f =>
+      f.type === "file" &&
+      f.name.toLowerCase().endsWith(".html") &&
+      f.name.toLowerCase() !== "index.html"
+    );
+
+    grid.innerHTML = "";
+
+    if (htmlFiles.length === 0) {
+      grid.innerHTML = `<div class="error-box">No se encontraron archivos HTML en el repositorio.</div>`;
+      return;
+    }
+
+    htmlFiles.forEach(file => {
+      const card = document.createElement("a");
+      card.className = "card";
+      card.href = file.name;
+      card.innerHTML = `
+        <span class="arrow">↗</span>
+        <div class="icon">${pickIcon(file.name)}</div>
+        <h2>${prettyName(file.name)}</h2>
+        <p>&nbsp;</p>
+        <span class="file">${file.name}</span>
+      `;
+      grid.appendChild(card);
+    });
+
+  } catch (err) {
+    grid.innerHTML = `<div class="error-box">⚠️ No se pudo cargar la lista de archivos.<br><small>${err.message}</small></div>`;
+  }
+}
+
+loadFiles();
+</script>
+</body>
+</html>
