@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YT Trading Dashboard</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --bg:#0f0f13;--bg2:#1a1a22;--bg3:#22222e;--border:#2e2e3e;
+    --accent:#6c63ff;--accent2:#ff6b6b;--green:#4ade80;--yellow:#facc15;
+    --orange:#fb923c;--blue:#60a5fa;--purple:#c084fc;
+    --text:#e2e2f0;--text2:#9090a8;--text3:#5a5a72;
+  }
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;}
+
+  /* NAV */
+  .nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-weight:700;font-size:15px;color:var(--accent);padding:14px 20px 14px 0;border-right:1px solid var(--border);margin-right:12px;white-space:nowrap;flex-shrink:0;}
+  .nav-tabs{display:flex;gap:0;overflow-x:auto;flex:1;}
+  .nav-tab{padding:14px 16px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;font-size:13px;}
+  .nav-tab:hover{color:var(--text);background:var(--bg3);}
+  .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .nav-actions{display:flex;gap:8px;padding-left:12px;border-left:1px solid var(--border);flex-shrink:0;}
+
+  /* PAGES */
+  .page{display:none;padding:28px 28px 64px;max-width:1400px;margin:0 auto;}
+  .page.active{display:block;}
+  .page-title{font-size:20px;font-weight:700;margin-bottom:4px;}
+  .page-sub{color:var(--text2);margin-bottom:24px;font-size:13px;}
+
+  /* GRID */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media(max-width:1000px){.grid-3,.grid-4{grid-template-columns:1fr 1fr;}}
+  @media(max-width:650px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+  /* CARD */
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .15s;}
+  .card:hover{border-color:var(--accent);}
+  .card-title{font-weight:600;font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .card-body{color:var(--text2);font-size:13px;line-height:1.6;}
+
+  /* TAGS */
+  .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+  .tag-red{background:#ff6b6b22;color:var(--accent2);border:1px solid #ff6b6b44;}
+  .tag-green{background:#4ade8022;color:var(--green);border:1px solid #4ade8044;}
+  .tag-blue{background:#60a5fa22;color:var(--blue);border:1px solid #60a5fa44;}
+  .tag-purple{background:#c084fc22;color:var(--purple);border:1px solid #c084fc44;}
+  .tag-yellow{background:#facc1522;color:var(--yellow);border:1px solid #facc1544;}
+  .tag-orange{background:#fb923c22;color:var(--orange);border:1px solid #fb923c44;}
+  .tag-gray{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+
+  /* TABLE */
+  .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+  table{width:100%;border-collapse:collapse;}
+  th{background:var(--bg3);padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+  td{padding:11px 14px;border-top:1px solid var(--border);font-size:13px;vertical-align:top;}
+  tr:hover td{background:var(--bg3);}
+  td a{color:var(--accent);text-decoration:none;}
+  td a:hover{text-decoration:underline;}
+
+  /* STAT */
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 22px;}
+  .stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .stat-value{font-size:26px;font-weight:700;}
+  .stat-note{font-size:11px;color:var(--text3);margin-top:4px;}
+
+  /* BUTTONS */
+  .btn{border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;display:inline-flex;align-items:center;gap:6px;}
+  .btn:hover{opacity:.85;}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-green{background:#22543d;color:var(--green);border:1px solid #4ade8044;}
+  .btn-danger{background:#3d1a1a;color:var(--accent2);border:1px solid #ff6b6b44;}
+  .btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* FORMS */
+  .form-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}
+  .form-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin:-20px -20px 20px;padding:0 20px;overflow-x:auto;}
+  .form-tab{padding:12px 16px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-size:13px;transition:all .15s;}
+  .form-tab:hover{color:var(--text);}
+  .form-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .form-body{display:none;}
+  .form-body.active{display:block;}
+  .field-group{display:grid;gap:14px;margin-bottom:14px;}
+  .field-group-2{grid-template-columns:1fr 1fr;}
+  .field-group-3{grid-template-columns:1fr 1fr 1fr;}
+  @media(max-width:700px){.field-group-2,.field-group-3{grid-template-columns:1fr;}}
+  .field label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:9px 12px;font-family:inherit;transition:border-color .15s;outline:none;}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);}
+  .field textarea{resize:vertical;min-height:70px;line-height:1.5;}
+  .field-hint{font-size:11px;color:var(--text3);margin-top:4px;}
+  .form-save-bar{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border);margin-top:6px;}
+
+  /* IMPORT ZONE */
+  .import-zone{border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;transition:all .2s;cursor:pointer;background:var(--bg2);}
+  .import-zone:hover,.import-zone.drag-over{border-color:var(--accent);background:#6c63ff11;}
+  .import-zone-icon{font-size:28px;margin-bottom:8px;}
+  .import-zone-title{font-weight:600;margin-bottom:4px;}
+  .import-zone-sub{font-size:13px;color:var(--text2);}
+  #file-input{display:none;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:13px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:360px;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast.success{border-color:var(--green);color:var(--green);}
+  .toast.error{border-color:var(--accent2);color:var(--accent2);}
+  .toast.info{border-color:var(--blue);color:var(--blue);}
+
+  /* DOLOR */
+  .dolor-card{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:10px;padding:18px;}
+  .dolor-titulo{font-weight:700;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .dolor-row{display:grid;grid-template-columns:130px 1fr;gap:8px;margin-bottom:8px;font-size:13px;}
+  .dolor-label{color:var(--text3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding-top:2px;}
+  .dolor-val{color:var(--text2);}
+
+  /* TITULO CARD */
+  .titulo-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .titulo-text{font-size:15px;font-weight:600;color:var(--blue);margin-bottom:10px;line-height:1.4;}
+
+  /* SOP */
+  .sop-step{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;}
+  .sop-num{position:absolute;top:-11px;left:18px;background:var(--accent);color:#fff;font-weight:700;font-size:11px;padding:2px 12px;border-radius:20px;}
+  .sop-titulo{font-weight:700;font-size:16px;margin-bottom:8px;margin-top:4px;}
+  .sop-check{list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .sop-check li{font-size:13px;color:var(--text2);padding-left:18px;position:relative;line-height:1.5;}
+  .sop-check li::before{content:"→";position:absolute;left:0;color:var(--accent);}
+  .sop-warning{background:#fb923c11;border:1px solid #fb923c44;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--orange);margin-top:10px;}
+  .sop-regla{background:#ff6b6b11;border:1px solid #ff6b6b33;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent2);margin-top:10px;font-weight:600;}
+
+  /* VSL BLOCKS */
+  .vsl-block{background:var(--bg3);border-radius:8px;padding:14px;margin-bottom:10px;border-left:3px solid var(--purple);}
+  .vsl-block-title{font-weight:700;font-size:13px;color:var(--purple);margin-bottom:8px;}
+  .vsl-list{list-style:none;display:flex;flex-direction:column;gap:5px;}
+  .vsl-list li{font-size:12px;color:var(--text2);padding-left:16px;position:relative;}
+  .vsl-list li::before{content:"✓";position:absolute;left:0;color:var(--purple);}
+
+  /* MINIATURA TAG */
+  .mini-desc{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--text2);font-style:italic;margin-top:8px;}
+
+  /* SECTION HEADER */
+  .section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+  .section-ttl{font-size:16px;font-weight:700;}
+  .count-badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 12px;font-size:12px;color:var(--text2);}
+
+  /* DIVIDER */
+  .divider{height:1px;background:var(--border);margin:24px 0;}
+
+  /* METRICS */
+  .metrics-ideal{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-top:10px;}
+  .metrics-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:8px;}
+  .metric-item .metric-label{font-size:11px;color:var(--text3);display:block;margin-bottom:2px;text-transform:uppercase;}
+  .metric-item .metric-val{color:var(--green);font-weight:700;font-size:14px;}
+
+  /* SESSIONS HISTORY */
+  .session-pill{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2);margin:3px;}
+  .session-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+
+  /* EMPTY */
+  .empty{text-align:center;padding:40px;color:var(--text3);font-size:13px;}
+  .empty-icon{font-size:28px;margin-bottom:10px;}
+
+  /* FLOW DIAGRAM */
+  .flow{display:flex;gap:0;overflow-x:auto;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 12px;}
+  .flow-step{flex:0 0 auto;text-align:center;padding:8px 14px;position:relative;}
+  .flow-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin:0 auto 8px;}
+  .flow-label{font-size:11px;color:var(--text2);white-space:nowrap;}
+  .flow-arrow{position:absolute;right:-4px;top:14px;color:var(--border);font-size:16px;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">⚡ YT Dashboard</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('overview',this)">Overview</div>
+    <div class="nav-tab" onclick="showPage('sop',this)">SOP</div>
+    <div class="nav-tab" onclick="showPage('dolores',this)">Dolores <span id="badge-dolores" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('competidores',this)">Competidores <span id="badge-comp" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('titulos',this)">Títulos <span id="badge-titulos" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('yankees',this)">Yankees USA <span id="badge-yankees" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('angulos',this)">Ángulos <span id="badge-angulos" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('videos',this)">Mis Videos</div>
+    <div class="nav-tab" onclick="showPage('anadir',this)">✏️ Añadir</div>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-green" onclick="exportarDB()">⬇ Exportar DB</button>
+    <button class="btn btn-danger" onclick="resetDB()">🗑 Reset</button>
+  </div>
+</nav>
+
+<!-- ======= OVERVIEW ======= -->
+<div class="page active" id="page-overview">
+  <div class="page-title">Dashboard de Nutrición YouTube</div>
+  <div class="page-sub">Nicho: Trading · Avatar: Trader B2C no rentable, frustrado, con info pero sin claridad · Mercado: Español</div>
+
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-label">Competidores</div><div class="stat-value" id="s-comp">0</div><div class="stat-note">Canales analizados</div></div>
+    <div class="stat-card"><div class="stat-label">Dolores mapeados</div><div class="stat-value" id="s-dolores">0</div><div class="stat-note">Del avatar</div></div>
+    <div class="stat-card"><div class="stat-label">Títulos referencia</div><div class="stat-value" id="s-titulos">0</div><div class="stat-note">Que funcionan</div></div>
+    <div class="stat-card"><div class="stat-label">Ángulos libres</div><div class="stat-value" id="s-angulos">0</div><div class="stat-note">Sin competencia en ES</div></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">🎯 Avatar</div>
+      <div class="card-body">
+        <div style="margin-bottom:8px"><strong>Tipo:</strong> Trader B2C</div>
+        <div style="color:var(--accent2);font-weight:600;margin-bottom:6px">Dolores clave:</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--accent2)">●</span>No es rentable</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--accent2)">●</span>Nunca ha pasado un fondeo</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--accent2)">●</span>Mucha información, poca claridad</li>
+          <li style="padding-left:14px;position:relative"><span style="position:absolute;left:0;color:var(--accent2)">●</span>Frustrado y estancado</li>
+        </ul>
+        <div style="color:var(--green);font-weight:600">Ángulo libre: <span style="font-weight:400;color:var(--text2)">Información vs Claridad</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Dato clave del mercado</div>
+      <div class="card-body">
+        <div style="font-size:30px;font-weight:800;color:var(--accent2);margin-bottom:8px">5–10%</div>
+        <div style="margin-bottom:10px">de traders pasan evaluaciones de prop firms. <strong>40%</strong> de los fondeados admite no ser exitoso (PipFarm, 2025).</div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2)">
+          Causa #1 de fallo: romper drawdown por emociones, NO por mala estrategia. Ahí está tu ángulo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div style="font-weight:700;font-size:15px">Flujo SOP — 8 pasos</div>
+  </div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent);color:#fff">1</div><div class="flow-label">Elegir Dolor</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent);color:#fff">2</div><div class="flow-label">Research</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent2);color:#fff">3</div><div class="flow-label" style="color:var(--accent2);font-weight:700">Miniatura+Título ⚠️</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent);color:#fff">4</div><div class="flow-label">Bullet Points</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent);color:#fff">5</div><div class="flow-label">Script VSL</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent);color:#fff">6</div><div class="flow-label">Grabar</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--accent);color:#fff">7</div><div class="flow-label">Subir+Desc</div><div class="flow-arrow">›</div></div>
+    <div class="flow-step"><div class="flow-circle" style="background:var(--green);color:#000">8</div><div class="flow-label">Evaluar</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="font-weight:700;font-size:15px;margin-bottom:14px">Sesiones importadas</div>
+  <div id="sessions-list"><div class="empty"><div class="empty-icon">📂</div>Aún no hay sesiones importadas.</div></div>
+</div>
+
+<!-- ======= SOP ======= -->
+<div class="page" id="page-sop">
+  <div class="page-title">SOP — Protocolo de producción</div>
+  <div class="page-sub">Los 8 pasos para crear un video de nutrición. Tiempo estimado: ~46 horas por video.</div>
+  <div style="display:flex;flex-direction:column;gap:24px">
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 1</div>
+      <div class="sop-titulo">Selección del Dolor Principal</div>
+      <ul class="sop-check">
+        <li><strong>Con clientes:</strong> lista de 10 dolores → el que más se repitió con los que más pagaron upfront</li>
+        <li><strong>Sin clientes:</strong> los 5 videos con más vistas de un yankee con tu mismo avatar = sus dolores más importantes</li>
+        <li>Anotar: ¿por qué elegí este dolor? ¿qué evidencia tengo?</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 2</div>
+      <div class="sop-titulo">Research de Competencia y Packaging</div>
+      <ul class="sop-check">
+        <li><strong>Competencia directa:</strong> ¿cómo resuelven el dolor? Define tu ángulo diferente</li>
+        <li><strong>Yankees USA:</strong> busca en inglés el dolor usando el prompt de AI para keywords</li>
+        <li>Anotar: palabras repetidas en títulos, qué muestran miniaturas, tipo de promesa</li>
+      </ul>
+      <div class="sop-warning">💡 Prompt AI para keywords: "Actúa como experto en research de mercado en YouTube USA. Dolor: [X] · Nicho: [X] · Avatar: [X]. Dame 5 keywords en inglés, 3-4 palabras máx, lenguaje natural, sin how/why/best/tips/guide."</div>
+    </div>
+
+    <div class="sop-step" style="border-left:3px solid var(--accent2)">
+      <div class="sop-num" style="background:var(--accent2)">PASO 3 ⚠️</div>
+      <div class="sop-titulo">Crear Miniatura y Título ANTES de Grabar</div>
+      <ul class="sop-check">
+        <li><strong>Título:</strong> directo, específico, promesa clara o pregunta incómoda. Lo más importante al inicio</li>
+        <li><strong>Miniatura:</strong> simple (máx 3 elementos), complementa el título sin repetirlo, colores llamativos</li>
+        <li>Crear 3 variaciones de título y elegir la mejor</li>
+        <li>Buscar 3 referencias de miniaturas que funcionen en tu nicho</li>
+      </ul>
+      <div class="sop-regla">❌ REGLA: Si no tienes miniatura y título definidos ANTES de grabar, NO grabes. El packaging es el 80% del resultado.</div>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 4</div>
+      <div class="sop-titulo">Bullet Points del Video</div>
+      <ul class="sop-check">
+        <li>Bajar el dolor principal a 3-5 problemas concretos</li>
+        <li>Para cada problema: <strong>Problema específico</strong> + <strong>Tu solución única</strong> + <strong>Cambio de creencia</strong></li>
+        <li>La solución NO puede ser lo que ya dice el mercado</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 5</div>
+      <div class="sop-titulo">Estructura del Script (VSL)</div>
+      <div class="vsl-block"><div class="vsl-block-title">PARTE 1 — APERTURA (primeros 2-3 min)</div><ul class="vsl-list"><li>Primeros 15 seg: frase que muestra el dolor, confirma expectativa del packaging, rompe el patrón</li><li>Validación de autoridad: MOSTRAR resultados (dashboard/Stripe/testimonio) — no decir "soy experto"</li><li>Promesa: algo que el avatar NO ha escuchado antes. Específico, no genérico</li><li>Mini roadmap: lista los 3-5 problemas que vas a cubrir, en voz y visual</li></ul></div>
+      <div class="vsl-block"><div class="vsl-block-title">PARTE 2 — MECANISMOS (cuerpo)</div><ul class="vsl-list"><li>Exploración profunda del dolor: costos ocultos de seguir igual</li><li>Tu mecanismo único: sistema/framework propio, nuevo, simple</li><li>Cambio de creencia: por qué las soluciones tradicionales no funcionan</li><li>Anticipar y romper objeciones antes de que aparezcan</li><li>Proof stack: datos, testimonios, capturas — cuantos más mejor</li><li>Frases puente entre secciones para mantener retención</li></ul></div>
+      <div class="vsl-block"><div class="vsl-block-title">PARTE 3 — CTA</div><ul class="vsl-list"><li>Qué le pides que haga (específico, no "te dejo el link abajo")</li><li>Beneficio claro de tomar acción</li><li>Consecuencia de NO tomar acción</li></ul></div>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 6</div>
+      <div class="sop-titulo">Grabación</div>
+      <ul class="sop-check">
+        <li>Script revisado y ensayado</li>
+        <li>Ejemplos visuales preparados (capturas, gráficos, casos de éxito)</li>
+        <li>Iluminación y audio chequeados</li>
+        <li>Energía alta — no grabar cansado</li>
+        <li>Enviar a editor: video crudo + script + referencias visuales + miniaturas + deadline</li>
+      </ul>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 7</div>
+      <div class="sop-titulo">Postproducción y Subida</div>
+      <ul class="sop-check">
+        <li>Descripción: CTA directo en las primeras líneas (mismo CTA del video)</li>
+        <li>Segunda CTA opcional si tienen dudas</li>
+        <li>Autoridad opcional: testimonios/resultados</li>
+        <li>Capítulos opcionales</li>
+      </ul>
+      <div class="sop-warning">⚠️ CRÍTICO: Prueba el link (Instagram/Calendly) ANTES de publicar. Muchos no funcionan por seguridad activada.</div>
+    </div>
+
+    <div class="sop-step">
+      <div class="sop-num">PASO 8</div>
+      <div class="sop-titulo">Evaluación Post-Lanzamiento</div>
+      <ul class="sop-check">
+        <li><strong>A las 2 horas:</strong> CTR. Si &lt;5% → cambiar miniatura/título YA</li>
+        <li><strong>A los 7 días:</strong> vistas totales, CTR final, retención, agendas generadas</li>
+        <li>Analizar gráfico de retención: ¿dónde se van? ¿en qué timestamp?</li>
+        <li>Definir 1-3 mejoras para el próximo video</li>
+      </ul>
+      <div class="metrics-ideal">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px">Métricas ideales</div>
+        <div class="metrics-row">
+          <div class="metric-item"><span class="metric-label">CTR (siempre)</span><span class="metric-val">5–10%+</span></div>
+          <div class="metric-item"><span class="metric-label">Retención &lt;10min</span><span class="metric-val">40–50%+</span></div>
+          <div class="metric-item"><span class="metric-label">Retención 10-25min</span><span class="metric-val">30–40%+</span></div>
+          <div class="metric-item"><span class="metric-label">Retención &gt;25min</span><span class="metric-val">15–25%+</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ======= DOLORES ======= -->
+<div class="page" id="page-dolores">
+  <div class="page-title">Dolores del Avatar</div>
+  <div class="page-sub">Trader B2C — no rentable, no fondeado, frustrado, con mucha info y poca claridad</div>
+  <div id="dolores-list" style="display:flex;flex-direction:column;gap:14px"></div>
+</div>
+
+<!-- ======= COMPETIDORES ======= -->
+<div class="page" id="page-competidores">
+  <div class="page-title">Competidores</div>
+  <div class="page-sub">Todos los canales analizados — se actualiza al importar nuevas sesiones</div>
+  <div class="table-wrap"><table><thead><tr>
+    <th>Canal</th><th>Subs</th><th>Ángulo</th><th>Solución que vende</th><th>Dolores que ataca</th><th>Debilidad / Hueco</th><th>Miniaturas</th><th>Títulos ejemplo</th><th>Link</th>
+  </tr></thead><tbody id="comp-tbody"></tbody></table></div>
+  <div id="comp-empty" class="empty" style="display:none"><div class="empty-icon">📺</div>Importa una sesión para ver competidores.</div>
+</div>
+
+<!-- ======= TÍTULOS ======= -->
+<div class="page" id="page-titulos">
+  <div class="page-title">Títulos y Patrones que Funcionan</div>
+  <div class="page-sub">Base de datos de títulos reales con su patrón, dolor y por qué generan clics</div>
+  <div class="grid-2" id="titulos-list"></div>
+  <div id="titulos-empty" class="empty" style="display:none"><div class="empty-icon">📝</div>Importa una sesión para ver títulos.</div>
+</div>
+
+<!-- ======= YANKEES ======= -->
+<div class="page" id="page-yankees">
+  <div class="page-title">Yankees — Referentes USA en Inglés</div>
+  <div class="page-sub">Lo que funciona en el mercado americano para adaptar al español</div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr>
+    <th>Título</th><th>Canal</th><th>Vistas</th><th>Ángulo</th><th>Por qué funciona</th><th>Adaptar al español</th><th>Link</th>
+  </tr></thead><tbody id="yankees-tbody"></tbody></table></div>
+  <div id="yankees-empty" class="empty" style="display:none"><div class="empty-icon">🇺🇸</div>Importa una sesión para ver referentes USA.</div>
+  <div class="card">
+    <div class="card-title">📊 Datos clave del mercado USA</div>
+    <div class="card-body"><ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--yellow)">→</span><strong>Solo el 5-10%</strong> de traders pasan evaluaciones de prop firms</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--yellow)">→</span><strong>40%</strong> de traders con fondeo admiten no ser exitosos (PipFarm, abril 2025)</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--yellow)">→</span>Causa #1 de fallo: romper el drawdown diario — no la estrategia</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--yellow)">→</span>Solo el <strong>11.2%</strong> se considera "muy exitoso"</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ======= ÁNGULOS ======= -->
+<div class="page" id="page-angulos">
+  <div class="page-title">Ángulos Diferenciadores</div>
+  <div class="page-sub">Lo que puedes decir que la competencia NO está diciendo</div>
+  <div class="grid-2" id="angulos-list"></div>
+  <div id="angulos-empty" class="empty" style="display:none"><div class="empty-icon">🎯</div>Importa una sesión para ver ángulos.</div>
+</div>
+
+<!-- ======= MIS VIDEOS ======= -->
+<div class="page" id="page-videos">
+  <div class="page-title">Mis Videos — Seguimiento</div>
+  <div class="page-sub">Tracking de CTR, retención y conversión de cada video publicado</div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr>
+    <th>Título</th><th>Fecha</th><th>CTR 2h</th><th>CTR 7d</th><th>Retención</th><th>Agendas</th><th>Notas</th>
+  </tr></thead><tbody id="videos-tbody"></tbody></table></div>
+  <div id="videos-empty" class="empty"><div class="empty-icon">📹</div>Aún no hay videos publicados.</div>
+  <div class="card">
+    <div class="card-title">❌ Errores críticos</div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+      <div style="background:var(--bg3);border-radius:8px;padding:10px 14px;display:flex;gap:10px"><span style="color:var(--accent2);flex-shrink:0">❌</span><span><strong>Grabar sin packaging.</strong> Sin miniatura+título definidos, el video no va a funcionar.</span></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:10px 14px;display:flex;gap:10px"><span style="color:var(--accent2);flex-shrink:0">❌</span><span><strong>Ignorar CTR a las 2h.</strong> Si está bajo del 5%, cambiar packaging inmediatamente.</span></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:10px 14px;display:flex;gap:10px"><span style="color:var(--accent2);flex-shrink:0">❌</span><span><strong>CTA débil.</strong> "Te dejo el link abajo" es ruido. El CTA define si el video convierte.</span></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:10px 14px;display:flex;gap:10px"><span style="color:var(--accent2);flex-shrink:0">❌</span><span><strong>Copiar sin adaptar.</strong> Títulos y miniaturas en inglés no funcionan igual en español.</span></div>
+      <div style="background:var(--bg3);border-radius:8px;padding:10px 14px;display:flex;gap:10px"><span style="color:var(--accent2);flex-shrink:0">❌</span><span><strong>Subir y olvidarse.</strong> Las primeras 48 horas son cruciales. Monitoriza activamente.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= AÑADIR ======= -->
+<div class="page" id="page-anadir">
+  <div class="page-title">Añadir nueva entrada</div>
+  <div class="page-sub">Rellena el formulario y guarda. Los datos se añaden al dashboard al instante.</div>
+
+  <div class="form-section">
+    <div class="form-tabs">
+      <div class="form-tab active" onclick="switchForm('competidor',this)">📺 Competidor</div>
+      <div class="form-tab" onclick="switchForm('titulo',this)">📝 Título</div>
+      <div class="form-tab" onclick="switchForm('dolor',this)">😤 Dolor</div>
+      <div class="form-tab" onclick="switchForm('yankee',this)">🇺🇸 Yankee USA</div>
+      <div class="form-tab" onclick="switchForm('angulo',this)">🎯 Ángulo</div>
+    </div>
+
+    <!-- COMPETIDOR -->
+    <div class="form-body active" id="form-competidor">
+      <div class="field-group field-group-2">
+        <div class="field"><label>Nombre del canal *</label><input id="f-c-nombre" type="text" placeholder="Ej: Sr. Machado FX"></div>
+        <div class="field"><label>URL del canal</label><input id="f-c-url" type="text" placeholder="https://youtube.com/channel/..."></div>
+      </div>
+      <div class="field-group field-group-2">
+        <div class="field"><label>Suscriptores</label><input id="f-c-subs" type="text" placeholder="Ej: 50K, 200K, N/D"></div>
+        <div class="field"><label>Fuente / cómo lo encontraste</label><input id="f-c-fuente" type="text" placeholder="Ej: YouTube search, recomendación..."></div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label>Enfoque del canal</label><textarea id="f-c-enfoque" placeholder="De qué trata el canal, qué tipo de contenido hace..."></textarea></div>
+        <div class="field"><label>Ángulo / posicionamiento único</label><textarea id="f-c-angulo" placeholder="Cómo se posiciona, qué lo hace diferente a otros canales..."></textarea></div>
+        <div class="field"><label>Qué vende / solución que ofrece</label><textarea id="f-c-solucion" placeholder="Curso, programa, membresía... descripción de su producto"></textarea></div>
+        <div class="field"><label>Dolores que ataca <span style="color:var(--text3);font-weight:400;text-transform:none">(separados por comas)</span></label><input id="f-c-dolores" type="text" placeholder="No pasar fondeo, No ser rentable, Gestión emocional..."></div>
+        <div class="field"><label>Debilidad / hueco que deja</label><textarea id="f-c-debilidad" placeholder="Qué no cubre, dónde falla, qué oportunidad deja libre para ti..."></textarea></div>
+        <div class="field"><label>Títulos de ejemplo <span style="color:var(--text3);font-weight:400;text-transform:none">(uno por línea)</span></label><textarea id="f-c-titulos" placeholder="Título de video 1&#10;Título de video 2&#10;Título de video 3..."></textarea></div>
+        <div class="field"><label>Descripción de sus miniaturas</label><textarea id="f-c-mini" placeholder="Ej: Fondo negro, foto del creador en primer plano, texto grande en rojo con número de dinero..."></textarea></div>
+        <div class="field"><label>Notas extra</label><textarea id="f-c-notas" placeholder="Cualquier observación adicional..."></textarea></div>
+      </div>
+      <div class="form-save-bar">
+        <button class="btn btn-primary" onclick="guardarCompetidor()">✅ Guardar competidor</button>
+        <span id="msg-comp" style="font-size:13px;color:var(--green);display:none">¡Guardado!</span>
+      </div>
+    </div>
+
+    <!-- TÍTULO -->
+    <div class="form-body" id="form-titulo">
+      <div class="field-group">
+        <div class="field"><label>Título exacto del video *</label><input id="f-t-titulo" type="text" placeholder="Pega el título exacto tal como aparece en YouTube"></div>
+      </div>
+      <div class="field-group field-group-3">
+        <div class="field"><label>Canal</label><input id="f-t-canal" type="text" placeholder="Nombre del canal"></div>
+        <div class="field"><label>Vistas</label><input id="f-t-vistas" type="text" placeholder="Ej: 150K, 1.2M..."></div>
+        <div class="field"><label>URL del video</label><input id="f-t-url" type="text" placeholder="https://youtube.com/watch?v=..."></div>
+      </div>
+      <div class="field-group field-group-2">
+        <div class="field">
+          <label>Patrón del título</label>
+          <select id="f-t-patron">
+            <option value="">Seleccionar...</option>
+            <option>Contradicción + Curiosidad</option>
+            <option>Número + Estructura clara</option>
+            <option>Promesa directa</option>
+            <option>Pregunta incómoda</option>
+            <option>Promesa de atajo</option>
+            <option>Rompe creencia</option>
+            <option>Autoridad inusual</option>
+            <option>Sueño directo del avatar</option>
+            <option>Polémico / Controvertido</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field"><label>Dolor que ataca</label><input id="f-t-dolor" type="text" placeholder="El dolor principal que ataca este título"></div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label>Por qué genera clics / por qué funciona</label><textarea id="f-t-funciona" placeholder="Explica la razón psicológica por la que el avatar hace clic en este título..."></textarea></div>
+        <div class="field"><label>Ángulo que usa</label><textarea id="f-t-angulo" placeholder="El enfoque o perspectiva desde la que ataca el tema..."></textarea></div>
+        <div class="field"><label>Elemento clave (la palabra o frase que lo hace funcionar)</label><input id="f-t-clave" type="text" placeholder="Ej: 'SIN ser rentable', el número '5 pasos', 'Sin hacer nada'..."></div>
+        <div class="field"><label>Descripción de la miniatura</label><textarea id="f-t-mini" placeholder="Colores, texto visible, foto o imagen, elementos destacados, fondo..."></textarea></div>
+      </div>
+      <div class="form-save-bar">
+        <button class="btn btn-primary" onclick="guardarTitulo()">✅ Guardar título</button>
+        <span id="msg-tit" style="font-size:13px;color:var(--green);display:none">¡Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DOLOR -->
+    <div class="form-body" id="form-dolor">
+      <div class="field-group">
+        <div class="field"><label>El dolor en voz del avatar * <span style="color:var(--text3);font-weight:400;text-transform:none">(como lo diría él)</span></label><input id="f-d-dolor" type="text" placeholder='Ej: "Llevo meses operando y no consigo pasar el fondeo"'></div>
+        <div class="field"><label>Descripción más detallada</label><textarea id="f-d-desc" placeholder="Contexto del dolor, cómo lo vive el avatar en su día a día..."></textarea></div>
+      </div>
+      <div class="field-group field-group-2">
+        <div class="field">
+          <label>Frecuencia / importancia</label>
+          <select id="f-d-freq">
+            <option value="Alta">Alta — es un dolor recurrente y urgente</option>
+            <option value="Media">Media — aparece con frecuencia</option>
+            <option value="Baja">Baja — aparece ocasionalmente</option>
+          </select>
+        </div>
+        <div class="field"><label>Fuente (de dónde viene este dato)</label><input id="f-d-fuente" type="text" placeholder="Ej: llamadas de venta, YouTube, comentarios, research..."></div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label>Lo que hace el mercado (solución genérica que ya existe)</label><textarea id="f-d-mercado" placeholder="Qué está ofreciendo la competencia para este dolor..."></textarea></div>
+        <div class="field"><label>Tu ángulo diferente para atacar este dolor</label><textarea id="f-d-angulo" placeholder="Cómo lo atacarías tú de forma diferente a lo que ya existe en el mercado..."></textarea></div>
+        <div class="field"><label>Keywords USA <span style="color:var(--text3);font-weight:400;text-transform:none">(separadas por comas)</span></label><input id="f-d-keywords" type="text" placeholder="funded trader failing, prop firm challenge tips, trading not profitable..."></div>
+        <div class="field">
+          <label>¿Está libre (sin competencia directa) en español?</label>
+          <select id="f-d-libre">
+            <option value="true">Sí — nadie lo está atacando con este ángulo en español</option>
+            <option value="false">No — hay competencia en español</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-save-bar">
+        <button class="btn btn-primary" onclick="guardarDolor()">✅ Guardar dolor</button>
+        <span id="msg-dol" style="font-size:13px;color:var(--green);display:none">¡Guardado!</span>
+      </div>
+    </div>
+
+    <!-- YANKEE -->
+    <div class="form-body" id="form-yankee">
+      <div class="field-group">
+        <div class="field"><label>Título del video en inglés *</label><input id="f-y-titulo" type="text" placeholder="El título exacto del video que encontraste"></div>
+      </div>
+      <div class="field-group field-group-3">
+        <div class="field"><label>Canal</label><input id="f-y-canal" type="text" placeholder="Nombre del canal USA"></div>
+        <div class="field"><label>Vistas</label><input id="f-y-vistas" type="text" placeholder="Ej: 500K, 2M..."></div>
+        <div class="field"><label>URL</label><input id="f-y-url" type="text" placeholder="https://youtube.com/watch?v=..."></div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label>Ángulo que usan</label><textarea id="f-y-angulo" placeholder="El enfoque o perspectiva desde la que atacan el tema en USA..."></textarea></div>
+        <div class="field"><label>Por qué funciona en USA</label><textarea id="f-y-funciona" placeholder="Por qué este video tiene éxito con el avatar americano..."></textarea></div>
+        <div class="field"><label>Cómo adaptarlo al mercado español</label><textarea id="f-y-adaptar" placeholder="Título adaptado, cambios que harías, qué mantener y qué cambiar..."></textarea></div>
+      </div>
+      <div class="form-save-bar">
+        <button class="btn btn-primary" onclick="guardarYankee()">✅ Guardar referente USA</button>
+        <span id="msg-yan" style="font-size:13px;color:var(--green);display:none">¡Guardado!</span>
+      </div>
+    </div>
+
+    <!-- ÁNGULO -->
+    <div class="form-body" id="form-angulo">
+      <div class="field-group field-group-2">
+        <div class="field"><label>Nombre del ángulo *</label><input id="f-a-titulo" type="text" placeholder="Ej: Información vs Claridad, El cuello de botella..."></div>
+        <div class="field">
+          <label>Nivel de diferenciación</label>
+          <select id="f-a-nivel">
+            <option value="Alto">Alto — muy diferente a lo que existe</option>
+            <option value="Medio-Alto">Medio-Alto</option>
+            <option value="Medio">Medio — hay algo parecido</option>
+            <option value="Bajo">Bajo — similar a lo que ya existe</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field"><label>Descripción del ángulo</label><textarea id="f-a-desc" placeholder="Explica el ángulo y por qué es diferente a lo que ya existe en el mercado..."></textarea></div>
+        <div class="field">
+          <label>¿Está libre en español?</label>
+          <select id="f-a-libre">
+            <option value="true">Sí — nadie lo está usando con este ángulo en español</option>
+            <option value="false">No — hay competidores con un ángulo similar</option>
+          </select>
+        </div>
+        <div class="field"><label>¿Qué competidor lo hace? <span style="color:var(--text3);font-weight:400;text-transform:none">(si aplica)</span></label><input id="f-a-comp" type="text" placeholder="Ninguno / Nombre del canal o creador..."></div>
+        <div class="field"><label>Títulos posibles con este ángulo <span style="color:var(--text3);font-weight:400;text-transform:none">(uno por línea)</span></label><textarea id="f-a-titulos" placeholder="Por qué saber más te aleja del fondeo&#10;El problema no es tu estrategia, es esto&#10;Tienes todo para ser rentable menos esto"></textarea></div>
+      </div>
+      <div class="form-save-bar">
+        <button class="btn btn-primary" onclick="guardarAngulo()">✅ Guardar ángulo</button>
+        <span id="msg-ang" style="font-size:13px;color:var(--green);display:none">¡Guardado!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JSON IMPORT (sección secundaria para uso avanzado / Claude) -->
+  <div style="margin-top:32px">
+    <div style="font-weight:700;font-size:15px;margin-bottom:6px">Importación masiva via JSON</div>
+    <div style="color:var(--text2);font-size:13px;margin-bottom:16px">Para cuando Claude te genera un análisis completo de un canal entero en un solo archivo.</div>
+    <div class="import-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <div class="import-zone-icon">📂</div>
+      <div class="import-zone-title">Arrastra aquí el JSON generado por Claude</div>
+      <div class="import-zone-sub">El archivo se fusiona automáticamente sin borrar nada existente</div>
+    </div>
+    <input type="file" id="file-input" accept=".json" onchange="importFile(event)">
+  </div>
+
+  <div style="margin-top:24px">
+    <div style="font-weight:700;font-size:15px;margin-bottom:14px">Historial de sesiones</div>
+    <div id="import-history"><div class="empty"><div class="empty-icon">📂</div>Aún no hay sesiones.</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// SEED DATA — cargada la primera vez (si localStorage vacío)
+// ============================================================
+const SEED = {
+  meta: { version: 1, creado: "2025-05-14" },
+  sessions: [{ nombre: "Seed inicial — Research mayo 2025", fecha: "2025-05-14", items: { comp:3, titulos:6, dolores:5, yankees:3, angulos:4 } }],
+  competidores: [
+    { id:"c1", nombre:"Sr. Machado FX", canal_url:"https://www.youtube.com/channel/UC1-ZEKVFKUBMS6CmSeM8eiQ", suscriptores:"N/D", enfoque:"Historia de transformación: quebró 2 veces → cuentas fondeadas de 6 cifras", angulo:"De la ruina al éxito con prop firms. Identidad del trader que ya fracasó y lo logró.", solucion_vende:"Programa 'Trader Evolution' — estrategias y sistemas para pasar evaluaciones", dolores_ataca:["No pasar fondeo","No ser rentable","No tener sistema"], debilidad:"Muy enfocado en sistema técnico. Poco sobre claridad mental o diagnóstico individual.", titulos_ejemplo:["Cómo pasar Cuentas de Fondeo y Vivir del Trading","Trader Millonario Nos Explica Su Estrategia"], miniatura_descripcion:"Foto del creador, texto grande, colores contrastados", notas_extra:"" },
+    { id:"c2", nombre:"Novatos Trading Club", canal_url:"https://www.youtube.com/channel/UC1uKGVsMcKdHjVOMm2QpFMg", suscriptores:"Grande", enfoque:"Educación general de trading desde cero. Amplio y accesible.", angulo:"Académico/educativo. Para el que empieza desde cero.", solucion_vende:"Escuela online. +8000 alumnos", dolores_ataca:["No saber operar","Querer empezar desde cero"], debilidad:"Demasiado genérico. No ataca al trader que ya sabe pero no es rentable ni la frustración del intermedio.", titulos_ejemplo:["Curso de Trading Gratis desde 0","Las mejores cuentas de fondeo 2025"], miniatura_descripcion:"Diseño educativo clásico, colores azul/blanco, texto grande", notas_extra:"" },
+    { id:"c3", nombre:"Trading Cero", canal_url:"https://www.youtube.com/channel/UCMmmdQa46WMDIEY2cUxptRg", suscriptores:"N/D", enfoque:"Trading en vivo en bolsa americana. Directos diarios.", angulo:"Entrenamiento por inmersión, ver operar en tiempo real.", solucion_vende:"Cursos y directos diarios", dolores_ataca:["Querer ver trading real en vivo"], debilidad:"No ataca dolor emocional ni cuello de botella. Muy execution-focused.", titulos_ejemplo:["TRADING EN VIVO Wall Street","Operativa del día en bolsa americana"], miniatura_descripcion:"Capturas de pantalla de gráficos, texto urgente", notas_extra:"" }
+  ],
+  titulos: [
+    { id:"t1", titulo:"Este Trader Gana Millones SIN Ser Rentable", canal:"Desconocido", url:"https://www.youtube.com/watch?v=m5PEOTA1COs", vistas:"N/D", patron:"Contradicción + Curiosidad", dolor_atacado:"No ser rentable", por_que_funciona:"Genera tensión cognitiva. El avatar se pregunta '¿cómo es posible?' y tiene que ver el video.", angulo:"Revelar algo que rompe la lógica del mercado", elemento_clave:"La contradicción 'gana millones SIN ser rentable' obliga al clic", miniatura_descripcion:"" },
+    { id:"t2", titulo:"Cómo Pasar Exámenes De Fondeo Sin Hacer Nada", canal:"Desconocido", url:"https://www.youtube.com/watch?v=RH-bRGI8pXw", vistas:"N/D", patron:"Promesa de atajo", dolor_atacado:"No pasar fondeo", por_que_funciona:"Ataca directamente el dolor + sugiere que hay un camino fácil que no conoce.", angulo:"Existe un sistema que otros no te cuentan", elemento_clave:"'Sin hacer nada' = pattern interrupt máximo", miniatura_descripcion:"" },
+    { id:"t3", titulo:"Cómo pasar Cuentas de Fondeo y Vivir del Trading", canal:"Sr. Machado FX", url:"https://www.youtube.com/watch?v=ntT-IQPqLls", vistas:"N/D", patron:"Sueño directo del avatar", dolor_atacado:"No pasar fondeo + no vivir del trading", por_que_funciona:"Habla exactamente de lo que el avatar quiere. Combina el obstáculo con el sueño.", angulo:"Roadmap directo al resultado deseado", elemento_clave:"Combina fondeo + libertad financiera en un solo título", miniatura_descripcion:"" },
+    { id:"t4", titulo:"Psicólogo Fondeado Explica Cómo Ser Rentable Haciendo Trading", canal:"Desconocido", url:"https://www.youtube.com/watch?v=vIgZJDPt0rc", vistas:"N/D", patron:"Autoridad inusual + Curiosidad", dolor_atacado:"Emociones + no ser rentable", por_que_funciona:"Un psicólogo que además está fondeado = credencial diferente. Nadie lo había visto así.", angulo:"La psicología es lo que separa a los que pasan fondeo de los que no", elemento_clave:"Combinación inesperada de roles = curiosidad inmediata", miniatura_descripcion:"" },
+    { id:"t5", titulo:"Cómo PASAR CUENTAS de FONDEO sin SER TRADER", canal:"Desconocido", url:"https://www.youtube.com/watch?v=lz_3avwJl7k", vistas:"N/D", patron:"Rompe creencia", dolor_atacado:"No pasar fondeo", por_que_funciona:"Destruye la idea de que necesitas ser 'un trader'. Muy controvertido y genera reacción.", angulo:"El fondeo no requiere lo que crees", elemento_clave:"La contradicción implica que todo lo que saben está mal", miniatura_descripcion:"" },
+    { id:"t6", titulo:"LOS 5 PASOS PARA SER UN TRADER RENTABLE", canal:"Desconocido", url:"https://www.youtube.com/watch?v=Z24BnG9UNAc", vistas:"N/D", patron:"Número + Estructura clara", dolor_atacado:"No ser rentable + mucha info sin claridad", por_que_funciona:"Los números prometen claridad. El avatar frustrado quiere un camino concreto.", angulo:"Existe un proceso paso a paso concreto", elemento_clave:"Número + resultado específico = expectativa clara", miniatura_descripcion:"" }
+  ],
+  dolores: [
+    { id:"d1", dolor:"Tengo mucha información pero no soy rentable", descripcion:"El trader estudia, consume cursos, sabe de análisis técnico, pero cuando opera en real pierde. Siente que le falta algo pero no sabe qué.", frecuencia:"Alta", fuente:"Avatar directo / research", solucion_mercado:"Más estrategias, más indicadores, más cursos técnicos", angulo_diferente:"El problema no es la información — es la claridad sobre qué aplicar y cuándo. Demasiada info = parálisis + inconsistencia.", keywords_usa:["too much trading info","information overload trading","why i cant trade profitably"], libre_en_español:true },
+    { id:"d2", dolor:"No consigo pasar el examen de fondeo / lo pierdo siempre", descripcion:"Lleva N intentos fallados. Llega al límite de drawdown justo cuando estaba bien o por un día malo.", frecuencia:"Alta", fuente:"Títulos YouTube + research", solucion_mercado:"Estrategias específicas para el challenge, reglas de gestión", angulo_diferente:"El 90% falla por emociones y reglas, no por estrategia. Protocolo mental que los que SÍ pasan usan antes de operar.", keywords_usa:["prop firm challenge fail","why traders fail funded account","pass prop firm evaluation"], libre_en_español:false },
+    { id:"d3", dolor:"Mis emociones me sabotean cuando opero con dinero real", descripcion:"En demo funciona. En real, el miedo a perder y el FOMO le hacen tomar malas decisiones. Sabe lo que tiene que hacer pero no lo hace.", frecuencia:"Alta", fuente:"Research USA (40% de traders con fondeo lo admiten)", solucion_mercado:"Libros de psicología del trading, 'opera sin emociones'", angulo_diferente:"Las emociones no se eliminan — se diseñan. Sistema de reglas pre-trade que te hace actuar antes de que el miedo aparezca.", keywords_usa:["trading psychology profitable","emotional trading mistakes","fear in trading"], libre_en_español:false },
+    { id:"d4", dolor:"No sé cuál es mi cuello de botella real", descripcion:"Opera, pierde, cambia de estrategia. Opera, pierde, cambia de timeframe. Nunca sabe si el problema es la entrada, la salida, el sizing o la psicología.", frecuencia:"Media", fuente:"Avatar definido + SOP", solucion_mercado:"Análisis post-trade genérico", angulo_diferente:"Sin diario de trading con métricas concretas nunca mejoras porque no sabes qué medir. El sistema de métricas que te dice exactamente qué arreglar.", keywords_usa:["trading journal improve","identify trading weakness","trading bottleneck"], libre_en_español:true },
+    { id:"d5", dolor:"Llevo meses/años y no avanzo — estoy estancado", descripcion:"Frustración máxima. Ha invertido tiempo y dinero. Siente que el trading no es para él pero tampoco puede dejarlo.", frecuencia:"Media", fuente:"Avatar directo", solucion_mercado:"Motivación, 'confía en el proceso', más cursos", angulo_diferente:"El estancamiento tiene una causa concreta que se puede diagnosticar. No es motivación lo que necesitas — es un cambio de variable específico.", keywords_usa:["stuck in trading","trader plateau","cant improve trading"], libre_en_español:true }
+  ],
+  yankees: [
+    { id:"y1", titulo:"Why Most Traders Fail Prop Firm Challenges", canal:"HolaPrime", url:"https://holaprime.com/blogs/trading-tips/why-traders-fail-futures-prop-challenge/", vistas:"N/D", angulo:"El problema NO es la estrategia — es gestión del riesgo y emociones", por_que_funciona:"Ataca la causa real, no el síntoma. El trader cree que necesita mejor estrategia pero se equivoca.", adaptar_español:"Por qué sigues fallando los retos de fondeo aunque tengas estrategia" },
+    { id:"y2", titulo:"The Man Behind 157 Prop Firms Exposes Why Traders Fail", canal:"Desconocido", url:"https://www.youtube.com/watch?v=ucF91qWKYBE", vistas:"N/D", angulo:"Perspectiva del insider. El que diseña las prop firms revela la verdad.", por_que_funciona:"Autoridad máxima + revelar secreto. 'El hombre detrás de...' genera curiosidad extrema.", adaptar_español:"La verdad que las prop firms no quieren que sepas" },
+    { id:"y3", titulo:"Trading Challenge Prop Firms Are a Scam (Here's Proof)", canal:"Desconocido", url:"https://www.youtube.com/watch?v=o7qcovBzQ1U", vistas:"N/D", angulo:"Provocador / polémico. Ataca la industria entera.", por_que_funciona:"Genera reacción emocional fuerte. El avatar que ha fallado muchas veces quiere que le confirmen su frustración.", adaptar_español:"¿Las cuentas fondeadas son una trampa? (Lo que nadie te dice)" }
+  ],
+  angulos: [
+    { id:"a1", titulo:"Información vs Claridad", descripcion:"La competencia da más información. Tú das claridad: el sistema exacto para filtrar qué aplicar.", esta_libre:true, nivel_diferenciacion:"Alto", titulos_posibles:["Por qué saber más de trading te está alejando del fondeo","El problema no es tu estrategia, es este error que nadie menciona","Tienes todo para ser rentable menos esto"], competidor_que_lo_hace:"Ninguno" },
+    { id:"a2", titulo:"El cuello de botella diagnóstico", descripcion:"En vez de dar 'pasos para mejorar' genéricos, ayudar al trader a identificar exactamente qué está fallando en su caso.", esta_libre:true, nivel_diferenciacion:"Alto", titulos_posibles:["Cómo saber exactamente por qué no eres rentable (en 10 minutos)","El dato que te dice qué cambiar en tu trading ahora mismo"], competidor_que_lo_hace:"Ninguno" },
+    { id:"a3", titulo:"La trampa de las prop firms", descripcion:"Revelar cómo las prop firms están diseñadas para que falles, y cómo operar dentro de sus reglas.", esta_libre:false, nivel_diferenciacion:"Medio", titulos_posibles:["Por qué el 90% falla los retos de fondeo (y no es tu culpa)","La verdad sobre los retos de fondeo que nadie te cuenta"], competidor_que_lo_hace:"Algunos videos en inglés, poco en español" },
+    { id:"a4", titulo:"Psicología operativa práctica", descripcion:"No 'controla tus emociones' genérico — sino protocolos concretos pre-trade para operar consistente.", esta_libre:false, nivel_diferenciacion:"Medio-Alto", titulos_posibles:["El ritual de 5 minutos antes de operar que cambió mi trading","Por qué tu problema no es la estrategia sino lo que haces antes de abrir el gráfico"], competidor_que_lo_hace:"Canal del psicólogo fondeado (inglés principalmente)" }
+  ],
+  misVideos: []
+};
+
+// ============================================================
+// DB ENGINE — localStorage
+// ============================================================
+const STORAGE_KEY = "yt_dashboard_db";
+
+function loadDB() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
+    saveDB(SEED);
+    return SEED;
+  }
+  return JSON.parse(raw);
+}
+
+function saveDB(db) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+}
+
+let DB = loadDB();
+
+function genId(prefix) {
+  return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2,6);
+}
+
+// ============================================================
+// MERGE — importar sesión JSON y fusionar con DB
+// ============================================================
+function mergeSession(session) {
+  let added = { comp:0, titulos:0, dolores:0, yankees:0, angulos:0 };
+
+  // Helper: check duplicate by field
+  function isDupe(arr, field, val) {
+    return arr.some(x => x[field] && x[field].trim().toLowerCase() === val.trim().toLowerCase());
+  }
+
+  if (session.competidores) {
+    session.competidores.forEach(c => {
+      if (!c.nombre) return;
+      if (!isDupe(DB.competidores, 'nombre', c.nombre)) {
+        c.id = genId('c');
+        DB.competidores.push(c);
+        added.comp++;
+      }
+    });
+  }
+
+  if (session.titulos) {
+    session.titulos.forEach(t => {
+      if (!t.titulo) return;
+      if (!isDupe(DB.titulos, 'titulo', t.titulo)) {
+        t.id = genId('t');
+        DB.titulos.push(t);
+        added.titulos++;
+      }
+    });
+  }
+
+  if (session.dolores) {
+    session.dolores.forEach(d => {
+      if (!d.dolor) return;
+      if (!isDupe(DB.dolores, 'dolor', d.dolor)) {
+        d.id = genId('d');
+        DB.dolores.push(d);
+        added.dolores++;
+      }
+    });
+  }
+
+  if (session.yankees) {
+    session.yankees.forEach(y => {
+      if (!y.titulo) return;
+      if (!isDupe(DB.yankees, 'titulo', y.titulo)) {
+        y.id = genId('y');
+        DB.yankees.push(y);
+        added.yankees++;
+      }
+    });
+  }
+
+  if (session.angulos) {
+    session.angulos.forEach(a => {
+      if (!a.titulo) return;
+      if (!isDupe(DB.angulos, 'titulo', a.titulo)) {
+        a.id = genId('a');
+        DB.angulos.push(a);
+        added.angulos++;
+      }
+    });
+  }
+
+  // Save session to history
+  const meta = session._meta || {};
+  DB.sessions = DB.sessions || [];
+  DB.sessions.push({
+    nombre: meta.sesion || "Sesión sin nombre",
+    fecha: meta.fecha || new Date().toISOString().slice(0,10),
+    fuente: meta.fuente || "",
+    items: added
+  });
+
+  saveDB(DB);
+  return added;
+}
+
+// ============================================================
+// FILE IMPORT
+// ============================================================
+function importFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      const added = mergeSession(data);
+      const total = Object.values(added).reduce((a,b)=>a+b,0);
+      showToast(`✅ Importado: +${added.comp} competidores, +${added.titulos} títulos, +${added.dolores} dolores, +${added.yankees} yankees, +${added.angulos} ángulos`, 'success');
+      renderAll();
+      // Reset input
+      e.target.value = '';
+    } catch(err) {
+      showToast('❌ Error al leer el JSON: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function dragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
+function dragLeave(e) { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function dropFile(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  const fakeEvent = { target: { files: [file], value: '' } };
+  importFile(fakeEvent);
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+function exportarDB() {
+  const json = JSON.stringify(DB, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'yt-dashboard-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  showToast('⬇ Base de datos exportada', 'info');
+}
+
+function descargarTemplate() {
+  const template = {
+    "_meta": { "sesion": "Nombre de la sesión", "fecha": new Date().toISOString().slice(0,10), "fuente": "YouTube manual / Claude research" },
+    "competidores": [{ "nombre": "", "canal_url": "", "suscriptores": "", "enfoque": "", "angulo": "", "solucion_vende": "", "dolores_ataca": [], "debilidad": "", "titulos_ejemplo": [], "miniatura_descripcion": "", "notas_extra": "" }],
+    "titulos": [{ "titulo": "", "canal": "", "url": "", "vistas": "", "patron": "", "dolor_atacado": "", "por_que_funciona": "", "angulo": "", "elemento_clave": "", "miniatura_descripcion": "" }],
+    "dolores": [{ "dolor": "", "descripcion": "", "frecuencia": "", "fuente": "", "solucion_mercado": "", "angulo_diferente": "", "keywords_usa": [], "libre_en_español": false }],
+    "yankees": [{ "titulo": "", "canal": "", "url": "", "vistas": "", "angulo": "", "por_que_funciona": "", "adaptar_español": "" }],
+    "angulos": [{ "titulo": "", "descripcion": "", "esta_libre": true, "nivel_diferenciacion": "", "titulos_posibles": [], "competidor_que_lo_hace": "" }]
+  };
+  const blob = new Blob([JSON.stringify(template, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sesion-template.json';
+  a.click();
+}
+
+function resetDB() {
+  if (!confirm('¿Borrar toda la base de datos y volver al estado inicial? Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  DB = loadDB();
+  renderAll();
+  showToast('🗑 Base de datos reseteada al estado inicial', 'info');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function renderAll() {
+  renderOverview();
+  renderDolores();
+  renderCompetidores();
+  renderTitulos();
+  renderYankees();
+  renderAngulos();
+  updateBadges();
+}
+
+function updateBadges() {
+  document.getElementById('badge-dolores').textContent = DB.dolores.length;
+  document.getElementById('badge-comp').textContent = DB.competidores.length;
+  document.getElementById('badge-titulos').textContent = DB.titulos.length;
+  document.getElementById('badge-yankees').textContent = DB.yankees.length;
+  document.getElementById('badge-angulos').textContent = DB.angulos.length;
+  document.getElementById('s-comp').textContent = DB.competidores.length;
+  document.getElementById('s-dolores').textContent = DB.dolores.length;
+  document.getElementById('s-titulos').textContent = DB.titulos.length;
+  const libres = DB.angulos.filter(a=>a.esta_libre).length;
+  document.getElementById('s-angulos').textContent = libres;
+}
+
+function renderOverview() {
+  // Sessions
+  const sl = document.getElementById('sessions-list');
+  const ih = document.getElementById('import-history');
+  if (!DB.sessions || DB.sessions.length === 0) {
+    sl.innerHTML = '<div class="empty"><div class="empty-icon">📂</div>Aún no hay sesiones importadas.</div>';
+    ih.innerHTML = '<div class="empty"><div class="empty-icon">📂</div>Aún no hay sesiones importadas.</div>';
+    return;
+  }
+  const sessHTML = DB.sessions.map(s => `<span class="session-pill"><span class="dot"></span>${s.nombre} <span style="color:var(--text3)">${s.fecha}</span></span>`).join('');
+  sl.innerHTML = sessHTML;
+
+  const tableHTML = `<div class="table-wrap"><table><thead><tr><th>Sesión</th><th>Fecha</th><th>Fuente</th><th>+Comp</th><th>+Títulos</th><th>+Dolores</th><th>+Yankees</th><th>+Ángulos</th></tr></thead><tbody>` +
+    DB.sessions.map(s => `<tr>
+      <td><strong>${s.nombre}</strong></td>
+      <td>${s.fecha}</td>
+      <td style="color:var(--text2)">${s.fuente||''}</td>
+      <td><span class="tag tag-blue">${s.items?.comp||0}</span></td>
+      <td><span class="tag tag-purple">${s.items?.titulos||0}</span></td>
+      <td><span class="tag tag-red">${s.items?.dolores||0}</span></td>
+      <td><span class="tag tag-yellow">${s.items?.yankees||0}</span></td>
+      <td><span class="tag tag-green">${s.items?.angulos||0}</span></td>
+    </tr>`).join('') + '</tbody></table></div>';
+  ih.innerHTML = tableHTML;
+}
+
+function renderDolores() {
+  const c = document.getElementById('dolores-list');
+  if (!DB.dolores.length) { c.innerHTML = '<div class="empty"><div class="empty-icon">😤</div>Importa una sesión para ver dolores.</div>'; return; }
+  c.innerHTML = DB.dolores.map(d => `
+    <div class="dolor-card">
+      <div class="dolor-titulo">${d.dolor}
+        <span class="tag tag-${d.frecuencia==='Alta'?'red':'yellow'}">${d.frecuencia||''}</span>
+        ${d.libre_en_español ? '<span class="tag tag-green">✓ Libre en español</span>' : ''}
+      </div>
+      <div class="dolor-row"><div class="dolor-label">Descripción</div><div class="dolor-val">${d.descripcion||''}</div></div>
+      <div class="dolor-row"><div class="dolor-label">Mercado hace</div><div class="dolor-val" style="color:var(--accent2)">${d.solucion_mercado||''}</div></div>
+      <div class="dolor-row"><div class="dolor-label">Tu ángulo</div><div class="dolor-val" style="color:var(--green);font-weight:600">${d.angulo_diferente||''}</div></div>
+      ${d.keywords_usa && d.keywords_usa.length ? `<div class="dolor-row"><div class="dolor-label">Keywords USA</div><div class="dolor-val">${d.keywords_usa.map(k=>`<span class="tag tag-blue" style="margin:2px;display:inline-block">${k}</span>`).join('')}</div></div>` : ''}
+      ${d.fuente ? `<div style="margin-top:8px;font-size:11px;color:var(--text3)">Fuente: ${d.fuente}</div>` : ''}
+    </div>`).join('');
+}
+
+function renderCompetidores() {
+  const tb = document.getElementById('comp-tbody');
+  const em = document.getElementById('comp-empty');
+  if (!DB.competidores.length) { tb.innerHTML=''; em.style.display='block'; return; }
+  em.style.display='none';
+  tb.innerHTML = DB.competidores.map(c => `<tr>
+    <td><strong>${c.nombre}</strong></td>
+    <td style="color:var(--text2)">${c.suscriptores||'N/D'}</td>
+    <td style="max-width:180px">${c.angulo||''}</td>
+    <td style="max-width:160px">${c.solucion_vende||''}</td>
+    <td>${(c.dolores_ataca||[]).map(d=>`<span class="tag tag-red" style="display:inline-block;margin:2px">${d}</span>`).join('')}</td>
+    <td style="max-width:160px;color:var(--green);font-size:12px">${c.debilidad||''}</td>
+    <td style="max-width:160px;font-size:12px;font-style:italic;color:var(--text2)">${c.miniatura_descripcion||'—'}</td>
+    <td style="max-width:180px">${(c.titulos_ejemplo||[]).map(t=>`<div style="font-size:12px;color:var(--blue);margin-bottom:3px">"${t}"</div>`).join('')}</td>
+    <td>${c.canal_url ? `<a href="${c.canal_url}" target="_blank">Ver →</a>` : '—'}</td>
+  </tr>`).join('');
+}
+
+function renderTitulos() {
+  const c = document.getElementById('titulos-list');
+  const em = document.getElementById('titulos-empty');
+  if (!DB.titulos.length) { c.innerHTML=''; em.style.display='block'; return; }
+  em.style.display='none';
+  c.innerHTML = DB.titulos.map(t => `
+    <div class="titulo-card">
+      <div class="titulo-text">"${t.titulo}"</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <span class="tag tag-purple">${t.patron||''}</span>
+        <span class="tag tag-red">${t.dolor_atacado||''}</span>
+        ${t.vistas && t.vistas!='N/D' ? `<span class="tag tag-gray">👁 ${t.vistas}</span>` : ''}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+        <div><span style="color:var(--text3);display:block;text-transform:uppercase;font-size:10px;letter-spacing:.4px;margin-bottom:2px">Canal</span>${t.canal||'—'}</div>
+        <div><span style="color:var(--text3);display:block;text-transform:uppercase;font-size:10px;letter-spacing:.4px;margin-bottom:2px">Elemento clave</span><span style="color:var(--yellow)">${t.elemento_clave||'—'}</span></div>
+        <div style="grid-column:1/-1"><span style="color:var(--text3);display:block;text-transform:uppercase;font-size:10px;letter-spacing:.4px;margin-bottom:2px">Por qué funciona</span><span style="color:var(--text2)">${t.por_que_funciona||'—'}</span></div>
+        <div style="grid-column:1/-1"><span style="color:var(--text3);display:block;text-transform:uppercase;font-size:10px;letter-spacing:.4px;margin-bottom:2px">Ángulo</span><span style="color:var(--green)">${t.angulo||'—'}</span></div>
+        ${t.miniatura_descripcion ? `<div style="grid-column:1/-1"><span style="color:var(--text3);display:block;text-transform:uppercase;font-size:10px;letter-spacing:.4px;margin-bottom:2px">Miniatura</span><div class="mini-desc">${t.miniatura_descripcion}</div></div>` : ''}
+      </div>
+      ${t.url ? `<div style="margin-top:10px"><a href="${t.url}" target="_blank" style="font-size:12px">Ver video →</a></div>` : ''}
+    </div>`).join('');
+}
+
+function renderYankees() {
+  const tb = document.getElementById('yankees-tbody');
+  const em = document.getElementById('yankees-empty');
+  if (!DB.yankees.length) { tb.innerHTML=''; em.style.display='block'; return; }
+  em.style.display='none';
+  tb.innerHTML = DB.yankees.map(y => `<tr>
+    <td><strong>${y.titulo}</strong></td>
+    <td>${y.canal||'—'}</td>
+    <td>${y.vistas&&y.vistas!='N/D'?y.vistas:'—'}</td>
+    <td style="max-width:160px">${y.angulo||''}</td>
+    <td style="max-width:180px;color:var(--text2)">${y.por_que_funciona||''}</td>
+    <td style="color:var(--green);font-weight:600;max-width:180px">${y.adaptar_español||''}</td>
+    <td>${y.url?`<a href="${y.url}" target="_blank">Ver →</a>`:'—'}</td>
+  </tr>`).join('');
+}
+
+function renderAngulos() {
+  const c = document.getElementById('angulos-list');
+  const em = document.getElementById('angulos-empty');
+  if (!DB.angulos.length) { c.innerHTML=''; em.style.display='block'; return; }
+  em.style.display='none';
+  c.innerHTML = DB.angulos.map(a => `
+    <div class="card" style="border-left:3px solid ${a.esta_libre?'var(--green)':'var(--yellow)'}">
+      <div class="card-title">
+        ${a.titulo}
+        ${a.esta_libre?'<span class="tag tag-green">✓ Libre</span>':'<span class="tag tag-yellow">Hay competencia</span>'}
+        <span class="tag tag-${a.nivel_diferenciacion==='Alto'?'green':'yellow'}">${a.nivel_diferenciacion||''}</span>
+      </div>
+      <div class="card-body">
+        <p style="margin-bottom:12px">${a.descripcion||''}</p>
+        ${a.competidor_que_lo_hace ? `<div style="font-size:12px;color:var(--text3);margin-bottom:12px">Competidor: <span style="color:var(--text2)">${a.competidor_que_lo_hace}</span></div>` : ''}
+        ${(a.titulos_posibles||[]).length ? `
+          <div style="font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Títulos posibles:</div>
+          ${a.titulos_posibles.map(tp=>`<div style="background:var(--bg3);border-radius:6px;padding:8px 12px;margin-bottom:5px;font-size:13px;color:var(--blue);font-style:italic">"${tp}"</div>`).join('')}
+        ` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// FORM SWITCHER
+// ============================================================
+function switchForm(id, el) {
+  document.querySelectorAll('.form-body').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.form-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('form-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+function showMsg(id) {
+  const el = document.getElementById('msg-'+id);
+  el.style.display='inline';
+  setTimeout(()=>el.style.display='none', 2500);
+}
+
+function clearFields(ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+}
+
+// ============================================================
+// FORM SAVES
+// ============================================================
+function guardarCompetidor() {
+  const nombre = document.getElementById('f-c-nombre').value.trim();
+  if (!nombre) { showToast('El nombre del canal es obligatorio','error'); return; }
+  if (DB.competidores.some(c=>c.nombre.toLowerCase()===nombre.toLowerCase())) {
+    showToast('Ya existe un competidor con ese nombre','error'); return;
+  }
+  const doloresRaw = document.getElementById('f-c-dolores').value;
+  const dolores = doloresRaw ? doloresRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  const titulosRaw = document.getElementById('f-c-titulos').value;
+  const titulos_ejemplo = titulosRaw ? titulosRaw.split('\n').map(s=>s.trim()).filter(Boolean) : [];
+
+  DB.competidores.push({
+    id: genId('c'),
+    nombre,
+    canal_url: document.getElementById('f-c-url').value.trim(),
+    suscriptores: document.getElementById('f-c-subs').value.trim() || 'N/D',
+    enfoque: document.getElementById('f-c-enfoque').value.trim(),
+    angulo: document.getElementById('f-c-angulo').value.trim(),
+    solucion_vende: document.getElementById('f-c-solucion').value.trim(),
+    dolores_ataca: dolores,
+    debilidad: document.getElementById('f-c-debilidad').value.trim(),
+    titulos_ejemplo,
+    miniatura_descripcion: document.getElementById('f-c-mini').value.trim(),
+    notas_extra: document.getElementById('f-c-notas').value.trim(),
+    _fuente: document.getElementById('f-c-fuente').value.trim()
+  });
+  saveDB(DB);
+  renderAll();
+  showMsg('comp');
+  showToast('✅ Competidor "'+nombre+'" añadido','success');
+  clearFields(['f-c-nombre','f-c-url','f-c-subs','f-c-fuente','f-c-enfoque','f-c-angulo','f-c-solucion','f-c-dolores','f-c-debilidad','f-c-titulos','f-c-mini','f-c-notas']);
+}
+
+function guardarTitulo() {
+  const titulo = document.getElementById('f-t-titulo').value.trim();
+  if (!titulo) { showToast('El título es obligatorio','error'); return; }
+  if (DB.titulos.some(t=>t.titulo.toLowerCase()===titulo.toLowerCase())) {
+    showToast('Ese título ya existe','error'); return;
+  }
+  DB.titulos.push({
+    id: genId('t'),
+    titulo,
+    canal: document.getElementById('f-t-canal').value.trim(),
+    url: document.getElementById('f-t-url').value.trim(),
+    vistas: document.getElementById('f-t-vistas').value.trim() || 'N/D',
+    patron: document.getElementById('f-t-patron').value,
+    dolor_atacado: document.getElementById('f-t-dolor').value.trim(),
+    por_que_funciona: document.getElementById('f-t-funciona').value.trim(),
+    angulo: document.getElementById('f-t-angulo').value.trim(),
+    elemento_clave: document.getElementById('f-t-clave').value.trim(),
+    miniatura_descripcion: document.getElementById('f-t-mini').value.trim()
+  });
+  saveDB(DB);
+  renderAll();
+  showMsg('tit');
+  showToast('✅ Título guardado','success');
+  clearFields(['f-t-titulo','f-t-canal','f-t-url','f-t-vistas','f-t-dolor','f-t-funciona','f-t-angulo','f-t-clave','f-t-mini']);
+  document.getElementById('f-t-patron').value='';
+}
+
+function guardarDolor() {
+  const dolor = document.getElementById('f-d-dolor').value.trim();
+  if (!dolor) { showToast('El dolor es obligatorio','error'); return; }
+  if (DB.dolores.some(d=>d.dolor.toLowerCase()===dolor.toLowerCase())) {
+    showToast('Ese dolor ya existe','error'); return;
+  }
+  const kwRaw = document.getElementById('f-d-keywords').value;
+  const keywords_usa = kwRaw ? kwRaw.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  DB.dolores.push({
+    id: genId('d'),
+    dolor,
+    descripcion: document.getElementById('f-d-desc').value.trim(),
+    frecuencia: document.getElementById('f-d-freq').value,
+    fuente: document.getElementById('f-d-fuente').value.trim(),
+    solucion_mercado: document.getElementById('f-d-mercado').value.trim(),
+    angulo_diferente: document.getElementById('f-d-angulo').value.trim(),
+    keywords_usa,
+    libre_en_español: document.getElementById('f-d-libre').value === 'true'
+  });
+  saveDB(DB);
+  renderAll();
+  showMsg('dol');
+  showToast('✅ Dolor guardado','success');
+  clearFields(['f-d-dolor','f-d-desc','f-d-fuente','f-d-mercado','f-d-angulo','f-d-keywords']);
+}
+
+function guardarYankee() {
+  const titulo = document.getElementById('f-y-titulo').value.trim();
+  if (!titulo) { showToast('El título es obligatorio','error'); return; }
+  if (DB.yankees.some(y=>y.titulo.toLowerCase()===titulo.toLowerCase())) {
+    showToast('Ese referente ya existe','error'); return;
+  }
+  DB.yankees.push({
+    id: genId('y'),
+    titulo,
+    canal: document.getElementById('f-y-canal').value.trim(),
+    url: document.getElementById('f-y-url').value.trim(),
+    vistas: document.getElementById('f-y-vistas').value.trim() || 'N/D',
+    angulo: document.getElementById('f-y-angulo').value.trim(),
+    por_que_funciona: document.getElementById('f-y-funciona').value.trim(),
+    adaptar_español: document.getElementById('f-y-adaptar').value.trim()
+  });
+  saveDB(DB);
+  renderAll();
+  showMsg('yan');
+  showToast('✅ Referente USA guardado','success');
+  clearFields(['f-y-titulo','f-y-canal','f-y-url','f-y-vistas','f-y-angulo','f-y-funciona','f-y-adaptar']);
+}
+
+function guardarAngulo() {
+  const titulo = document.getElementById('f-a-titulo').value.trim();
+  if (!titulo) { showToast('El nombre del ángulo es obligatorio','error'); return; }
+  if (DB.angulos.some(a=>a.titulo.toLowerCase()===titulo.toLowerCase())) {
+    showToast('Ese ángulo ya existe','error'); return;
+  }
+  const titulosRaw = document.getElementById('f-a-titulos').value;
+  const titulos_posibles = titulosRaw ? titulosRaw.split('\n').map(s=>s.trim()).filter(Boolean) : [];
+  DB.angulos.push({
+    id: genId('a'),
+    titulo,
+    descripcion: document.getElementById('f-a-desc').value.trim(),
+    esta_libre: document.getElementById('f-a-libre').value === 'true',
+    nivel_diferenciacion: document.getElementById('f-a-nivel').value,
+    titulos_posibles,
+    competidor_que_lo_hace: document.getElementById('f-a-comp').value.trim() || 'Ninguno'
+  });
+  saveDB(DB);
+  renderAll();
+  showMsg('ang');
+  showToast('✅ Ángulo guardado','success');
+  clearFields(['f-a-titulo','f-a-desc','f-a-comp','f-a-titulos']);
+}
+
+// ============================================================
+// NAV
+// ============================================================
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if (el) el.classList.add('active');
+  if (id==='importar') renderOverview();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderAll();
+</script>
+</body>
+</html>
