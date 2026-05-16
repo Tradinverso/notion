@@ -169,6 +169,38 @@
   .flow-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;margin:0 auto 8px;}
   .flow-label{font-size:11px;color:var(--text2);white-space:nowrap;}
   .flow-arrow{position:absolute;right:-4px;top:14px;color:var(--border);font-size:16px;}
+
+  /* RANKING */
+  .rank-tipo-section{margin-bottom:32px;}
+  .rank-tipo-hdr{font-size:16px;font-weight:700;margin-bottom:14px;padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:space-between;}
+  .rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;transition:border-color .15s;}
+  .rank-card.aprobada{border-color:var(--green);background:#4ade8008;}
+  .rank-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+  .rank-score{flex-shrink:0;width:48px;height:48px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:18px;}
+  .rank-score.alta{background:#ff6b6b22;color:var(--accent2);border:1px solid #ff6b6b44;}
+  .rank-score.media{background:#facc1522;color:var(--yellow);border:1px solid #facc1544;}
+  .rank-score.baja{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+  .rank-score-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+  .rank-titulo{font-size:15px;font-weight:700;color:var(--blue);line-height:1.4;flex:1;}
+  .rank-approve-btn{flex-shrink:0;cursor:pointer;width:32px;height:32px;border-radius:8px;border:2px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;color:transparent;}
+  .rank-approve-btn:hover{border-color:var(--green);}
+  .rank-approve-btn.checked{background:var(--green);border-color:var(--green);color:#000;}
+  .rank-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;}
+  .rank-field-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+  .rank-field-val{color:var(--text2);line-height:1.5;}
+  .rank-hook{background:var(--bg3);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--text);font-style:italic;margin-top:10px;border-left:3px solid var(--accent);}
+  .rank-adapta{background:#4ade8011;border-radius:6px;padding:10px 14px;font-size:12px;color:var(--green);margin-top:8px;}
+  .rank-card.anadida{border-color:#4ade8055;opacity:.55;}
+  .rank-card.anadida .rank-titulo{color:var(--text2);}
+  .rank-anadida-badge{background:var(--green);color:#000;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;display:inline-block;}
+  /* CONFIG */
+  .config-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px;}
+  .config-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;}
+  .config-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 14px;font-family:monospace;outline:none;transition:border-color .15s;}
+  .config-input:focus{border-color:var(--accent);}
+  .config-hint{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.6;}
+  .conn-ok{color:var(--green);font-size:13px;font-weight:600;}
+  .conn-err{color:var(--accent2);font-size:13px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -185,12 +217,50 @@
     <div class="nav-tab" onclick="showPage('angulos',this)">Ángulos <span id="badge-angulos" class="count-badge" style="margin-left:6px">0</span></div>
     <div class="nav-tab" onclick="showPage('videos',this)">Mis Videos</div>
     <div class="nav-tab" onclick="showPage('anadir',this)">✏️ Añadir</div>
+    <div class="nav-tab" onclick="showPage('ranking',this);renderRanking()">🏆 Ideas Rankeadas <span id="badge-aprobadas" class="count-badge" style="margin-left:6px"></span></div>
   </div>
   <div class="nav-actions">
+    <button class="btn btn-outline" onclick="showPage('config',this)" style="font-size:16px;padding:6px 12px" title="Configuración Notion">⚙️</button>
     <button class="btn btn-green" onclick="exportarDB()">⬇ Exportar DB</button>
     <button class="btn btn-danger" onclick="resetDB()">🗑 Reset</button>
   </div>
 </nav>
+
+<!-- ======= CONFIG ======= -->
+<div class="page" id="page-config">
+  <div class="page-title">⚙️ Configuración — Integración Notion</div>
+  <div class="page-sub">Conecta el dashboard con tu base de datos de Notion para añadir ideas aprobadas directamente.</div>
+
+  <div class="config-section">
+    <div style="font-weight:700;font-size:15px;margin-bottom:16px">🔑 Credenciales de Notion</div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <label class="config-label">Integration Token</label>
+        <input class="config-input" id="cfg-token" type="password" placeholder="secret_... o ntn_...">
+        <div class="config-hint">Obtén tu token en <strong>notion.so/my-integrations</strong> → Crea integración "YT Dashboard" → copia el token.<br>Después ve a la BD "Banco de Ideas YT" en Notion → Share → Add connections → busca tu integración.</div>
+      </div>
+      <div>
+        <label class="config-label">ID de la base de datos (Banco de Ideas YT)</label>
+        <input class="config-input" id="cfg-dbid" type="text" placeholder="6bfb966f-b852-45ab-ac27-79468d01d9c1" value="6bfb966fb85245abac2779468d01d9c1">
+        <div class="config-hint">Ya está rellenado con el ID correcto de tu Banco de Ideas YT. No lo cambies salvo que migres la BD.</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+      <button class="btn btn-primary" onclick="guardarConfig()">💾 Guardar configuración</button>
+      <button class="btn btn-outline" onclick="probarConexion()">🔌 Probar conexión</button>
+      <span id="conn-status" style="font-size:13px"></span>
+    </div>
+  </div>
+
+  <div class="config-section">
+    <div style="font-weight:700;font-size:15px;margin-bottom:12px">📋 Cómo funciona la integración</div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--text2)">
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">1.</span><span>En la pestaña <strong>🏆 Ideas Rankeadas</strong>, cada idea tiene un botón ✓ de aprobación.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">2.</span><span>Al hacer clic en ✓, el dashboard llama a la API de Notion y crea la entrada en tu Banco de Ideas YT con <strong>todos los campos pre-rellenados</strong>: Título, Tipo, Formato, Canal origen, Dolor, Ángulo, Hook, Por qué funciona, Adaptación Tradinverso, Prioridad, Link, Estado.</span></div>
+      <div style="display:flex;gap:10px"><span style="color:var(--accent);font-weight:700;flex-shrink:0">3.</span><span>La idea aprobada se mueve a la sección <strong>✅ Añadidas a Notion</strong> y desaparece del ranking activo.</span></div>
+    </div>
+  </div>
+</div>
 
 <!-- ======= OVERVIEW ======= -->
 <div class="page active" id="page-overview">
@@ -615,6 +685,42 @@
   <div style="margin-top:24px">
     <div style="font-weight:700;font-size:15px;margin-bottom:14px">Historial de sesiones</div>
     <div id="import-history"><div class="empty"><div class="empty-icon">📂</div>Aún no hay sesiones.</div></div>
+  </div>
+</div>
+
+<!-- ======= IDEAS RANKEADAS ======= -->
+<div class="page" id="page-ranking">
+  <div class="page-title">🏆 Ideas Rankeadas</div>
+  <div class="page-sub">Puntuación automática · Solo se muestran ideas con puntuación ≥9 (Media o Alta) · Aprueba las que quieres y expórtalas a Notion</div>
+
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="renderRanking()">🔄 Recalcular ranking</button>
+    <span id="aprobadas-count" style="font-size:13px;color:var(--text2)">0 ideas añadidas</span>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:24px">
+    <div style="font-weight:700;margin-bottom:10px;font-size:13px;color:var(--text2)">📊 Sistema de puntuación — máx 18 pts</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;font-size:12px">
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">1. Tracción (1-5)</div><div style="color:var(--text2)">&lt;100K=1 · 100-500K=2 · 500K-1M=3 · 1M-5M=4 · +5M=5</div></div>
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">2. GAP español (1-5)</div><div style="color:var(--text2)">Libre en español (del dolor) → 5 pts. Con competencia → 1 pt.</div></div>
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">3. Fit avatar (1-5)</div><div style="color:var(--text2)">Keywords fondeo/prop/fase → 5. Keywords trading general → 3. Otros → 1.</div></div>
+      <div><div style="color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">4. Producción (1-3)</div><div style="color:var(--text2)">W or L / Payout → 3. Normal → 2. Tutorial / Serie → 1.</div></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+      <span class="tag tag-red">🔴 Alta: 14-18 pts</span>
+      <span class="tag tag-yellow">🟡 Media: 9-13 pts</span>
+      <span class="tag tag-gray">⚪ Baja: &lt;9 pts (no se muestra)</span>
+    </div>
+  </div>
+
+  <div id="ranking-list"><div class="empty"><div class="empty-icon">🏆</div>Pulsa "Recalcular ranking" para ver las ideas puntuadas.<br><span style="font-size:12px">Necesitas tener títulos importados en la pestaña Títulos.</span></div></div>
+
+  <div id="anadidas-section" style="display:none;margin-top:32px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:16px;font-weight:700;color:var(--green)">✅ Añadidas a Notion</div>
+      <button class="btn btn-outline" onclick="document.getElementById('anadidas-list').style.display=document.getElementById('anadidas-list').style.display==='none'?'flex':'none'" style="font-size:12px">Mostrar/Ocultar</button>
+    </div>
+    <div id="anadidas-list" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
 </div>
 
@@ -1167,8 +1273,329 @@ function showPage(id, el) {
 }
 
 // ============================================================
+// CONFIG — guardar/cargar token Notion
+// ============================================================
+const CFG_KEY = 'yt_dashboard_config';
+
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem(CFG_KEY)) || {}; } catch(e) { return {}; }
+}
+function guardarConfig() {
+  const token = document.getElementById('cfg-token').value.trim();
+  const dbid  = document.getElementById('cfg-dbid').value.trim();
+  if (!token) { showToast('El token es obligatorio','error'); return; }
+  localStorage.setItem(CFG_KEY, JSON.stringify({ token, dbid }));
+  showToast('✅ Configuración guardada','success');
+}
+function initConfig() {
+  const cfg = loadConfig();
+  if (cfg.token) document.getElementById('cfg-token').value = cfg.token;
+  if (cfg.dbid)  document.getElementById('cfg-dbid').value  = cfg.dbid;
+}
+async function probarConexion() {
+  const cfg = loadConfig();
+  if (!cfg.token) { showToast('Guarda primero el token','error'); return; }
+  const st = document.getElementById('conn-status');
+  st.textContent = 'Probando...'; st.className = '';
+  const dbid = cfg.dbid || '6bfb966fb85245abac2779468d01d9c1';
+  try {
+    const r = await fetch(`https://corsproxy.io/?https://api.notion.com/v1/databases/${dbid}`, {
+      headers: { 'Authorization': `Bearer ${cfg.token}`, 'Notion-Version': '2022-06-28' }
+    });
+    if (r.ok) { st.textContent = '✅ Conexión OK'; st.className = 'conn-ok'; }
+    else { const e = await r.json(); st.textContent = '❌ Error: ' + (e.message || r.status); st.className = 'conn-err'; }
+  } catch(e) { st.textContent = '❌ Error de red: ' + e.message; st.className = 'conn-err'; }
+}
+
+// ============================================================
+// RANKING — sistema de puntuación por Tipo
+// ============================================================
+
+function parseVistas(v) {
+  const s = String(v || '').toLowerCase().replace(/,/g,'').trim();
+  if (!s || s === 'n/d') return 0;
+  if (s.includes('m')) return parseFloat(s) * 1000000;
+  if (s.includes('k')) return parseFloat(s) * 1000;
+  return parseInt(s.replace(/[^0-9]/g,'')) || 0;
+}
+
+function puntuarMiniatura(desc) {
+  if (!desc || desc.trim().length < 5) return 1;
+  const d = desc.toLowerCase();
+  const hasFace = d.includes('cara') || d.includes('rostro') || d.includes('foto') || d.includes('face') || d.includes('primer plano');
+  const hasText = d.includes('texto') || d.includes('text') || d.includes('título') || d.includes('grande') || d.includes('bold') || d.includes('número');
+  const hasContrast = d.includes('contraste') || d.includes('rojo') || d.includes('amarillo') || d.includes('naranja') || d.includes('negro') || d.includes('blanco') || d.includes('llamativo');
+  const score = (hasFace ? 1 : 0) + (hasText ? 1 : 0) + (hasContrast ? 1 : 0);
+  return score >= 3 ? 4 : score >= 2 ? 3 : score >= 1 ? 2 : 1;
+}
+
+function puntuarGap(t) {
+  if (t.libre_en_español === true) return 5;
+  if (t.libre_en_español === false) return 1;
+  const dolorText = (t.dolor_atacado || '').toLowerCase();
+  for (const d of DB.dolores) {
+    const dText = (d.dolor || '').toLowerCase();
+    const overlap = dolorText.split(' ').filter(w => w.length > 4 && dText.includes(w)).length;
+    if (overlap >= 2) return d.libre_en_español ? 5 : 1;
+  }
+  return 3;
+}
+
+function tieneFondeoKw(t) {
+  const txt = ((t.dolor_atacado||'')+(t.titulo||'')+(t.angulo||'')).toLowerCase();
+  return ['fondeado','funded','prop firm','fondeo','fase 2','fase 1','drawdown','challenge','evaluaci','payout'].some(k=>txt.includes(k));
+}
+
+function puntuarTitulo(t) {
+  const tipo = t.tipo || inferTipo(t);
+  const vistas = parseVistas(t.vistas);
+  let vPts = vistas >= 5000000 ? 5 : vistas >= 1000000 ? 4 : vistas >= 500000 ? 3 : vistas >= 100000 ? 2 : vistas > 0 ? 1 : 2;
+
+  if (tipo === '🎯 Atracción') {
+    // Vistas (1-5) + Patrón título (1-5) + Miniatura (1-4) + GAP (1-3) + Fondeo kw (0-1)
+    const patron = (t.patron||'').toLowerCase();
+    let pPts = 2;
+    if (['contradicción','rompe creencia'].some(k=>patron.includes(k))) pPts = 5;
+    else if (['pregunta incómoda','polémico'].some(k=>patron.includes(k))) pPts = 4;
+    else if (['promesa de atajo','autoridad'].some(k=>patron.includes(k))) pPts = 3;
+    const mPts = puntuarMiniatura(t.miniatura_descripcion);
+    const gPts = Math.min(3, Math.round(puntuarGap(t) * 0.6));
+    const fPts = tieneFondeoKw(t) ? 1 : 0;
+    return Math.min(18, vPts + pPts + mPts + gPts + fPts);
+  }
+
+  if (tipo === '📚 Nutrición') {
+    // Fondeo especificidad (1-6) + GAP ángulo (1-6) + Producción Sergio (1-4) + Vistas validación (1-2)
+    const fEsp = tieneFondeoKw(t) ? 6 : ((t.dolor_atacado||'').toLowerCase().match(/trader|trading|rentable|consistente/) ? 3 : 1);
+    const gPts = puntuarGap(t);
+    const patron = (t.patron||'').toLowerCase();
+    const prodPts = ['w or l','payout','resultado','rutina','vlog','día'].some(k=>patron.includes(k)) ? 4 :
+                    ['tutorial','serie','masterclass','curso'].some(k=>patron.includes(k)) ? 2 : 3;
+    const vVal = vistas >= 100000 ? 2 : 1;
+    return Math.min(18, fEsp + gPts + prodPts + vVal);
+  }
+
+  if (tipo === '⭐ Conversión') {
+    // Prueba social (1-5) + Vistas (1-5) + Fit compra (1-5) + GAP (1-3)
+    const txt = (t.titulo||'').toLowerCase();
+    const socialPts = ['testimonios','resultados','conseguí','logré','conseguir','de cero a','mi historia'].some(k=>txt.includes(k)) ? 5 :
+                      ['mi sistema','cómo lo hice','lo que me funcionó'].some(k=>txt.includes(k)) ? 3 : 1;
+    const compraPts = tieneFondeoKw(t) ? 5 : 2;
+    const gPts = Math.min(3, Math.round(puntuarGap(t) * 0.6));
+    return Math.min(18, socialPts + vPts + compraPts + gPts);
+  }
+
+  // Fallback genérico
+  return Math.min(18, vPts + puntuarGap(t) + (tieneFondeoKw(t) ? 4 : 1) + 2);
+}
+
+function getPrioridad(score) {
+  if (score >= 14) return { label: '🔴 Alta', cls: 'alta' };
+  if (score >= 9)  return { label: '🟡 Media', cls: 'media' };
+  return { label: '⚪ Baja', cls: 'baja' };
+}
+
+function inferTipo(t) {
+  if (t.tipo) return t.tipo; // Claude lo puede incluir en el JSON
+  const text = ((t.titulo || '') + ' ' + (t.dolor_atacado || '') + ' ' + (t.patron || '') + ' ' + (t.angulo || '')).toLowerCase();
+  const atraccionKw = ['por qué','cómo','error','falla','quemas','pierdes','nadie te','verdad','trampa','secreto','review','mito','sin ser','sin hacer'];
+  const conversionKw = ['mi sistema','de frustrado','transformación','conseguí','logré','caso real','resultados reales','testimonios'];
+  if (atraccionKw.some(k => text.includes(k))) return '🎯 Atracción';
+  if (conversionKw.some(k => text.includes(k))) return '⭐ Conversión';
+  return '📚 Nutrición';
+}
+
+function mapPatronToFormato(p) {
+  if (!p) return 'Desmontando mito';
+  const pl = p.toLowerCase();
+  if (pl.includes('w or l') || pl.includes('win or loss')) return 'W or L';
+  if (pl.includes('payout') || pl.includes('resultado')) return 'Payout/Resultado';
+  if (pl.includes('rutina') || pl.includes('sueño')) return 'Rutina/Sistema';
+  if (pl.includes('tutorial') || pl.includes('número')) return 'Tutorial técnico';
+  if (pl.includes('serie') || pl.includes('masterclass') || pl.includes('curso')) return 'Serie educativa';
+  if (pl.includes('live') || pl.includes('clip') || pl.includes('directo')) return 'Live clip';
+  return 'Desmontando mito';
+}
+
+async function aprobarYEnviarANotion(tituloId) {
+  const cfg = loadConfig();
+  if (!cfg.token) {
+    showToast('⚠️ Configura el token de Notion en ⚙️ Config primero', 'error');
+    return;
+  }
+  const t = DB.titulos.find(x => x.id === tituloId);
+  if (!t) return;
+  if (t._nocion_anadida) { showToast('Esta idea ya está en el Banco de Ideas de Notion', 'info'); return; }
+
+  const btn = document.querySelector(`[data-approve="${tituloId}"]`);
+  if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+
+  const dbid = cfg.dbid || '6bfb966fb85245abac2779468d01d9c1';
+  const prioridad = getPrioridad(puntuarTitulo(t)).label;
+
+  const body = {
+    parent: { database_id: dbid },
+    properties: {
+      "Título de la idea": { title: [{ text: { content: t.titulo_tradinverso || t.titulo }}]},
+      "Tipo":              { select: { name: t.tipo || inferTipo(t) }},
+      "Formato":           { select: { name: mapPatronToFormato(t.patron) }},
+      "Canal origen":      { rich_text: [{ text: { content: t.canal || '' }}]},
+      "Dolor":             { rich_text: [{ text: { content: t.dolor_atacado || '' }}]},
+      "Ángulo":            { rich_text: [{ text: { content: t.angulo || '' }}]},
+      "Hook":              { rich_text: [{ text: { content: t.hook_propuesto || '' }}]},
+      "Por qué funciona":  { rich_text: [{ text: { content: t.por_que_funciona || '' }}]},
+      "Adaptación Tradinverso": { rich_text: [{ text: { content: t.adaptacion_tradinverso || '' }}]},
+      "Canal referencia":  { rich_text: [{ text: { content: t.canal || '' }}]},
+      "Prioridad":         { select: { name: prioridad }},
+      "Estado":            { select: { name: '✨ Nueva' }},
+    }
+  };
+  if (t.url) body.properties["Link vídeo referencia"] = { url: t.url };
+
+  try {
+    const r = await fetch('https://corsproxy.io/?https://api.notion.com/v1/pages', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (r.ok) {
+      t._nocion_anadida = true;
+      if (!DB.rankings_aprobados) DB.rankings_aprobados = [];
+      if (!DB.rankings_aprobados.includes(tituloId)) DB.rankings_aprobados.push(tituloId);
+      saveDB(DB);
+      showToast(`✅ "${t.titulo.slice(0,40)}..." añadida al Banco de Ideas en Notion`, 'success');
+      renderRanking();
+    } else {
+      const err = await r.json();
+      showToast('❌ Error Notion: ' + (err.message || r.status), 'error');
+      if (btn) { btn.textContent = ''; btn.disabled = false; }
+    }
+  } catch(e) {
+    showToast('❌ Error de red: ' + e.message, 'error');
+    if (btn) { btn.textContent = ''; btn.disabled = false; }
+  }
+}
+
+function updateApprovedCount() {
+  const n = (DB.rankings_aprobados || []).length;
+  const el = document.getElementById('aprobadas-count');
+  const badge = document.getElementById('badge-aprobadas');
+  if (el) el.textContent = n + ' idea' + (n !== 1 ? 's' : '') + ' aprobada' + (n !== 1 ? 's' : '');
+  if (badge) badge.textContent = n > 0 ? n : '';
+}
+
+function renderRanking() {
+  const aprobadas = DB.rankings_aprobados || [];
+  if (!DB.titulos.length) {
+    document.getElementById('ranking-list').innerHTML = '<div class="empty"><div class="empty-icon">📂</div>Importa una sesión para ver ideas rankeadas.</div>';
+    return;
+  }
+
+  const anadidas = (DB.rankings_aprobados || []);
+  const scored = DB.titulos.map(t => {
+    const sc = puntuarTitulo(t);
+    return { ...t, _score: sc, _tipo: inferTipo(t), _prio: getPrioridad(sc) };
+  }).filter(t => t._score >= 9).sort((a,b) => b._score - a._score);
+
+  // Separa añadidas de pendientes
+  const pendientes = scored.filter(t => !anadidas.includes(t.id));
+  const yaAnadidas  = scored.filter(t =>  anadidas.includes(t.id));
+
+  // Renderiza sección de añadidas
+  const secAnadidas = document.getElementById('anadidas-section');
+  const listAnadidas = document.getElementById('anadidas-list');
+  if (yaAnadidas.length) {
+    secAnadidas.style.display = 'block';
+    listAnadidas.innerHTML = yaAnadidas.map(t => `
+      <div class="rank-card anadida">
+        <div class="rank-card-header">
+          <div class="rank-score ${t._prio.cls}"><span>${t._score}</span><span class="rank-score-label">pts</span></div>
+          <div class="rank-titulo">${t.titulo}</div>
+          <span class="rank-anadida-badge">✅ En Notion</span>
+        </div>
+        <div style="font-size:12px;color:var(--text3)">Tipo: ${t._tipo} · Canal: ${t.canal||'—'}</div>
+      </div>`).join('');
+  } else {
+    secAnadidas.style.display = 'none';
+  }
+
+  if (!pendientes.length) {
+    document.getElementById('ranking-list').innerHTML = yaAnadidas.length
+      ? '<div class="empty"><div class="empty-icon">🎉</div>Todas las ideas rankeadas ya están en el Banco de Ideas de Notion.</div>'
+      : '<div class="empty"><div class="empty-icon">🏆</div>No hay ideas con puntuación ≥9. Importa más sesiones de análisis de Claude.</div>';
+    updateApprovedCount();
+    return;
+  }
+
+  const grupos = {
+    '🎯 Atracción': pendientes.filter(t => t._tipo === '🎯 Atracción'),
+    '📚 Nutrición':  pendientes.filter(t => t._tipo === '📚 Nutrición'),
+    '⭐ Conversión':  pendientes.filter(t => t._tipo === '⭐ Conversión'),
+  };
+
+  const tipoColors = { '🎯 Atracción': 'var(--accent2)', '📚 Nutrición': 'var(--blue)', '⭐ Conversión': 'var(--green)' };
+  let html = '';
+
+  for (const [tipo, ideas] of Object.entries(grupos)) {
+    if (!ideas.length) continue;
+    html += `<div class="rank-tipo-section">
+      <div class="rank-tipo-hdr" style="border-left:4px solid ${tipoColors[tipo]}">
+        <span>${tipo}</span><span class="count-badge">${ideas.length} ideas</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">`;
+
+    for (const t of ideas) {
+      const ok = aprobadas.includes(t.id);
+      const tagCls = t._prio.cls === 'alta' ? 'tag-red' : t._prio.cls === 'media' ? 'tag-yellow' : 'tag-gray';
+      html += `
+        <div class="rank-card ${ok ? 'aprobada' : ''}" data-tid="${t.id}">
+          <div class="rank-card-header">
+            <div class="rank-score ${t._prio.cls}"><span>${t._score}</span><span class="rank-score-label">pts</span></div>
+            <div class="rank-titulo">${t.titulo}</div>
+            <button class="rank-approve-btn ${ok ? 'checked' : ''}" data-approve="${t.id}" onclick="aprobarYEnviarANotion('${t.id}')" title="${ok ? 'Ya añadida a Notion' : 'Añadir al Banco de Ideas en Notion'}">${ok ? '✓' : ''}</button>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+            <span class="tag ${tagCls}">${t._prio.label}</span>
+            ${t.patron ? `<span class="tag tag-purple">${t.patron}</span>` : ''}
+            <span class="tag tag-gray">👁 ${t.vistas || 'N/D'}</span>
+            ${t.canal ? `<span class="tag tag-blue">${t.canal}</span>` : ''}
+          </div>
+          <div class="rank-fields">
+            <div>
+              <div class="rank-field-label">Dolor que ataca</div>
+              <div class="rank-field-val">${t.dolor_atacado || '—'}</div>
+            </div>
+            <div>
+              <div class="rank-field-label">Ángulo</div>
+              <div class="rank-field-val" style="color:var(--green)">${t.angulo || '—'}</div>
+            </div>
+            <div style="grid-column:1/-1">
+              <div class="rank-field-label">Por qué funciona</div>
+              <div class="rank-field-val">${t.por_que_funciona || '—'}</div>
+            </div>
+          </div>
+          ${t.hook_propuesto ? `<div class="rank-hook">💬 Hook propuesto: "${t.hook_propuesto}"</div>` : ''}
+          ${t.adaptacion_tradinverso ? `<div class="rank-adapta">🎯 Adaptación Tradinverso: ${t.adaptacion_tradinverso}</div>` : ''}
+          ${t.url ? `<div style="margin-top:10px"><a href="${t.url}" target="_blank" style="font-size:12px">Ver vídeo original →</a></div>` : ''}
+        </div>`;
+    }
+    html += '</div></div>';
+  }
+
+  document.getElementById('ranking-list').innerHTML = html;
+  updateApprovedCount();
+}
+
+// exportarAprobadas eliminado — ahora la aprobación va directo a Notion via aprobarYEnviarANotion()
+
+// ============================================================
 // INIT
 // ============================================================
+initConfig();
 renderAll();
 </script>
 </body>
