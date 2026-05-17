@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reportes de Llamadas — Tradinverso</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a22;--bg3:#22222e;--border:#2e2e3e;
+  --accent:#10b981;--red:#ff6b6b;--green:#4ade80;--yellow:#facc15;
+  --orange:#fb923c;--blue:#60a5fa;--purple:#c084fc;
+  --text:#e2e2f0;--text2:#9090a8;--text3:#5a5a72;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;}
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;position:sticky;top:0;z-index:100;}
+.nav-logo{font-weight:700;font-size:15px;color:var(--accent);padding:14px 20px 14px 0;border-right:1px solid var(--border);margin-right:12px;white-space:nowrap;}
+.nav-tabs{display:flex;overflow-x:auto;flex:1;}
+.nav-tab{padding:14px 14px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;font-size:13px;}
+.nav-tab:hover{color:var(--text);background:var(--bg3);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.nav-actions{display:flex;gap:8px;padding-left:12px;border-left:1px solid var(--border);}
+.page{display:none;padding:28px;max-width:1400px;margin:0 auto;padding-bottom:64px;}
+.page.active{display:block;}
+.page-title{font-size:20px;font-weight:700;margin-bottom:4px;}
+.page-sub{color:var(--text2);margin-bottom:24px;font-size:13px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+@media(max-width:1000px){.grid-3,.grid-4,.grid-6{grid-template-columns:1fr 1fr;}}
+@media(max-width:650px){.grid-2,.grid-3,.grid-4,.grid-6{grid-template-columns:1fr;}}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat-value{font-size:24px;font-weight:700;}
+.stat-note{font-size:11px;color:var(--text3);margin-top:4px;}
+.btn{border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{opacity:.85;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-green{background:#22543d;color:var(--green);border:1px solid #4ade8044;}
+.btn-danger{background:#3d1a1a;color:var(--red);border:1px solid #ff6b6b44;}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag-red{background:#ff6b6b22;color:var(--red);border:1px solid #ff6b6b44;}
+.tag-green{background:#4ade8022;color:var(--green);border:1px solid #4ade8044;}
+.tag-blue{background:#60a5fa22;color:var(--blue);border:1px solid #60a5fa44;}
+.tag-purple{background:#c084fc22;color:var(--purple);border:1px solid #c084fc44;}
+.tag-yellow{background:#facc1522;color:var(--yellow);border:1px solid #facc1544;}
+.tag-orange{background:#fb923c22;color:var(--orange);border:1px solid #fb923c44;}
+.tag-gray{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+.count-badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--text2);}
+.divider{height:1px;background:var(--border);margin:24px 0;}
+.empty{text-align:center;padding:40px;color:var(--text3);font-size:13px;}
+.empty-icon{font-size:28px;margin-bottom:10px;}
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+td{padding:10px 14px;border-top:1px solid var(--border);font-size:13px;vertical-align:top;}
+tr:hover td{background:var(--bg3);}
+.filters-bar{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;}
+.filter-group{display:flex;flex-direction:column;gap:4px;}
+.filter-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;font-weight:700;}
+.filter-select,.filter-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;padding:6px 10px;outline:none;}
+.filter-select:focus,.filter-input:focus{border-color:var(--accent);}
+/* INSIGHT BARS */
+.ins-item{margin-bottom:14px;}
+.ins-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.ins-label{font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ins-count{font-size:12px;color:var(--text3);min-width:30px;text-align:right;flex-shrink:0;}
+.ins-bar-wrap{width:80px;height:6px;background:var(--border);border-radius:3px;flex-shrink:0;}
+.ins-bar{height:6px;border-radius:3px;background:var(--accent);}
+.ins-pct{font-size:11px;color:var(--text3);min-width:36px;flex-shrink:0;}
+/* IDEAS */
+.idea-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;}
+.idea-card.done{border-color:#4ade8055;opacity:.55;}
+.idea-score{width:46px;height:46px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;}
+.idea-score.alta{background:#ff6b6b22;color:var(--red);border:1px solid #ff6b6b44;}
+.idea-score.media{background:#facc1522;color:var(--yellow);border:1px solid #facc1544;}
+.approve-btn{cursor:pointer;padding:8px 14px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+.approve-btn:hover{border-color:var(--green);color:var(--green);}
+.approve-btn.done{background:var(--green);border-color:var(--green);color:#000;}
+/* IMPORT */
+.import-zone{border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;}
+.import-zone:hover,.import-zone.drag-over{border-color:var(--accent);background:#10b98111;}
+#file-input{display:none;}
+/* CONFIG */
+.config-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 14px;font-family:monospace;outline:none;}
+.config-input:focus{border-color:var(--accent);}
+.conn-ok{color:var(--green);font-size:13px;font-weight:600;}
+.conn-err{color:var(--red);font-size:13px;font-weight:600;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:13px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:360px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+.toast.info{border-color:var(--blue);color:var(--blue);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">📞 Reportes de Llamadas</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('overview',this)">Overview</div>
+    <div class="nav-tab" onclick="showPage('llamadas',this);renderLlamadas()">Llamadas <span id="badge-calls" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('insights',this);renderInsights()">📊 Insights</div>
+    <div class="nav-tab" onclick="showPage('ideas',this);renderIdeasYT()">🏆 Ideas YT</div>
+    <div class="nav-tab" onclick="showPage('mis-ideas',this);loadMisIdeas()">📋 Mis Ideas en Notion</div>
+    <div class="nav-tab" onclick="showPage('importar',this)">✏️ Importar</div>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-outline" onclick="showPage('config',this)" style="font-size:16px;padding:6px 12px">⚙️</button>
+    <button class="btn btn-green" onclick="exportarDB()">⬇ Exportar</button>
+    <button class="btn btn-danger" onclick="resetDB()">🗑 Reset</button>
+  </div>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="page active" id="page-overview">
+  <div class="page-title">📞 Dashboard de Reportes de Llamadas</div>
+  <div class="page-sub">Analiza llamadas de venta para crear contenido que convierta. Basado en el Reporte Post-Llamada completo.</div>
+
+  <div class="filters-bar" style="margin-bottom:20px">
+    <div class="filter-group"><div class="filter-label">Mes</div><select class="filter-select" id="flt-mes" onchange="actualizarOverview()"><option value="">Todos</option></select></div>
+    <div class="filter-group"><div class="filter-label">Resultado</div><select class="filter-select" id="flt-resultado" onchange="actualizarOverview()"><option value="">Todos</option><option>cerrado</option><option>follow pendiente</option><option>no cerrado</option><option>no show</option></select></div>
+    <div class="filter-group"><div class="filter-label">Forma de pago</div><select class="filter-select" id="flt-pago" onchange="actualizarOverview()"><option value="">Todos</option><option>PIF</option><option>cuotas</option></select></div>
+    <div class="filter-group"><div class="filter-label">Avatar ideal</div><select class="filter-select" id="flt-avatar" onchange="actualizarOverview()"><option value="">Todos</option><option>sí</option><option>más o menos</option><option>no</option></select></div>
+    <div class="filter-group"><div class="filter-label">Closer</div><select class="filter-select" id="flt-closer" onchange="actualizarOverview()"><option value="">Todos</option></select></div>
+  </div>
+
+  <div class="grid-6" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-label">Agendadas</div><div class="stat-value" id="s-agendadas">0</div><div class="stat-note">Total llamadas</div></div>
+    <div class="stat-card"><div class="stat-label">Show-up rate</div><div class="stat-value" id="s-showup" style="color:var(--blue)">0%</div><div class="stat-note">Presentes/Agendadas</div></div>
+    <div class="stat-card"><div class="stat-label">Close rate</div><div class="stat-value" id="s-close" style="color:var(--green)">0%</div><div class="stat-note">Cerrados/Presentes</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="s-rev" style="color:var(--green)">€0</div><div class="stat-note">Total cobrado</div></div>
+    <div class="stat-card"><div class="stat-label">Ticket medio</div><div class="stat-value" id="s-ticket">€0</div><div class="stat-note">Cerrados</div></div>
+    <div class="stat-card"><div class="stat-label">PIF vs Cuotas</div><div class="stat-value" id="s-pif" style="font-size:16px">—</div><div class="stat-note">Cerrados</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">🚫 Top objeciones</div>
+      <div id="ov-objeciones"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">😤 Top dolores</div>
+      <div id="ov-dolores"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LLAMADAS TABLE -->
+<div class="page" id="page-llamadas">
+  <div class="page-title">Todas las Llamadas</div>
+  <div class="page-sub">Tabla completa con todos los reportes importados. Filtra por cualquier campo.</div>
+
+  <div class="filters-bar">
+    <div class="filter-group"><div class="filter-label">Mes</div><select class="filter-select" id="tbl-mes" onchange="renderLlamadas()"><option value="">Todos</option></select></div>
+    <div class="filter-group"><div class="filter-label">Resultado</div><select class="filter-select" id="tbl-resultado" onchange="renderLlamadas()"><option value="">Todos</option><option>cerrado</option><option>follow pendiente</option><option>no cerrado</option><option>no show</option></select></div>
+    <div class="filter-group"><div class="filter-label">Pago</div><select class="filter-select" id="tbl-pago" onchange="renderLlamadas()"><option value="">Todos</option><option>PIF</option><option>cuotas</option></select></div>
+    <div class="filter-group"><div class="filter-label">Canal</div><select class="filter-select" id="tbl-canal" onchange="renderLlamadas()"><option value="">Todos</option></select></div>
+    <div class="filter-group"><div class="filter-label">Avatar ideal</div><select class="filter-select" id="tbl-avatar" onchange="renderLlamadas()"><option value="">Todos</option><option>sí</option><option>más o menos</option><option>no</option></select></div>
+    <div class="filter-group"><div class="filter-label">Ticket min €</div><input class="filter-input" id="tbl-tmin" type="number" min="0" placeholder="0" style="width:80px" onchange="renderLlamadas()"></div>
+    <div class="filter-group"><div class="filter-label">Ticket max €</div><input class="filter-input" id="tbl-tmax" type="number" min="0" placeholder="∞" style="width:80px" onchange="renderLlamadas()"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Fecha</th><th>Closer</th><th>Prospect</th><th>Resultado</th><th>Ticket</th>
+        <th>Pago</th><th>Canal</th><th>Pieza contenido</th><th>Objeción</th>
+        <th>Dolor principal</th><th>Avatar ideal</th><th>Score lead</th><th>Urgencia</th><th></th>
+      </tr></thead>
+      <tbody id="calls-tbody"></tbody>
+    </table>
+  </div>
+  <div id="calls-empty" class="empty" style="display:none"><div class="empty-icon">📞</div>Sin llamadas con ese filtro.</div>
+</div>
+
+<!-- INSIGHTS -->
+<div class="page" id="page-insights">
+  <div class="page-title">📊 Insights Agregados</div>
+  <div class="page-sub">Patrones detectados en todas las llamadas. Base para crear contenido que convierta al avatar exacto.</div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">🚫 Objeciones (todas)</div><div id="ins-objeciones"></div></div>
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">😤 Dolores (palabras del mercado)</div><div id="ins-dolores"></div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">✅ Motivos de compra</div><div id="ins-motivos"></div></div>
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">🔄 Soluciones previas probadas</div><div id="ins-soluciones"></div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">💬 Frases literales del mercado</div><div id="ins-frases"></div></div>
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">📡 Triggers de agenda (qué pieza)</div><div id="ins-triggers"></div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">🧠 Nivel de conciencia (problema)</div><div id="ins-conciencia-p"></div></div>
+    <div class="card"><div style="font-weight:700;font-size:15px;margin-bottom:14px">💡 Nivel de conciencia (solución)</div><div id="ins-conciencia-s"></div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">📊 Scores medios del lead</div>
+      <div id="ins-scores"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">💡 Insights directos del closer (para marketing)</div>
+      <div id="ins-marketing"></div>
+    </div>
+  </div>
+</div>
+
+<!-- IDEAS YT -->
+<div class="page" id="page-ideas">
+  <div class="page-title">🏆 Ideas YT — De Llamadas a Contenido</div>
+  <div class="page-sub">Ideas rankeadas por frecuencia de dolores y objeciones. Haz clic en ✓ para enviarlas a <strong>📞 Ideas de Llamadas</strong> en Notion (paso 1).</div>
+  <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center">
+    <button class="btn btn-primary" onclick="renderIdeasYT()">🔄 Recalcular</button>
+    <span id="ideas-count" style="font-size:13px;color:var(--text2)"></span>
+  </div>
+  <div id="ideas-list"></div>
+</div>
+
+<!-- MIS IDEAS EN NOTION -->
+<div class="page" id="page-mis-ideas">
+  <div class="page-title">📋 Mis Ideas en Notion — Aprobación final</div>
+  <div class="page-sub">Ideas que aprobaste en el paso 1 en <strong>📞 Ideas de Llamadas</strong> en Notion. Haz clic en ✓ para enviarlas al pipeline de producción (BD Vídeos YT).</div>
+  <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center">
+    <button class="btn btn-primary" onclick="loadMisIdeas()">🔄 Recargar</button>
+    <span id="mis-ideas-count" style="font-size:13px;color:var(--text2)"></span>
+  </div>
+  <div id="mis-ideas-list"><div class="empty"><div class="empty-icon">📋</div>Pulsa "Recargar" para cargar ideas de Notion.</div></div>
+</div>
+
+<!-- IMPORTAR -->
+<div class="page" id="page-importar">
+  <div class="page-title">✏️ Importar Reportes</div>
+  <div class="page-sub">Claude genera el JSON a partir del "Reporte Post-Llamada". Mínimo 10 reportes a la vez para mejores insights.</div>
+
+  <div style="margin-bottom:24px">
+    <div style="font-weight:700;font-size:15px;margin-bottom:8px">Prompt para Claude</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:12px;color:var(--text2);line-height:1.7;font-family:monospace;white-space:pre-wrap" id="prompt-text">Convierte estos reportes post-llamada al formato JSON exacto y devuelve SOLO el JSON válido, sin texto adicional:
+
+{"reportes":[{"fecha":"2026-05-17","closer":"nombre","prospect_nombre":"","duracion_min":45,"estado_final":"cerrado","tipo_perfil":"Trader fondeado frustrado","pais_ciudad":"Madrid, España","experiencia_nicho":"2 años operando, 4 fondeos fallidos","capacidad_economica":"confirmada","tags_perfil":["con experiencia previa","motivacion alta"],"es_avatar_ideal":"sí","canal_entrada":"IG","pieza_contenido":"Reel del payout de €4800","trigger_real":"Vio el reel y se identificó con la historia","frases_literales":["llevo 2 años y no consigo ser consistente","sé lo que tengo que hacer pero no lo ejecuto"],"dolores_mercado":["no poder mantener la consistencia en fondeo","las emociones me sabotean"],"dolor_principal":"Inconsistencia en fase 2 del fondeo","dolor_secundario":"Gestión emocional bajo presión","vision_vida":"Vivir del trading y dejar el trabajo en 1 año","soluciones_probadas":["cursos de SMC","mentorías genéricas","libros de psicología"],"objeciones":[{"objecion":"El precio es alto para mí ahora mismo","tipo":"precio","como_manejo":"Calculamos el coste de no actuar vs el coste del programa","resuelta":true}],"urgencia":8,"confianza_sistema":7,"confianza_si_mismo":5,"calidad_lead":8,"conciencia_problema":"alto","conciencia_solucion":"medio","insights_marketing":[{"idea":"Vídeo sobre por qué el 90% falla en fase 2 aunque técnicamente son buenos","tipo":"contenido"}],"notas_closer":"Lead muy cualificado. Tomó la decisión sin necesitar follow-up.","ticket_pagado":2500,"forma_pago":"PIF","num_cuotas":null,"valor_cuota":null}]}
+
+Documentos: [PEGA LOS REPORTES AQUÍ]</div>
+    <button class="btn btn-outline" style="margin-top:10px" onclick="copiarPrompt()">📋 Copiar prompt</button>
+  </div>
+
+  <div style="font-weight:700;font-size:15px;margin-bottom:8px">Importar JSON</div>
+  <div class="import-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+    <div style="font-size:28px;margin-bottom:8px">📂</div>
+    <div style="font-weight:600;margin-bottom:4px">Arrastra el JSON de Claude aquí</div>
+    <div style="font-size:13px;color:var(--text2)">Se fusiona automáticamente sin borrar datos existentes</div>
+  </div>
+  <input type="file" id="file-input" accept=".json" onchange="importFile(event)">
+
+  <div style="margin-top:24px;font-weight:700;font-size:15px;margin-bottom:14px">Historial de importaciones</div>
+  <div id="import-history"></div>
+</div>
+
+<!-- CONFIG -->
+<div class="page" id="page-config">
+  <div class="page-title">⚙️ Configuración</div>
+  <div class="page-sub">Token de Notion para los dos pasos de aprobación.</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px">
+    <div style="font-weight:700;font-size:15px;margin-bottom:16px">🔑 Credenciales de Notion</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Integration Token</label>
+        <input class="config-input" id="cfg-token" type="password" placeholder="ntn_...">
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">BD Ideas de Llamadas (Notion)</label>
+        <input class="config-input" id="cfg-ideas-db" type="text" value="4424a35ac5114ea78e71523ba58ba2b9">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">📞 Ideas de Llamadas — donde van tus ideas en el paso 1</div>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">BD Vídeos YT (Notion)</label>
+        <input class="config-input" id="cfg-videos-db" type="text" value="bcce2a24cea948dbac8c9eb0d9825b61">
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+      <button class="btn btn-primary" onclick="guardarConfig()">💾 Guardar</button>
+      <button class="btn btn-outline" onclick="probarConexion()">🔌 Probar</button>
+      <span id="conn-status" style="font-size:13px"></span>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px">
+    <div style="font-weight:700;font-size:14px;margin-bottom:12px">📋 Flujo de aprobación en dos pasos</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8">
+      <div><span style="color:var(--accent);font-weight:700">Paso 1:</span> En "🏆 Ideas YT" → ✓ → idea va a <strong>📞 Ideas de Llamadas</strong> en Notion</div>
+      <div><span style="color:var(--green);font-weight:700">Paso 2:</span> En "📋 Mis Ideas en Notion" → ✓ → idea va a <strong>BD Vídeos YT</strong> (pipeline)</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================================================================
+// CONFIG
+// ================================================================
+const CFG_KEY='llamadas_cfg';
+function loadCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY))||{};}catch(e){return{};}}
+function guardarConfig(){
+  const t=document.getElementById('cfg-token').value.trim();
+  if(!t){showToast('Token obligatorio','error');return;}
+  localStorage.setItem(CFG_KEY,JSON.stringify({token:t,ideas_db:document.getElementById('cfg-ideas-db').value.trim(),videos_db:document.getElementById('cfg-videos-db').value.trim()}));
+  showToast('✅ Config guardada','success');
+}
+function initCfg(){
+  const c=loadCfg();
+  if(c.token)document.getElementById('cfg-token').value=c.token;
+  if(c.ideas_db)document.getElementById('cfg-ideas-db').value=c.ideas_db;
+  if(c.videos_db)document.getElementById('cfg-videos-db').value=c.videos_db;
+}
+async function probarConexion(){
+  const c=loadCfg();if(!c.token){showToast('Configura token','error');return;}
+  const st=document.getElementById('conn-status');st.textContent='Probando...';st.className='';
+  try{await notionFetch(`databases/${c.videos_db||'bcce2a24cea948dbac8c9eb0d9825b61'}`,'GET');st.textContent='✅ OK';st.className='conn-ok';}
+  catch(e){st.textContent='❌ '+e.message;st.className='conn-err';}
+}
+
+// ================================================================
+// NOTION API
+// ================================================================
+async function notionFetch(endpoint,method,body){
+  const c=loadCfg();if(!c.token)throw new Error('Sin token');
+  const url='https://corsproxy.io/?https://api.notion.com/v1/'+endpoint;
+  const opts={method,headers:{'Authorization':'Bearer '+c.token,'Notion-Version':'2022-06-28','Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(url,opts);
+  if(!r.ok){const e=await r.json();throw new Error(e.message||r.status);}
+  return r.json();
+}
+function rtext(v){return[{text:{content:(v||'').toString().slice(0,2000)}}];}
+function extractText(p){return p&&p.rich_text?p.rich_text.map(t=>t.plain_text||'').join(''):'';}
+
+// ================================================================
+// DB
+// ================================================================
+const DB_KEY='llamadas_db';
+function loadDB(){try{return JSON.parse(localStorage.getItem(DB_KEY))||{sessions:[],reportes:[],sent_ideas:[],sent_final:[]};}catch(e){return{sessions:[],reportes:[],sent_ideas:[],sent_final:[]};}}
+function saveDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db));}
+let DB=loadDB();
+
+// ================================================================
+// SEED DATA — 10 llamadas ficticias de ejemplo
+// ================================================================
+const SEED_REPORTES=[
+  {_seed:true,fecha:'2026-04-03',closer:'Alejandro',prospect_nombre:'Carlos M.',duracion_min:52,estado_final:'cerrado',tipo_perfil:'Trader fondeado con 2 años de experiencia',pais_ciudad:'Madrid, España',experiencia_nicho:'3 fondeos fallidos, opera Forex e índices',capacidad_economica:'confirmada',tags_perfil:['con experiencia previa','motivacion alta','listo para comprar'],es_avatar_ideal:'sí',canal_entrada:'IG',pieza_contenido:'Reel del payout de €4.800',trigger_real:'Se identificó con la historia de transformación',frases_literales:['llevo 2 años y no consigo ser consistente','sé lo que tengo que hacer pero no lo ejecuto'],dolores_mercado:['inconsistencia en fase 2','las emociones me sabotean cuando hay dinero real'],dolor_principal:'Inconsistencia emocional bajo presión de fondeo real',dolor_secundario:'No tener un sistema de gestión de rachas',vision_vida:'Dejar el trabajo y vivir del trading en 1 año',soluciones_probadas:['curso SMC de Telegram','mentoría genérica de €300','libros de psicología del trading'],objeciones:[{objecion:'El precio es mucho para mí ahora mismo',tipo:'precio',como_manejo:'Calculamos el coste de seguir sin solución vs el coste del programa',resuelta:true}],urgencia:9,confianza_sistema:8,confianza_si_mismo:5,calidad_lead:9,conciencia_problema:'alto',conciencia_solucion:'medio',insights_marketing:[{idea:'Vídeo sobre por qué los buenos traders fallan en la fase 2 por razones emocionales',tipo:'contenido'}],notas_closer:'Lead muy cualificado. Tomó la decisión sin follow-up.',ticket_pagado:2500,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-04-07',closer:'Alejandro',prospect_nombre:'Marta L.',duracion_min:38,estado_final:'follow pendiente',tipo_perfil:'Trader semi-profesional con fondeo activo',pais_ciudad:'Barcelona, España',experiencia_nicho:'1 fondeo activo, 4 años en el mercado',capacidad_economica:'parcial',tags_perfil:['con experiencia previa','freelance / autónomo','múltiples objeciones'],es_avatar_ideal:'más o menos',canal_entrada:'YT',pieza_contenido:'Vídeo rutina de las 7am',trigger_real:'La rutina le resonó con su situación actual',frases_literales:['gano en demo pero pierdo en real','no entiendo por qué si el análisis está bien'],dolores_mercado:['inconsistencia demo vs real','parálisis por análisis'],dolor_principal:'No poder replicar resultados de demo en real',dolor_secundario:'Mucha información, poca claridad sobre qué aplicar',vision_vida:'Ser rentable de forma consistente para tener libertad financiera',soluciones_probadas:['YouTube gratis','curso de €97'],objeciones:[{objecion:'Necesito consultarlo con mi pareja',tipo:'pareja',como_manejo:'Ofrecimos llamada conjunta con la pareja',resuelta:false},{objecion:'No sé si es el momento',tipo:'tiempo',como_manejo:'Preguntamos cuándo sería el momento ideal',resuelta:false}],urgencia:6,confianza_sistema:6,confianza_si_mismo:6,calidad_lead:7,conciencia_problema:'alto',conciencia_solucion:'bajo',insights_marketing:[{idea:'Contenido que explique por qué el problema demo/real es emocional y no técnico',tipo:'angulo'}],notas_closer:'Interesada pero pareja es un freno real. Follow en 1 semana.',ticket_pagado:0,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-04-10',closer:'Alejandro',prospect_nombre:'David R.',duracion_min:22,estado_final:'no cerrado',tipo_perfil:'Empezando en trading, sin experiencia real',pais_ciudad:'Valencia, España',experiencia_nicho:'6 meses en trading, nunca ha intentado fondeo',capacidad_economica:'no confirmada',tags_perfil:['sin experiencia previa','empleado activo','bajo nivel de conciencia'],es_avatar_ideal:'no',canal_entrada:'IG',pieza_contenido:'Post en Instagram sobre resultados',trigger_real:'Quería ganar dinero rápido viendo el resultado',frases_literales:['¿cuánto puedo ganar al mes?','¿en cuánto tiempo sería rentable?'],dolores_mercado:['necesito más ingresos'],dolor_principal:'Querer ingresos extra rápidos sin experiencia base',dolor_secundario:'',vision_vida:'Ganar dinero desde casa',soluciones_probadas:[],objeciones:[{objecion:'No tengo el dinero ahora mismo',tipo:'precio',como_manejo:'Explicamos que el programa requiere base previa',resuelta:false}],urgencia:4,confianza_sistema:3,confianza_si_mismo:7,calidad_lead:3,conciencia_problema:'bajo',conciencia_solucion:'bajo',insights_marketing:[{idea:'Contenido de filtro: qué tipo de persona NO debería entrar al trading con fondeo todavía',tipo:'contenido'}],notas_closer:'No es el avatar. Demasiado novato y motivado solo por el dinero.',ticket_pagado:0,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-04-14',closer:'Alejandro',prospect_nombre:'Roberto S.',duracion_min:61,estado_final:'cerrado',tipo_perfil:'Trader con fondeo activo, frustrado con inconsistencia',pais_ciudad:'Ciudad de México, México',experiencia_nicho:'5 años, 6 fondeos en total, 2 activos',capacidad_economica:'confirmada',tags_perfil:['con experiencia previa','freelance / autónomo','motivacion alta','listo para comprar'],es_avatar_ideal:'sí',canal_entrada:'referido',pieza_contenido:'Referido por un alumno',trigger_real:'El alumno le habló de sus resultados con el programa',frases_literales:['tengo la estrategia pero me traiciona la mente','en demo soy rentable pero en real destruyo las cuentas'],dolores_mercado:['no poder ser consistente con dinero real','gestión emocional en rachas de pérdidas'],dolor_principal:'Inconsistencia psicológica — destruye cuentas en rachas malas',dolor_secundario:'No tener protocolo para gestionar drawdown emocional',vision_vida:'Escalar a gestor de fondos en 3 años',soluciones_probadas:['libros de Mark Douglas','terapia psicológica individual','varios cursos de trading'],objeciones:[{objecion:'Ya he probado muchas cosas y no ha funcionado',tipo:'confianza',como_manejo:'Mostramos el caso del alumno que lo refirió y resultados específicos',resuelta:true}],urgencia:8,confianza_sistema:7,confianza_si_mismo:6,calidad_lead:9,conciencia_problema:'alto',conciencia_solucion:'alto',insights_marketing:[{idea:'Testimonial del alumno que lo refirió + caso de inconsistencia resuelta',tipo:'contenido'}],notas_closer:'Perfil ideal. Resistencia inicial por experiencias previas, pero testimonial lo desbloqueó.',ticket_pagado:2500,forma_pago:'cuotas',num_cuotas:2,valor_cuota:1350},
+  {_seed:true,fecha:'2026-04-17',closer:'Alejandro',prospect_nombre:'Ana P.',duracion_min:0,estado_final:'no show',tipo_perfil:'Desconocido',pais_ciudad:'',experiencia_nicho:'',capacidad_economica:'no confirmada',tags_perfil:[],es_avatar_ideal:'más o menos',canal_entrada:'IG',pieza_contenido:'Reel de objeción de tiempo',trigger_real:'No se presentó',frases_literales:[],dolores_mercado:[],dolor_principal:'',dolor_secundario:'',vision_vida:'',soluciones_probadas:[],objeciones:[],urgencia:0,confianza_sistema:0,confianza_si_mismo:0,calidad_lead:0,conciencia_problema:'bajo',conciencia_solucion:'bajo',insights_marketing:[],notas_closer:'No se presentó sin aviso. Recontactar en 48h.',ticket_pagado:0,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-04-21',closer:'Alejandro',prospect_nombre:'Javier F.',duracion_min:47,estado_final:'cerrado',tipo_perfil:'Trader fondeado frustrado con 3 cuentas activas',pais_ciudad:'Bogotá, Colombia',experiencia_nicho:'3 años, 5 fondeos, 3 activos actualmente',capacidad_economica:'confirmada',tags_perfil:['con experiencia previa','motivacion alta','listo para comprar'],es_avatar_ideal:'sí',canal_entrada:'YT',pieza_contenido:'Vídeo de los 3 errores del trader fondeado',trigger_real:'Se reconoció en los 3 errores mencionados',frases_literales:['me quedo sin saber qué me pasó cuando pierdo una serie','el drawdown me hace tomar decisiones irracionales'],dolores_mercado:['drawdown emocional','no tener sistema de recuperación'],dolor_principal:'Drawdown emocional que desborda el sistema técnico',dolor_secundario:'No poder gestionar 3 cuentas sin mezclarse mentalmente',vision_vida:'Independencia financiera completa en 2 años',soluciones_probadas:['comunidad de trading de pago','mentoría de €500'],objeciones:[{objecion:'¿Esto funciona para traders ya fondeados?',tipo:'confianza',como_manejo:'Mostramos casos de traders con fondeo activo que mejoraron',resuelta:true}],urgencia:8,confianza_sistema:8,confianza_si_mismo:6,calidad_lead:8,conciencia_problema:'alto',conciencia_solucion:'medio',insights_marketing:[{idea:'Vídeo específico para traders que ya tienen fondeo pero no son consistentes',tipo:'angulo'}],notas_closer:'Cerrado fácil. Muy alineado con el programa.',ticket_pagado:2500,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-04-25',closer:'Alejandro',prospect_nombre:'Sofía G.',duracion_min:55,estado_final:'cerrado',tipo_perfil:'Trader con empleo fijo que quiere transición',pais_ciudad:'Madrid, España',experiencia_nicho:'2 años, 1 fondeo, quiere dejar su trabajo',capacidad_economica:'confirmada',tags_perfil:['con experiencia previa','empleado activo','motivacion alta'],es_avatar_ideal:'sí',canal_entrada:'IG',pieza_contenido:'Historia de transformación de Sergio',trigger_real:'La historia de Sergio le generó esperanza de que era posible',frases_literales:['quiero dejar mi trabajo pero no me atrevo hasta ser consistente','no sé si el problema soy yo o la estrategia'],dolores_mercado:['atrapada entre el trabajo y el trading','inconsistencia que le impide dar el salto'],dolor_principal:'No poder saber si el problema es la estrategia o la psicología',dolor_secundario:'Miedo a dar el salto sin consistencia probada',vision_vida:'Dejar el trabajo en 6 meses y vivir del trading',soluciones_probadas:['curso de trading completo de €200','YouTube durante 2 años'],objeciones:[{objecion:'¿Qué pasa si no funciona para mí?',tipo:'confianza',como_manejo:'Garantía y casos de perfiles similares',resuelta:true}],urgencia:8,confianza_sistema:7,confianza_si_mismo:5,calidad_lead:8,conciencia_problema:'alto',conciencia_solucion:'medio',insights_marketing:[{idea:'Contenido dirigido específicamente a traders con trabajo que quieren dar el salto',tipo:'angulo'}],notas_closer:'Muy buena lead. La historia de Sergio fue clave.',ticket_pagado:2500,forma_pago:'cuotas',num_cuotas:3,valor_cuota:900},
+  {_seed:true,fecha:'2026-04-29',closer:'Alejandro',prospect_nombre:'Miguel T.',duracion_min:31,estado_final:'no cerrado',tipo_perfil:'Trader con experiencia previa en otra academia',pais_ciudad:'Buenos Aires, Argentina',experiencia_nicho:'2 años, viene de academia de €2.000 que no le funcionó',capacidad_economica:'parcial',tags_perfil:['con experiencia previa','viene de otra academia','múltiples objeciones'],es_avatar_ideal:'más o menos',canal_entrada:'YT',pieza_contenido:'Vídeo de por qué los cursos genéricos no funcionan',trigger_real:'El vídeo le habló directamente de su experiencia previa',frases_literales:['ya pagué mucho y no me funcionó','¿en qué sois diferentes?'],dolores_mercado:['decepción por inversión previa que no funcionó','desconfianza en formaciones de trading'],dolor_principal:'Desconfianza por mala experiencia previa con otra formación',dolor_secundario:'',vision_vida:'Ser rentable sin gastar más dinero en formación',soluciones_probadas:['academia de trading de €2.000','YouTube extensivo'],objeciones:[{objecion:'Ya gasté dinero en otra formación y no funcionó',tipo:'confianza',como_manejo:'Diferenciamos el enfoque vs la academia previa',resuelta:false},{objecion:'El precio es demasiado para mí ahora',tipo:'precio',como_manejo:'Explicamos el ROI potencial',resuelta:false}],urgencia:5,confianza_sistema:4,confianza_si_mismo:6,calidad_lead:5,conciencia_problema:'alto',conciencia_solucion:'bajo',insights_marketing:[{idea:'Vídeo que aborde directamente la objeción de haber probado otros programas',tipo:'objecion'}],notas_closer:'No cerrado. Desconfianza muy alta. Podría ser follow a largo plazo.',ticket_pagado:0,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-05-03',closer:'Alejandro',prospect_nombre:'Carmen V.',duracion_min:58,estado_final:'cerrado',tipo_perfil:'Trader fondeado, resultados irregulares',pais_ciudad:'Sevilla, España',experiencia_nicho:'4 años, 7 fondeos, 2 activos, payouts inconsistentes',capacidad_economica:'confirmada',tags_perfil:['con experiencia previa','freelance / autónomo','motivacion alta','listo para comprar'],es_avatar_ideal:'sí',canal_entrada:'IG',pieza_contenido:'Post de resultados de noviembre',trigger_real:'Sus resultados irregulares se parecían exactamente a los de Sergio antes del sistema',frases_literales:['un mes muy bien y el siguiente todo mal','no entiendo por qué no soy consistente si tengo estrategia'],dolores_mercado:['resultados irregulares mes a mes','no poder predecir ni controlar los meses malos'],dolor_principal:'Inconsistencia mensual — buenos y malos meses sin patrón claro',dolor_secundario:'No tener sistema de evaluación para identificar el cuello de botella',vision_vida:'Consistencia real que le permita escalar la cuenta',soluciones_probadas:['diario de trading manual','vídeos de psicología del trading'],objeciones:[{objecion:'¿Cuánto tiempo requiere el programa?',tipo:'tiempo',como_manejo:'Explicamos el sistema y la dedicación mínima',resuelta:true}],urgencia:9,confianza_sistema:8,confianza_si_mismo:7,calidad_lead:9,conciencia_problema:'alto',conciencia_solucion:'alto',insights_marketing:[{idea:'Vídeo sobre por qué el buen y mal mes alternados es una señal específica de problema psicológico',tipo:'contenido'}],notas_closer:'Cerró rápido. Muy clara en lo que necesita.',ticket_pagado:2500,forma_pago:'PIF',num_cuotas:null,valor_cuota:null},
+  {_seed:true,fecha:'2026-05-08',closer:'Alejandro',prospect_nombre:'Luis A.',duracion_min:43,estado_final:'follow pendiente',tipo_perfil:'Trader principiante con fondeo reciente',pais_ciudad:'Lima, Perú',experiencia_nicho:'1 año, primer fondeo hace 3 meses',capacidad_economica:'parcial',tags_perfil:['sin experiencia previa','empleado activo','bajo nivel de conciencia'],es_avatar_ideal:'más o menos',canal_entrada:'YT',pieza_contenido:'Vídeo de los errores del primer fondeo',trigger_real:'Está cometiendo exactamente los errores del vídeo',frases_literales:['apenas empiezo con el fondeo','quiero aprender rápido para no cometer errores'],dolores_mercado:['miedo a perder el fondeo en los primeros meses','no saber si está haciendo bien las cosas'],dolor_principal:'Inseguridad en los primeros meses del primer fondeo',dolor_secundario:'Falta de sistema operativo claro para fondeo',vision_vida:'Mantener el fondeo y escalar progresivamente',soluciones_probadas:['YouTube','grupos de Telegram gratuitos'],objeciones:[{objecion:'Soy muy principiante, ¿es esto para mí?',tipo:'confianza',como_manejo:'Explicamos que es mejor empezar bien que corregir malos hábitos',resuelta:true},{objecion:'Necesito pensarlo',tipo:'tiempo',como_manejo:'Acordamos follow en 1 semana',resuelta:false}],urgencia:6,confianza_sistema:6,confianza_si_mismo:7,calidad_lead:6,conciencia_problema:'medio',conciencia_solucion:'bajo',insights_marketing:[{idea:'Vídeo dirigido al trader que acaba de pasar su primer fondeo: qué hacer en los primeros 3 meses',tipo:'angulo'}],notas_closer:'Potencial pero necesita madurar la decisión. Follow en 7 días.',ticket_pagado:0,forma_pago:'cuotas',num_cuotas:3,valor_cuota:900},
+];
+
+// Carga seed solo si es la primera vez (nunca tras un reset)
+if(!DB.reportes.length && !localStorage.getItem('llamadas_reset_flag')){
+  DB.reportes=SEED_REPORTES.map(r=>({...r}));saveDB(DB);
+}
+localStorage.removeItem('llamadas_reset_flag');
+
+function getMes(f){return f?f.slice(0,7):'';}
+function fmtEur(n){if(!n&&n!==0)return'€0';return'€'+parseFloat(n).toLocaleString('es-ES',{maximumFractionDigits:0});}
+
+// FILTERS
+function filtrarReportes(ctx){
+  const mes=document.getElementById(ctx+'-mes')?.value||'';
+  const res=document.getElementById(ctx+'-resultado')?.value||'';
+  const pago=document.getElementById(ctx+'-pago')?.value||'';
+  const av=document.getElementById(ctx+'-avatar')?.value||'';
+  const closer=document.getElementById('flt-closer')?.value||'';
+  const canal=document.getElementById(ctx+'-canal')?.value||'';
+  const tmin=parseFloat(document.getElementById(ctx+'-tmin')?.value)||0;
+  const tmax=parseFloat(document.getElementById(ctx+'-tmax')?.value)||Infinity;
+  return DB.reportes.filter(r=>{
+    if(mes&&getMes(r.fecha)!==mes)return false;
+    if(res&&r.estado_final!==res)return false;
+    if(pago&&r.forma_pago!==pago)return false;
+    if(av&&r.es_avatar_ideal!==av)return false;
+    if(closer&&r.closer!==closer)return false;
+    if(canal&&r.canal_entrada!==canal)return false;
+    const t=parseFloat(r.ticket_pagado)||0;
+    if(t<tmin||t>tmax)return false;
+    return true;
+  });
+}
+
+function calcStats(reps){
+  const noShows=reps.filter(r=>r.estado_final==='no show').length;
+  const presentes=reps.length-noShows;
+  const cerrados=reps.filter(r=>r.estado_final==='cerrado').length;
+  const rev=reps.filter(r=>r.estado_final==='cerrado').reduce((a,r)=>a+(parseFloat(r.ticket_pagado)||0),0);
+  const ticketM=cerrados?rev/cerrados:0;
+  const pif=reps.filter(r=>r.estado_final==='cerrado'&&r.forma_pago==='PIF').length;
+  const cuotas=cerrados-pif;
+  return{total:reps.length,noShows,presentes,cerrados,rev,ticketM,pif,cuotas,
+    showupPct:reps.length?Math.round(presentes/reps.length*100):0,
+    closePct:presentes?Math.round(cerrados/presentes*100):0};
+}
+
+function countArr(reps,field){
+  const c={};
+  reps.forEach(r=>{
+    const items=Array.isArray(r[field])?r[field]:r[field]?[r[field]]:[];
+    items.forEach(it=>{if(it){const k=(it.trim?it.trim():String(it)).toLowerCase();c[k]=(c[k]||0)+1;}});
+  });
+  return Object.entries(c).sort((a,b)=>b[1]-a[1]);
+}
+function countObjArr(reps,field,subfield){
+  const c={};
+  reps.forEach(r=>{
+    const items=Array.isArray(r[field])?r[field]:[];
+    items.forEach(it=>{const k=(it[subfield]||'').toLowerCase().trim();if(k){c[k]=(c[k]||0)+1;}});
+  });
+  return Object.entries(c).sort((a,b)=>b[1]-a[1]);
+}
+function renderBars(pairs,maxCount,color='var(--accent)'){
+  if(!pairs.length)return'<div style="color:var(--text3)">Sin datos</div>';
+  return pairs.slice(0,8).map(([k,n])=>`
+    <div class="ins-item">
+      <div class="ins-row">
+        <div class="ins-label">${k}</div>
+        <div class="ins-bar-wrap"><div class="ins-bar" style="width:${Math.round(n/maxCount*100)}%;background:${color}"></div></div>
+        <div class="ins-count">${n}x</div>
+      </div>
+    </div>`).join('');
+}
+
+// ================================================================
+// RENDER OVERVIEW
+// ================================================================
+function updateFilterOptions(){
+  const meses=[...new Set(DB.reportes.map(r=>getMes(r.fecha)).filter(Boolean))].sort().reverse();
+  const canales=[...new Set(DB.reportes.map(r=>r.canal_entrada).filter(Boolean))].sort();
+  const closers=[...new Set(DB.reportes.map(r=>r.closer).filter(Boolean))].sort();
+  ['flt-mes','tbl-mes'].forEach(id=>{const s=document.getElementById(id);if(!s)return;const v=s.value;s.innerHTML='<option value="">Todos</option>'+meses.map(m=>`<option ${m===v?'selected':''}>${m}</option>`).join('');});
+  ['tbl-canal'].forEach(id=>{const s=document.getElementById(id);if(!s)return;s.innerHTML='<option value="">Todos</option>'+canales.map(c=>`<option>${c}</option>`).join('');});
+  const fc=document.getElementById('flt-closer');if(fc)fc.innerHTML='<option value="">Todos</option>'+closers.map(c=>`<option>${c}</option>`).join('');
+  document.getElementById('badge-calls').textContent=DB.reportes.length;
+}
+function actualizarOverview(){
+  const reps=filtrarReportes('flt');
+  const s=calcStats(reps);
+  document.getElementById('s-agendadas').textContent=s.total;
+  document.getElementById('s-showup').textContent=s.showupPct+'%';
+  document.getElementById('s-close').textContent=s.closePct+'%';
+  document.getElementById('s-rev').textContent=fmtEur(s.rev);
+  document.getElementById('s-ticket').textContent=fmtEur(s.ticketM);
+  document.getElementById('s-pif').textContent=`${s.pif} PIF · ${s.cuotas} cuotas`;
+  const obj=countObjArr(reps,'objeciones','objecion');const maxO=obj[0]?.[1]||1;
+  document.getElementById('ov-objeciones').innerHTML=renderBars(obj,maxO,'var(--red)');
+  const dol=countArr(reps,'dolores_mercado');const maxD=dol[0]?.[1]||1;
+  document.getElementById('ov-dolores').innerHTML=renderBars(dol,maxD,'var(--accent)');
+}
+
+// ================================================================
+// RENDER LLAMADAS TABLE
+// ================================================================
+function renderLlamadas(){
+  const reps=filtrarReportes('tbl').sort((a,b)=>b.fecha?.localeCompare(a.fecha||'')||0);
+  const tb=document.getElementById('calls-tbody');
+  const em=document.getElementById('calls-empty');
+  if(!reps.length){tb.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  const resCls={cerrado:'tag-green','follow pendiente':'tag-yellow','no cerrado':'tag-red','no show':'tag-gray'};
+  tb.innerHTML=reps.map(r=>`<tr>
+    <td>${r.fecha||'—'}</td>
+    <td>${r.closer||'—'}</td>
+    <td>${r.prospect_nombre||'—'}${r._seed?' <span style="font-size:10px;color:var(--text3)">⚗️</span>':''}</td>
+    <td><span class="tag ${resCls[r.estado_final]||'tag-gray'}">${r.estado_final||'—'}</span></td>
+    <td style="color:var(--green);font-weight:600">${r.estado_final==='cerrado'?fmtEur(r.ticket_pagado):'—'}</td>
+    <td>${r.forma_pago||'—'}${r.num_cuotas?` (${r.num_cuotas}x${fmtEur(r.valor_cuota)})`:''}
+    <td>${r.canal_entrada||'—'}</td>
+    <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.pieza_contenido||'—'}</td>
+    <td style="max-width:160px;color:var(--red)">${r.objeciones?.[0]?.objecion||'—'}</td>
+    <td style="max-width:180px;color:var(--text2)">${r.dolor_principal||'—'}</td>
+    <td>${r.es_avatar_ideal==='sí'?'✅':r.es_avatar_ideal==='más o menos'?'🟡':'❌'}</td>
+    <td>${r.calidad_lead||'—'}/10</td>
+    <td>${r.urgencia||'—'}/10</td>
+    <td><button onclick="eliminarReporte('${r.fecha}','${(r.prospect_nombre||'').replace(/'/g,'')}')" style="background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px 6px" title="Eliminar reporte">🗑</button></td>
+  </tr>`).join('');
+}
+
+// ================================================================
+// RENDER INSIGHTS
+// ================================================================
+function renderInsights(){
+  const reps=DB.reportes;
+  if(!reps.length){
+    ['ins-objeciones','ins-dolores','ins-motivos','ins-soluciones','ins-frases','ins-triggers','ins-conciencia-p','ins-conciencia-s','ins-scores','ins-marketing']
+      .forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div style="color:var(--text3)">Sin datos</div>';});
+    return;
+  }
+  // Objeciones (todas, incluyendo otras)
+  const obj1=countObjArr(reps,'objeciones','objecion');
+  const maxO=obj1[0]?.[1]||1;
+  document.getElementById('ins-objeciones').innerHTML=renderBars(obj1,maxO,'var(--red)');
+  // Dolores
+  const dol=[...countArr(reps,'dolores_mercado'),...countArr(reps,'dolor_principal'),...countArr(reps,'dolor_secundario')].reduce((a,[k,n])=>{const i=a.findIndex(([x])=>x===k);if(i>=0)a[i][1]+=n;else a.push([k,n]);return a;},[]).sort((a,b)=>b[1]-a[1]);
+  const maxD=dol[0]?.[1]||1;
+  document.getElementById('ins-dolores').innerHTML=renderBars(dol,maxD,'var(--accent)');
+  // Motivos de compra
+  const mot=countArr(reps.filter(r=>r.estado_final==='cerrado'),'motivos_compra');const maxM=mot[0]?.[1]||1;
+  document.getElementById('ins-motivos').innerHTML=renderBars(mot,maxM,'var(--green)');
+  // Soluciones previas
+  const sol=countArr(reps,'soluciones_probadas');const maxS=sol[0]?.[1]||1;
+  document.getElementById('ins-soluciones').innerHTML=renderBars(sol,maxS,'var(--blue)');
+  // Frases literales
+  const fra=countArr(reps,'frases_literales');const maxF=fra[0]?.[1]||1;
+  document.getElementById('ins-frases').innerHTML=fra.slice(0,8).map(([k,n])=>
+    `<div style="background:var(--bg3);border-radius:6px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px"><span style="font-style:italic">"${k}"</span><span class="tag tag-blue">${n}x</span></div>`
+  ).join('')||'<div style="color:var(--text3)">Sin datos</div>';
+  // Triggers (pieza de contenido)
+  const trg=countArr(reps,'pieza_contenido').filter(([k])=>k&&k!=='—');const maxT=trg[0]?.[1]||1;
+  document.getElementById('ins-triggers').innerHTML=renderBars(trg,maxT,'var(--purple)');
+  // Conciencia problema
+  const cp={alto:0,medio:0,bajo:0};reps.forEach(r=>{if(r.conciencia_problema)cp[r.conciencia_problema]=(cp[r.conciencia_problema]||0)+1;});
+  const totalCp=reps.length||1;
+  document.getElementById('ins-conciencia-p').innerHTML=Object.entries(cp).map(([k,n])=>
+    `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="min-width:50px;font-weight:700;color:${k==='alto'?'var(--red)':k==='medio'?'var(--yellow)':'var(--text3)'}">${k}</div><div style="flex:1;height:10px;background:var(--border);border-radius:5px"><div style="height:10px;border-radius:5px;background:${k==='alto'?'var(--red)':k==='medio'?'var(--yellow)':'var(--text3)'};width:${Math.round(n/totalCp*100)}%"></div></div><div style="min-width:50px;text-align:right;font-size:12px">${n} (${Math.round(n/totalCp*100)}%)</div></div>`
+  ).join('');
+  // Conciencia solución
+  const cs={alto:0,medio:0,bajo:0};reps.forEach(r=>{if(r.conciencia_solucion)cs[r.conciencia_solucion]=(cs[r.conciencia_solucion]||0)+1;});
+  document.getElementById('ins-conciencia-s').innerHTML=Object.entries(cs).map(([k,n])=>
+    `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="min-width:50px;font-weight:700;color:${k==='alto'?'var(--red)':k==='medio'?'var(--yellow)':'var(--text3)'}">${k}</div><div style="flex:1;height:10px;background:var(--border);border-radius:5px"><div style="height:10px;border-radius:5px;background:${k==='alto'?'var(--green)':k==='medio'?'var(--yellow)':'var(--text3)'};width:${Math.round(n/totalCp*100)}%"></div></div><div style="min-width:50px;text-align:right;font-size:12px">${n} (${Math.round(n/totalCp*100)}%)</div></div>`
+  ).join('');
+  // Scores medios
+  const fields=[['urgencia','Urgencia declarada'],['confianza_sistema','Confianza en el sistema'],['confianza_si_mismo','Confianza en sí mismo'],['calidad_lead','Calidad del lead']];
+  document.getElementById('ins-scores').innerHTML=fields.map(([f,l])=>{
+    const vals=reps.map(r=>parseInt(r[f])).filter(v=>v>0);
+    const avg=vals.length?( vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):0;
+    return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="flex:1;font-size:13px">${l}</div><div style="font-size:18px;font-weight:700;color:${avg>=7?'var(--green)':avg>=5?'var(--yellow)':'var(--red)'}">${avg}/10</div></div>`;
+  }).join('');
+  // Marketing insights
+  const mkt=[];reps.forEach(r=>{(r.insights_marketing||[]).forEach(i=>{if(i.idea)mkt.push(i.idea);});});
+  document.getElementById('ins-marketing').innerHTML=mkt.slice(0,10).map(i=>
+    `<div style="background:var(--bg3);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px;color:var(--text2)">${i}</div>`
+  ).join('')||'<div style="color:var(--text3)">Sin insights de closer aún</div>';
+}
+
+// ================================================================
+// IDEAS YT → Paso 1: enviar a Ideas de Llamadas en Notion
+// ================================================================
+function puntuarIdea(tema,n,total){
+  const freqPts=n>=8?6:n>=5?5:n>=3?4:n>=2?3:1;
+  const fondeoKw=['fondeado','fondeo','prop','fase','drawdown','consistencia','cuenta','evaluaci','challenge'];
+  const fitPts=fondeoKw.some(k=>tema.toLowerCase().includes(k))?5:3;
+  const urgKw=['no puedo','no consigo','llevo','perdiendo','siempre','nunca','falla'];
+  const urgPts=urgKw.some(k=>tema.toLowerCase().includes(k))?5:3;
+  return Math.min(20,freqPts+fitPts+urgPts+2);
+}
+function getPrio(sc){if(sc>=14)return{label:'🔴 Alta',cls:'alta'};if(sc>=9)return{label:'🟡 Media',cls:'media'};return{label:'⚪ Baja',cls:'baja'};}
+function renderIdeasYT(){
+  const c=document.getElementById('ideas-list');
+  const cnt=document.getElementById('ideas-count');
+  if(!DB.reportes.length){c.innerHTML='<div class="empty"><div class="empty-icon">🏆</div>Importa reportes primero.</div>';return;}
+  const total=DB.reportes.length;
+  const dol=countArr(DB.reportes,'dolores_mercado');
+  const obj1=countObjArr(DB.reportes,'objeciones','objecion');
+  const allItems=[...dol,...obj1].reduce((a,[k,n])=>{const i=a.findIndex(([x])=>x===k);if(i>=0)a[i][1]+=n;else a.push([k,n]);return a;},[]).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  const ideas=allItems.map(([tema,n])=>{
+    const sc=puntuarIdea(tema,n,total);
+    const esObj=obj1.some(([k])=>k===tema);
+    const tipo=esObj?'⭐ Conversión':'📚 Nutrición';
+    const titulo=esObj?`Por qué "${tema}" no debería impedirte avanzar como trader fondeado`:`Cómo superar "${tema}" — la verdad que nadie te cuenta`;
+    return{tema,n,sc,p:getPrio(sc),tipo,titulo};
+  }).filter(i=>i.sc>=9).sort((a,b)=>b.sc-a.sc);
+  cnt.textContent=ideas.length+' ideas potenciales';
+  const sent=DB.sent_ideas||[];
+  c.innerHTML=ideas.map(i=>{
+    const isSent=sent.includes(i.tema);
+    return`<div class="idea-card ${isSent?'done':''}">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div class="idea-score ${i.p.cls}"><span>${i.sc}</span></div>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:6px">${i.titulo}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="tag tag-blue">${i.tipo}</span>
+            <span class="tag tag-${i.p.cls==='alta'?'red':'yellow'}">${i.p.label}</span>
+            <span class="tag tag-gray">Mencionado ${i.n}x en llamadas</span>
+            <span class="tag tag-gray">${Math.round(i.n/total*100)}% de leads</span>
+          </div>
+        </div>
+        <button class="approve-btn ${isSent?'done':''}" onclick="enviarIdea1('${encodeURIComponent(i.tema)}','${encodeURIComponent(i.titulo)}','${i.tipo}','${i.sc}','${i.p.label}',this)" ${isSent?'disabled':''}>
+          ${isSent?'✅ En Notion':'✓ → Notion'}
+        </button>
+      </div>
+      <div style="margin-top:10px;background:var(--bg3);border-radius:6px;padding:10px;font-size:12px;color:var(--text2)">
+        💡 Tema: <strong>${i.tema}</strong> · Tipo: ${i.tipo} · Frecuencia: ${Math.round(i.n/total*100)}% de las llamadas
+      </div>
+    </div>`;
+  }).join('')||'<div class="empty"><div class="empty-icon">🏆</div>Sin ideas con score ≥9.</div>';
+}
+async function enviarIdea1(temaEnc,tituloEnc,tipo,score,prio,btn){
+  const c=loadCfg();if(!c.token){showToast('⚠️ Configura el token','error');return;}
+  btn.textContent='⏳';btn.disabled=true;
+  const tema=decodeURIComponent(temaEnc),titulo=decodeURIComponent(tituloEnc);
+  const dbId=c.ideas_db||'4424a35ac5114ea78e71523ba58ba2b9';
+  const n=DB.reportes.filter(r=>(r.dolores_mercado||[]).some(d=>d.toLowerCase().includes(tema.slice(0,20)))||( r.objeciones||[]).some(o=>(o.objecion||'').toLowerCase().includes(tema.slice(0,20)))).length;
+  const body={
+    parent:{database_id:dbId},
+    properties:{
+      'Título':{title:[{text:{content:titulo}}]},
+      'Tipo':{select:{name:tipo}},
+      'Fuente':{select:{name:'📞 Calls closing'}},
+      'Estado':{select:{name:'✨ Nueva'}},
+      'Score':{number:parseInt(score)||0},
+      'Prioridad':{select:{name:decodeURIComponent(prio)}},
+      'Frecuencia en llamadas':{number:n},
+      'Dolor / Objeción':{rich_text:[{text:{content:tema}}]},
+    }
+  };
+  try{
+    await notionFetch('pages','POST',body);
+    if(!DB.sent_ideas)DB.sent_ideas=[];DB.sent_ideas.push(tema);saveDB(DB);
+    btn.textContent='✅ En Notion';btn.className='approve-btn done';
+    showToast('✅ Idea enviada a "Ideas de Llamadas" en Notion','success');
+  }catch(e){showToast('❌ '+e.message,'error');btn.textContent='✓ → Notion';btn.disabled=false;}
+}
+
+// ================================================================
+// MIS IDEAS EN NOTION → Paso 2: BD Vídeos YT
+// ================================================================
+async function loadMisIdeas(){
+  const el=document.getElementById('mis-ideas-list'),cnt=document.getElementById('mis-ideas-count');
+  const c=loadCfg();if(!c.token){el.innerHTML='<div class="empty"><div class="empty-icon">⚙️</div>Configura el token en ⚙️ Config.</div>';return;}
+  el.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Cargando de Notion...</div>';cnt.textContent='';
+  try{
+    const dbId=c.ideas_db||'4424a35ac5114ea78e71523ba58ba2b9';
+    const data=await notionFetch(`databases/${dbId}/query`,'POST',{
+      filter:{or:[{property:'Estado',select:{equals:'✨ Nueva'}}]},
+      sorts:[{property:'Score',direction:'descending'}]
+    });
+    const ideas=data.results||[];cnt.textContent=ideas.length+' ideas pendientes de aprobación final';
+    if(!ideas.length){el.innerHTML='<div class="empty"><div class="empty-icon">✅</div>Sin ideas pendientes.</div>';return;}
+    const sentF=DB.sent_final||[];
+    el.innerHTML='<div style="display:flex;flex-direction:column;gap:10px">'+ideas.map(p=>{
+      const props=p.properties;
+      const titulo=props['Título']?.title?.map(t=>t.plain_text).join('')||'(sin título)';
+      const tipo=props['Tipo']?.select?.name||'';
+      const prio=props['Prioridad']?.select?.name||'';
+      const score=props['Score']?.number||0;
+      const dolor=extractText(props['Dolor / Objeción']);
+      const freq=props['Frecuencia en llamadas']?.number||0;
+      const isSent=sentF.includes(p.id);
+      return`<div class="idea-card ${isSent?'done':''}">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:6px">${titulo}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              ${tipo?`<span class="tag tag-blue">${tipo}</span>`:''}
+              ${prio?`<span class="tag tag-${prio.includes('Alta')?'red':prio.includes('Media')?'yellow':'gray'}">${prio}</span>`:''}
+              ${score?`<span class="tag tag-gray">${score}/20 pts</span>`:''}
+              ${freq?`<span class="tag tag-gray">${freq}x en llamadas</span>`:''}
+            </div>
+            ${dolor?`<div style="margin-top:8px;font-size:12px;color:var(--text2)">Dolor/Objeción: ${dolor}</div>`:''}
+          </div>
+          <button class="approve-btn ${isSent?'done':''}" onclick="aprobarFinal('${p.id}','${encodeURIComponent(titulo)}','${tipo}','${encodeURIComponent(dolor)}',this)" ${isSent?'disabled':''}>
+            ${isSent?'✅ En pipeline':'✓ → BD Vídeos'}
+          </button>
+        </div>
+      </div>`;
+    }).join('')+'</div>';
+  }catch(e){el.innerHTML=`<div class="empty"><div class="empty-icon">❌</div>Error: ${e.message}</div>`;}
+}
+async function aprobarFinal(pageId,tituloEnc,tipo,dolorEnc,btn){
+  const c=loadCfg();if(!c.token){showToast('⚠️ Configura el token','error');return;}
+  btn.textContent='⏳';btn.disabled=true;
+  const titulo=decodeURIComponent(tituloEnc),dolor=decodeURIComponent(dolorEnc);
+  const vDB=c.videos_db||'bcce2a24cea948dbac8c9eb0d9825b61';
+  const body={
+    parent:{database_id:vDB},
+    properties:{
+      'Título del vídeo':{title:[{text:{content:titulo}}]},
+      'Fuente de idea':{select:{name:'📞 Calls closing'}},
+      'Estado':{select:{name:'✅ Validado'}},
+      'Estado guion':{select:{name:'Sin empezar'}},
+    }
+  };
+  if(tipo)body.properties['Tipo']={select:{name:tipo}};
+  if(dolor)body.properties['Dolor principal']={rich_text:rtext(dolor)};
+  try{
+    await notionFetch('pages','POST',body);
+    await notionFetch(`pages/${pageId}`,'PATCH',{properties:{'Estado':{select:{name:'✅ Aprobada'}}}});
+    if(!DB.sent_final)DB.sent_final=[];DB.sent_final.push(pageId);saveDB(DB);
+    btn.textContent='✅ En pipeline';btn.className='approve-btn done';
+    showToast(`✅ "${titulo.slice(0,35)}..." añadida al pipeline de producción`,'success');
+  }catch(e){showToast('❌ '+e.message,'error');btn.textContent='✓ → BD Vídeos';btn.disabled=false;}
+}
+
+// ================================================================
+// IMPORTAR JSON
+// ================================================================
+function mergeReportes(data){
+  const reps=data.reportes||[];let added=0;
+  reps.forEach(r=>{
+    if(!r.fecha)return;
+    const dup=DB.reportes.some(x=>x.fecha===r.fecha&&(x.prospect_nombre||'')===(r.prospect_nombre||'')&&(x.closer||'')===(r.closer||''));
+    if(!dup){DB.reportes.push(r);added++;}
+  });
+  DB.sessions.push({fecha:new Date().toISOString().slice(0,10),total:reps.length,nuevos:added});
+  saveDB(DB);return added;
+}
+function importFile(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const data=JSON.parse(ev.target.result);
+      if(!data.reportes){showToast('❌ JSON inválido: falta "reportes"','error');return;}
+      const added=mergeReportes(data);
+      showToast(`✅ ${added} reportes nuevos importados`,'success');
+      updateFilterOptions();actualizarOverview();renderImportHistory();
+      e.target.value='';
+    }catch(err){showToast('❌ Error JSON: '+err.message,'error');}
+  };
+  reader.readAsText(file);
+}
+function dragOver(e){e.preventDefault();document.getElementById('drop-zone').classList.add('drag-over');}
+function dragLeave(e){document.getElementById('drop-zone').classList.remove('drag-over');}
+function dropFile(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(!f)return;importFile({target:{files:[f],value:''}});}
+function renderImportHistory(){
+  const c=document.getElementById('import-history');
+  if(!DB.sessions?.length){c.innerHTML='<div class="empty"><div class="empty-icon">📂</div>Sin importaciones aún.</div>';return;}
+  c.innerHTML='<div style="display:flex;flex-direction:column;gap:8px">'+DB.sessions.slice().reverse().map(s=>
+    `<div style="background:var(--bg3);border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text2)">${s.fecha}</span><span>${s.total} reportes · <strong>${s.nuevos} nuevos</strong></span></div>`
+  ).join('')+'</div>';
+}
+
+// ================================================================
+// UTILS
+// ================================================================
+function copiarPrompt(){
+  const t=document.getElementById('prompt-text').textContent;
+  navigator.clipboard.writeText(t).then(()=>showToast('✅ Prompt copiado','success')).catch(()=>showToast('Copia el texto manualmente','info'));
+}
+function exportarDB(){
+  const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='llamadas-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  showToast('⬇ Exportado','info');
+}
+function eliminarReporte(fecha, nombre){
+  if(!confirm('¿Eliminar este reporte? (no se puede deshacer)'))return;
+  DB.reportes=DB.reportes.filter(r=>!(r.fecha===fecha&&(r.prospect_nombre||'')===(nombre||'')));
+  saveDB(DB);updateFilterOptions();actualizarOverview();renderLlamadas();
+  showToast('🗑 Reporte eliminado','info');
+}
+function resetDB(){
+  localStorage.setItem('llamadas_reset_flag','1');
+  localStorage.removeItem(DB_KEY);
+  location.reload();
+}
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');if(el)el.classList.add('active');
+}
+function showToast(msg,type='info'){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+initCfg();updateFilterOptions();actualizarOverview();renderImportHistory();
+</script>
+</body>
+</html>
