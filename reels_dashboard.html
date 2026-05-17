@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reels Dashboard — Tradinverso</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a22;--bg3:#22222e;--border:#2e2e3e;
+  --accent:#e1306c;--green:#4ade80;--yellow:#facc15;--orange:#fb923c;
+  --blue:#60a5fa;--purple:#c084fc;--pink:#f471b5;--red:#ff6b6b;
+  --text:#e2e2f0;--text2:#9090a8;--text3:#5a5a72;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;}
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;position:sticky;top:0;z-index:100;}
+.nav-logo{font-weight:700;font-size:15px;color:var(--accent);padding:14px 20px 14px 0;border-right:1px solid var(--border);margin-right:12px;white-space:nowrap;}
+.nav-tabs{display:flex;overflow-x:auto;flex:1;}
+.nav-tab{padding:14px 15px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;font-size:13px;}
+.nav-tab:hover{color:var(--text);background:var(--bg3);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.nav-actions{display:flex;gap:8px;padding-left:12px;border-left:1px solid var(--border);}
+.page{display:none;padding:28px;max-width:1400px;margin:0 auto;padding-bottom:64px;}
+.page.active{display:block;}
+.page-title{font-size:20px;font-weight:700;margin-bottom:4px;}
+.page-sub{color:var(--text2);margin-bottom:24px;font-size:13px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+@media(max-width:1000px){.grid-3,.grid-5{grid-template-columns:1fr 1fr;}}
+@media(max-width:650px){.grid-2,.grid-3,.grid-5{grid-template-columns:1fr;}}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 22px;}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat-value{font-size:26px;font-weight:700;}
+.btn{border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{opacity:.85;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-green{background:#22543d;color:var(--green);border:1px solid #4ade8044;}
+.btn-danger{background:#3d1a1a;color:var(--red);border:1px solid #ff6b6b44;}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag-red{background:#ff6b6b22;color:var(--red);border:1px solid #ff6b6b44;}
+.tag-green{background:#4ade8022;color:var(--green);border:1px solid #4ade8044;}
+.tag-blue{background:#60a5fa22;color:var(--blue);border:1px solid #60a5fa44;}
+.tag-purple{background:#c084fc22;color:var(--purple);border:1px solid #c084fc44;}
+.tag-yellow{background:#facc1522;color:var(--yellow);border:1px solid #facc1544;}
+.tag-pink{background:#f471b522;color:var(--pink);border:1px solid #f471b544;}
+.tag-gray{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+.count-badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--text2);}
+.divider{height:1px;background:var(--border);margin:24px 0;}
+.empty{text-align:center;padding:40px;color:var(--text3);font-size:13px;}
+.empty-icon{font-size:28px;margin-bottom:10px;}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:9px 12px;font-family:inherit;transition:border-color .15s;outline:none;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);}
+.field textarea{resize:vertical;min-height:60px;}
+.field-group{display:grid;gap:14px;margin-bottom:14px;}
+.fg2{grid-template-columns:1fr 1fr;}
+.fg3{grid-template-columns:1fr 1fr 1fr;}
+@media(max-width:700px){.fg2,.fg3{grid-template-columns:1fr;}}
+.form-section{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}
+.save-bar{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border);margin-top:6px;}
+/* REEL CARD */
+.reel-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px;transition:border-color .15s;}
+.reel-card:hover{border-color:var(--accent);}
+.reel-card.seed-card{border-left:3px solid var(--text3);}
+.reel-header{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+.score-box{flex-shrink:0;width:52px;height:52px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:20px;}
+.score-box.alta{background:#ff6b6b22;color:var(--red);border:1px solid #ff6b6b44;}
+.score-box.media{background:#facc1522;color:var(--yellow);border:1px solid #facc1544;}
+.score-box.baja{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+.score-box-label{font-size:9px;font-weight:600;text-transform:uppercase;}
+.reel-hook{font-size:15px;font-weight:700;color:var(--blue);line-height:1.4;flex:1;}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
+@media(max-width:700px){.metrics-row{grid-template-columns:repeat(2,1fr);}}
+.metric-box{background:var(--bg3);border-radius:8px;padding:10px;text-align:center;}
+.metric-box .val{font-size:18px;font-weight:700;}
+.metric-box .lbl{font-size:10px;color:var(--text3);text-transform:uppercase;margin-top:2px;}
+/* RANKING */
+.rank-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--border);}
+.rank-row:first-child{border-top:none;}
+.rank-num{font-weight:700;color:var(--text3);width:20px;flex-shrink:0;}
+.rank-label{flex:1;font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.rank-bar-wrap{width:100px;height:6px;background:var(--bg3);border-radius:3px;flex-shrink:0;}
+.rank-bar{height:6px;border-radius:3px;background:var(--accent);}
+.rank-val{font-size:13px;font-weight:700;flex-shrink:0;min-width:60px;text-align:right;}
+/* NOTION IDEA CARD */
+.notion-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;}
+.notion-card.aprobada{border-color:#4ade8055;opacity:.55;}
+.approve-btn{cursor:pointer;padding:8px 16px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--text2);font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap;}
+.approve-btn:hover{border-color:var(--green);color:var(--green);}
+.approve-btn.done{background:var(--green);border-color:var(--green);color:#000;}
+/* CONFIG */
+.config-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 14px;font-family:monospace;outline:none;}
+.config-input:focus{border-color:var(--accent);}
+.conn-ok{color:var(--green);font-size:13px;font-weight:600;}
+.conn-err{color:var(--red);font-size:13px;font-weight:600;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:13px;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:360px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:var(--green);color:var(--green);}
+.toast.error{border-color:var(--red);color:var(--red);}
+.toast.info{border-color:var(--blue);color:var(--blue);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">📱 Reels Dashboard</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('overview',this)">Overview</div>
+    <div class="nav-tab" onclick="showPage('reels',this);renderReels()">Reels <span id="badge-reels" class="count-badge" style="margin-left:6px">0</span></div>
+    <div class="nav-tab" onclick="showPage('ideas',this);renderIdeasYT()">🏆 Ideas YT</div>
+    <div class="nav-tab" onclick="showPage('mis-ideas',this);loadMisIdeas()">📋 Mis Ideas en Notion</div>
+    <div class="nav-tab" onclick="showPage('anadir',this)">✏️ Añadir Reel</div>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-outline" onclick="showPage('config',this)" style="font-size:16px;padding:6px 12px">⚙️</button>
+    <button class="btn btn-green" onclick="exportarDB()">⬇ Exportar</button>
+    <button class="btn btn-danger" onclick="resetDB()">🗑 Reset</button>
+  </div>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="page active" id="page-overview">
+  <div class="page-title">📱 Reels Dashboard — Tradinverso</div>
+  <div class="page-sub">Tracker de rendimiento de Reels. Rellena a las 48h de publicar. Métricas que importan: Cash collected · DMs · Retención.</div>
+
+  <div class="grid-5" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-label">Total Reels</div><div class="stat-value" id="s-total">0</div></div>
+    <div class="stat-card"><div class="stat-label">Cash total</div><div class="stat-value" id="s-cash" style="color:var(--green)">€0</div></div>
+    <div class="stat-card"><div class="stat-label">DMs totales</div><div class="stat-value" id="s-dms" style="color:var(--accent)">0</div></div>
+    <div class="stat-card"><div class="stat-label">Retención media</div><div class="stat-value" id="s-ret" style="color:var(--blue)">0%</div></div>
+    <div class="stat-card"><div class="stat-label">Score medio</div><div class="stat-value" id="s-score">0/20</div></div>
+  </div>
+
+  <!-- FILTROS -->
+  <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap">
+    <div style="font-size:13px;color:var(--text2)">Rankings:</div>
+    <select id="rk-n" onchange="renderRankings()" style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 10px;font-size:12px;outline:none">
+      <option value="5">Top 5</option>
+      <option value="10">Top 10</option>
+      <option value="15">Top 15</option>
+      <option value="999">Todos</option>
+    </select>
+    <select id="rk-mes" onchange="renderRankings()" style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 10px;font-size:12px;outline:none">
+      <option value="">Todos los meses</option>
+    </select>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">💶 Top por Cash Collected</div>
+      <div id="rk-cash"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">😤 Top por Dolor (cash + DMs)</div>
+      <div id="rk-dolor"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:14px">🏆 Top por Score general</div>
+      <div id="rk-score"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px">📊 Por tipo de contenido</div>
+      <div id="by-tipo"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:10px">📐 Sistema de puntuación (máx 20)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:var(--text2)">
+        <div><span style="color:var(--green);font-weight:700">💶 Cash (0-6)</span><br>0€=0 · 1-500€=2 · 500-2K€=4 · >2K€=6</div>
+        <div><span style="color:var(--accent);font-weight:700">📩 DMs (1-5)</span><br>0=1 · 1-5=2 · 5-15=3 · 15-30=4 · >30=5</div>
+        <div><span style="color:var(--blue);font-weight:700">📺 Retención (1-5)</span><br><20%=1 · 20-35%=2 · 35-50%=3 · 50-65%=4 · >65%=5</div>
+        <div><span style="color:var(--yellow);font-weight:700">👁 Vistas (1-4)</span><br><2K=1 · 2-10K=2 · 10-30K=3 · >30K=4</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <span class="tag tag-red">🔴 Alta: 14-20</span>
+        <span class="tag tag-yellow">🟡 Media: 9-13</span>
+        <span class="tag tag-gray">⚪ Baja: &lt;9</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REELS LIST -->
+<div class="page" id="page-reels">
+  <div class="page-title">Todos los Reels</div>
+  <div class="page-sub">Ordenados por score. Los seed de ejemplo tienen ⚗️ y se pueden eliminar.</div>
+  <div id="reels-list"></div>
+</div>
+
+<!-- IDEAS YT -->
+<div class="page" id="page-ideas">
+  <div class="page-title">🏆 Ideas YT — Del Reel al Vídeo Largo</div>
+  <div class="page-sub">Propuestas de vídeo YT basadas en tus Reels de mayor rendimiento. Haz clic en ✓ para enviarlas a <strong>📱 Ideas de Reels</strong> en Notion (paso 1 de aprobación).</div>
+  <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center">
+    <button class="btn btn-primary" onclick="renderIdeasYT()">🔄 Recalcular</button>
+    <span id="ideas-count" style="font-size:13px;color:var(--text2)"></span>
+  </div>
+  <div id="ideas-list"></div>
+</div>
+
+<!-- MIS IDEAS EN NOTION -->
+<div class="page" id="page-mis-ideas">
+  <div class="page-title">📋 Mis Ideas en Notion — Aprobación final</div>
+  <div class="page-sub">Ideas que ya aprobaste en el paso 1 y están en <strong>📱 Ideas de Reels</strong> en Notion. Haz clic en ✓ para enviarlas al pipeline de producción (BD Vídeos YT).</div>
+  <div style="margin-bottom:20px;display:flex;gap:10px;align-items:center">
+    <button class="btn btn-primary" onclick="loadMisIdeas()">🔄 Recargar</button>
+    <span id="mis-ideas-count" style="font-size:13px;color:var(--text2)"></span>
+  </div>
+  <div id="mis-ideas-list"><div class="empty"><div class="empty-icon">📋</div>Pulsa "Recargar" para cargar tus ideas de Notion.</div></div>
+</div>
+
+<!-- AÑADIR -->
+<div class="page" id="page-anadir">
+  <div class="page-title">✏️ Añadir Reel</div>
+  <div class="page-sub">Rellena este formulario a las 48h de publicar el Reel con los datos reales de Insights.</div>
+  <div class="form-section">
+    <div class="field-group fg2">
+      <div class="field"><label>URL del Reel *</label><input id="f-url" type="url" placeholder="https://www.instagram.com/reel/..."></div>
+      <div class="field"><label>Fecha de publicación *</label><input id="f-fecha" type="date"></div>
+    </div>
+    <div class="field-group fg2">
+      <div class="field">
+        <label>Tipo de contenido *</label>
+        <select id="f-tipo">
+          <option value="">Seleccionar...</option>
+          <option>🎯 Atracción</option><option>📚 Nutrición</option><option>⭐ Conversión</option>
+          <option>👤 Posicionamiento</option><option>🏆 Prueba social</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Formato</label>
+        <select id="f-formato-sel" onchange="toggleFormato()">
+          <option value="">Seleccionar...</option>
+          <option>Talking head</option><option>Texto en pantalla</option>
+          <option>B-roll + narración</option><option>Carrusel</option>
+          <option>Hook + historia</option><option>Antes/Después</option>
+          <option value="__custom">✏️ Personalizado...</option>
+        </select>
+        <input id="f-formato-custom" type="text" placeholder="Escribe el formato..." style="margin-top:8px;display:none">
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field"><label>Hook (primera frase del Reel) *</label><input id="f-hook" type="text" placeholder="Las primeras palabras del Reel..."></div>
+      <div class="field"><label>Dolor que ataca</label><input id="f-dolor" type="text" placeholder="El pain point principal"></div>
+      <div class="field"><label>Ángulo / enfoque diferenciador</label><input id="f-angulo" type="text" placeholder="Qué lo hace diferente"></div>
+      <div class="field"><label>Caption / descripción</label><textarea id="f-caption" placeholder="Texto del caption..."></textarea></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-weight:700;font-size:14px;margin-bottom:14px;color:var(--accent)">📊 Métricas a las 48h</div>
+    <div class="field-group fg3">
+      <div class="field"><label>Vistas</label><input id="f-vistas" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>Likes</label><input id="f-likes" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>Comentarios</label><input id="f-comentarios" type="number" min="0" placeholder="0"></div>
+    </div>
+    <div class="field-group fg3">
+      <div class="field"><label>Guardados / Compartidos</label><input id="f-guardados" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>DMs generados</label><input id="f-dms" type="number" min="0" placeholder="0"></div>
+      <div class="field"><label>Retención media %</label><input id="f-retencion" type="number" min="0" max="100" step="0.1" placeholder="0"></div>
+    </div>
+    <div class="field-group fg2">
+      <div class="field"><label>💶 Cash Collected (€)</label><input id="f-cash" type="number" min="0" step="0.01" placeholder="0"></div>
+      <div class="field"><label>Notas</label><input id="f-notas" type="text" placeholder="Observaciones extra..."></div>
+    </div>
+    <div class="save-bar">
+      <button class="btn btn-primary" onclick="guardarReel()">✅ Guardar Reel</button>
+      <span id="msg-reel" style="font-size:13px;color:var(--green);display:none">¡Guardado correctamente!</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="page" id="page-config">
+  <div class="page-title">⚙️ Configuración</div>
+  <div class="page-sub">Token de Notion para la integración de los dos pasos de aprobación.</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px">
+    <div style="font-weight:700;font-size:15px;margin-bottom:16px">🔑 Credenciales de Notion</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Integration Token</label>
+        <input class="config-input" id="cfg-token" type="password" placeholder="ntn_...">
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">BD Ideas de Reels (Notion)</label>
+        <input class="config-input" id="cfg-ideas-db" type="text" value="4bfcd25dfd44496abd6a42723bd914b8">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">📱 Ideas de Reels — donde van tus ideas en el paso 1</div>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">BD Vídeos YT (Notion)</label>
+        <input class="config-input" id="cfg-videos-db" type="text" value="bcce2a24cea948dbac8c9eb0d9825b61">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">BD Vídeos YT — pipeline de producción (destino final)</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+      <button class="btn btn-primary" onclick="guardarConfig()">💾 Guardar</button>
+      <button class="btn btn-outline" onclick="probarConexion()">🔌 Probar conexión</button>
+      <span id="conn-status" style="font-size:13px"></span>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px">
+    <div style="font-weight:700;font-size:14px;margin-bottom:12px">📋 Flujo de aprobación en dos pasos</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8">
+      <div><span style="color:var(--accent);font-weight:700">Paso 1:</span> En "🏆 Ideas YT" → haz clic ✓ → la idea va a <strong>📱 Ideas de Reels</strong> en Notion para revisión</div>
+      <div><span style="color:var(--green);font-weight:700">Paso 2:</span> En "📋 Mis Ideas en Notion" → haz clic ✓ → la idea va a <strong>BD Vídeos YT</strong> (pipeline de producción)</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================================================================
+// CONFIG
+// ================================================================
+const CFG_KEY = 'reels_cfg';
+function loadCfg() { try{return JSON.parse(localStorage.getItem(CFG_KEY))||{};}catch(e){return{};} }
+function guardarConfig() {
+  const t=document.getElementById('cfg-token').value.trim();
+  if(!t){showToast('Token obligatorio','error');return;}
+  localStorage.setItem(CFG_KEY,JSON.stringify({
+    token:t,
+    ideas_db:document.getElementById('cfg-ideas-db').value.trim(),
+    videos_db:document.getElementById('cfg-videos-db').value.trim()
+  }));
+  showToast('✅ Configuración guardada','success');
+}
+function initCfg(){
+  const c=loadCfg();
+  if(c.token) document.getElementById('cfg-token').value=c.token;
+  if(c.ideas_db) document.getElementById('cfg-ideas-db').value=c.ideas_db;
+  if(c.videos_db) document.getElementById('cfg-videos-db').value=c.videos_db;
+}
+async function probarConexion(){
+  const c=loadCfg();
+  if(!c.token){showToast('Configura el token primero','error');return;}
+  const st=document.getElementById('conn-status');
+  st.textContent='Probando...';st.className='';
+  try{
+    const r=await notionFetch(`databases/${c.videos_db||'bcce2a24cea948dbac8c9eb0d9825b61'}`,'GET');
+    st.textContent='✅ Conexión OK';st.className='conn-ok';
+  }catch(e){st.textContent='❌ '+e.message;st.className='conn-err';}
+}
+
+// ================================================================
+// NOTION API
+// ================================================================
+async function notionFetch(endpoint,method,body){
+  const c=loadCfg();
+  if(!c.token)throw new Error('Sin token — configura en ⚙️');
+  const url='https://corsproxy.io/?https://api.notion.com/v1/'+endpoint;
+  const opts={method,headers:{'Authorization':'Bearer '+c.token,'Notion-Version':'2022-06-28','Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(url,opts);
+  if(!r.ok){const e=await r.json();throw new Error(e.message||r.status);}
+  return r.json();
+}
+function rtext(v){return[{text:{content:v||''}}];}
+
+// ================================================================
+// DB — localStorage
+// ================================================================
+const DB_KEY='reels_db';
+function loadDB(){try{return JSON.parse(localStorage.getItem(DB_KEY))||{reels:[],sent_ideas:[]};}catch(e){return{reels:[],sent_ideas:[]};}  }
+function saveDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db));}
+let DB=loadDB();
+function genId(){return 'r_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);}
+
+// SEED DATA — 10 reels ficticios de ejemplo
+const SEED_REELS=[
+  {id:'seed_1',_seed:true,url:'https://www.instagram.com/reel/seed1/',fecha:'2026-04-02',tipo:'🎯 Atracción',formato:'Talking head',hook:'El error que quema el 90% de las cuentas fondeadas',dolor:'No poder mantener la consistencia en el fondeo',angulo:'El fallo es emocional, no técnico',caption:'3 fondeos perdidos y siempre por la misma razón...',vistas:18500,likes:342,comentarios:67,guardados:128,dms:12,retencion:42,cash_collected:0,notas:'Seed ejemplo'},
+  {id:'seed_2',_seed:true,url:'https://www.instagram.com/reel/seed2/',fecha:'2026-04-05',tipo:'📚 Nutrición',formato:'Talking head',hook:'Mi rutina de las 7am antes de abrir el gráfico',dolor:'No tener un sistema pre-trading claro',angulo:'La rutina define el rendimiento más que la estrategia',caption:'Lo que hago ANTES de operar cada día',vistas:9200,likes:187,comentarios:34,guardados:89,dms:8,retencion:38,cash_collected:1800,notas:'2 ventas directas'},
+  {id:'seed_3',_seed:true,url:'https://www.instagram.com/reel/seed3/',fecha:'2026-04-08',tipo:'⭐ Conversión',formato:'Texto en pantalla',hook:'De 3 fondeos quemados a consistente en 4 meses',dolor:'Estar fondeado pero no ser rentable',angulo:'Prueba social real con historia de transformación',caption:'Esto es lo que cambió todo para mí',vistas:24300,likes:612,comentarios:143,guardados:287,dms:34,retencion:55,cash_collected:7500,notas:'Mejor convertidor del mes'},
+  {id:'seed_4',_seed:true,url:'https://www.instagram.com/reel/seed4/',fecha:'2026-04-12',tipo:'👤 Posicionamiento',formato:'Talking head',hook:'Por qué solo el 3% de traders fondeados son consistentes',dolor:'Sentir que el mercado está en tu contra',angulo:'No es el mercado, es tu gestión del riesgo emocional',caption:'La verdad que nadie te dice sobre las prop firms',vistas:31000,likes:780,comentarios:189,guardados:412,dms:28,retencion:61,cash_collected:3200,notas:'Viral en nicho'},
+  {id:'seed_5',_seed:true,url:'https://www.instagram.com/reel/seed5/',fecha:'2026-04-15',tipo:'📚 Nutrición',formato:'B-roll + narración',hook:'Cómo gestiono 3 cuentas fondeadas al mismo tiempo',dolor:'No saber escalar después del primer fondeo',angulo:'Sistema operativo de múltiples cuentas',caption:'Así lo organizo todo sin volverme loco',vistas:7800,likes:156,comentarios:28,guardados:67,dms:5,retencion:34,cash_collected:900,notas:'Buena retención'},
+  {id:'seed_6',_seed:true,url:'https://www.instagram.com/reel/seed6/',fecha:'2026-04-18',tipo:'🎯 Atracción',formato:'Hook + historia',hook:'Me rechazaron en 5 prop firms antes de encontrar el sistema',dolor:'Frustración acumulada de fondeos fallidos',angulo:'El rechazo como parte del proceso, no como fracaso',caption:'No te rindas. Yo tampoco lo hice.',vistas:42000,likes:1100,comentarios:267,guardados:521,dms:47,retencion:48,cash_collected:4100,notas:'Más visto del mes'},
+  {id:'seed_7',_seed:true,url:'https://www.instagram.com/reel/seed7/',fecha:'2026-04-22',tipo:'🏆 Prueba social',formato:'Texto en pantalla',hook:'Payout de €4.800 esta semana (captura real)',dolor:'Dudar si el trading con fondeo es posible',angulo:'Prueba de resultados reales con contexto',caption:'No es suerte. Es sistema.',vistas:56000,likes:1820,comentarios:394,guardados:733,dms:62,retencion:71,cash_collected:8900,notas:'Payout real generó confianza masiva'},
+  {id:'seed_8',_seed:true,url:'https://www.instagram.com/reel/seed8/',fecha:'2026-04-25',tipo:'📚 Nutrición',formato:'Talking head',hook:'El análisis que hago cada domingo (y tú deberías hacer)',dolor:'No tener revisión semanal estructurada',angulo:'Sistema de revisión semanal del trader fondeado',caption:'Esto me cambió la consistencia completamente',vistas:6200,likes:98,comentarios:19,guardados:54,dms:3,retencion:29,cash_collected:0,notas:'Bajo engagement pero buen contenido'},
+  {id:'seed_9',_seed:true,url:'https://www.instagram.com/reel/seed9/',fecha:'2026-04-29',tipo:'⭐ Conversión',formato:'Antes/Después',hook:'Antes: 7 fondeos quemados. Ahora: consistencia en 6 meses',dolor:'Perder la esperanza de ser rentable',angulo:'Transformación real documentada mes a mes',caption:'La diferencia no fue la estrategia. Fue el sistema.',vistas:19800,likes:445,comentarios:112,guardados:298,dms:41,retencion:58,cash_collected:12400,notas:'Mejor ROI en ventas'},
+  {id:'seed_10',_seed:true,url:'https://www.instagram.com/reel/seed10/',fecha:'2026-05-03',tipo:'🎯 Atracción',formato:'Hook + historia',hook:'Por qué ganas en demo y pierdes en real (la verdad)',dolor:'No poder replicar los resultados de demo en real',angulo:'El problema es el cambio de contexto emocional, no la estrategia',caption:'Esto que te voy a decir lo cambia todo',vistas:38500,likes:920,comentarios:231,guardados:487,dms:39,retencion:52,cash_collected:2800,notas:'Muy buen engagement'},
+];
+
+// Carga seed solo si es la primera vez (nunca tras un reset)
+if(!DB.reels.length && !localStorage.getItem('reels_reset_flag')){
+  DB.reels=SEED_REELS.map(r=>({...r}));saveDB(DB);
+}
+localStorage.removeItem('reels_reset_flag');
+
+// ================================================================
+// SCORING
+// ================================================================
+function puntuarReel(r){
+  const cash=parseFloat(r.cash_collected)||0;
+  const dms=parseInt(r.dms)||0;
+  const ret=parseFloat(r.retencion)||0;
+  const vis=parseInt(r.vistas)||0;
+  const c=cash>=2000?6:cash>=500?4:cash>=1?2:0;
+  const d=dms>=30?5:dms>=15?4:dms>=5?3:dms>=1?2:1;
+  const re=ret>=65?5:ret>=50?4:ret>=35?3:ret>=20?2:1;
+  const v=vis>=30000?4:vis>=10000?3:vis>=2000?2:1;
+  return c+d+re+v;
+}
+function getPrio(sc){
+  if(sc>=14)return{label:'🔴 Alta',cls:'alta'};
+  if(sc>=9)return{label:'🟡 Media',cls:'media'};
+  return{label:'⚪ Baja',cls:'baja'};
+}
+function tipoTag(t){
+  const m={'🎯 Atracción':'tag-red','📚 Nutrición':'tag-blue','⭐ Conversión':'tag-green','👤 Posicionamiento':'tag-purple','🏆 Prueba social':'tag-yellow'};
+  return m[t]||'tag-gray';
+}
+function tipoToYT(t){
+  if(t.includes('Atr'))return'🎯 Atracción';
+  if(t.includes('Nut'))return'📚 Nutrición';
+  return'⭐ Conversión';
+}
+function fmt(n){if(!n)return'0';n=parseInt(n);if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n;}
+function fmtEur(n){if(!n&&n!==0)return'€0';return'€'+parseFloat(n).toLocaleString('es-ES',{maximumFractionDigits:0});}
+function getMes(f){return f?f.slice(0,7):'';}
+
+// ================================================================
+// RENDER OVERVIEW
+// ================================================================
+function renderOverview(){
+  const r=DB.reels;
+  document.getElementById('s-total').textContent=r.length;
+  document.getElementById('s-cash').textContent=fmtEur(r.reduce((a,x)=>a+(parseFloat(x.cash_collected)||0),0));
+  document.getElementById('s-dms').textContent=r.reduce((a,x)=>a+(parseInt(x.dms)||0),0);
+  const avgRet=r.length?( r.reduce((a,x)=>a+(parseFloat(x.retencion)||0),0)/r.length).toFixed(1):0;
+  document.getElementById('s-ret').textContent=avgRet+'%';
+  const avgSc=r.length?(r.reduce((a,x)=>a+puntuarReel(x),0)/r.length).toFixed(1):0;
+  document.getElementById('s-score').textContent=avgSc+'/20';
+  // By tipo
+  const tipos={};r.forEach(x=>{if(x.tipo){if(!tipos[x.tipo])tipos[x.tipo]={n:0,cash:0};tipos[x.tipo].n++;tipos[x.tipo].cash+=parseFloat(x.cash_collected)||0;}});
+  document.getElementById('by-tipo').innerHTML=Object.entries(tipos).map(([t,v])=>
+    `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px"><span class="tag ${tipoTag(t)}">${t}</span><span><strong>${v.n}</strong> · <span style="color:var(--green)">${fmtEur(v.cash)}</span></span></div>`
+  ).join('')||'<div style="color:var(--text3)">Sin datos</div>';
+  // Mes options
+  const meses=[...new Set(r.map(x=>getMes(x.fecha)).filter(Boolean))].sort().reverse();
+  const ms=document.getElementById('rk-mes');const mv=ms.value;
+  ms.innerHTML='<option value="">Todos los meses</option>'+meses.map(m=>`<option ${m===mv?'selected':''}>${m}</option>`).join('');
+  document.getElementById('badge-reels').textContent=r.length;
+  renderRankings();
+}
+function renderRankings(){
+  const n=parseInt(document.getElementById('rk-n').value)||5;
+  const mes=document.getElementById('rk-mes').value||'';
+  const r=DB.reels.filter(x=>!mes||getMes(x.fecha)===mes);
+  // By cash
+  const byCash=[...r].sort((a,b)=>(parseFloat(b.cash_collected)||0)-(parseFloat(a.cash_collected)||0)).slice(0,n);
+  const maxCash=byCash[0]?parseFloat(byCash[0].cash_collected)||0:1;
+  document.getElementById('rk-cash').innerHTML=byCash.map((x,i)=>
+    `<div class="rank-row"><div class="rank-num">${i+1}</div><div class="rank-label">${x.hook||'(sin hook)'}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round((parseFloat(x.cash_collected)||0)/maxCash*100)}%;background:var(--green)"></div></div><div class="rank-val" style="color:var(--green)">${fmtEur(x.cash_collected)}</div></div>`
+  ).join('')||'<div style="color:var(--text3)">Sin datos</div>';
+  // By dolor (agrupado)
+  const dolorMap={};r.forEach(x=>{const d=x.dolor||'Sin dolor';if(!dolorMap[d])dolorMap[d]={cash:0,dms:0,n:0};dolorMap[d].cash+=parseFloat(x.cash_collected)||0;dolorMap[d].dms+=parseInt(x.dms)||0;dolorMap[d].n++;});
+  const byDolor=Object.entries(dolorMap).sort((a,b)=>(b[1].cash+b[1].dms*100)-(a[1].cash+a[1].dms*100)).slice(0,n);
+  const maxDolor=byDolor[0]?byDolor[0][1].cash+byDolor[0][1].dms*100:1;
+  document.getElementById('rk-dolor').innerHTML=byDolor.map(([d,v],i)=>
+    `<div class="rank-row"><div class="rank-num">${i+1}</div><div class="rank-label">${d}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round((v.cash+v.dms*100)/maxDolor*100)}%"></div></div><div class="rank-val">${fmtEur(v.cash)} · ${v.dms} DMs</div></div>`
+  ).join('')||'<div style="color:var(--text3)">Sin datos</div>';
+  // By score
+  const byScore=[...r].map(x=>({...x,_sc:puntuarReel(x)})).sort((a,b)=>b._sc-a._sc).slice(0,n);
+  const maxSc=byScore[0]?byScore[0]._sc:1;
+  document.getElementById('rk-score').innerHTML=byScore.map((x,i)=>{
+    const p=getPrio(x._sc);
+    return`<div class="rank-row"><div class="rank-num">${i+1}</div><div class="rank-label">${x.hook||'(sin hook)'}</div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(x._sc/20*100)}%;background:${p.cls==='alta'?'var(--red)':p.cls==='media'?'var(--yellow)':'var(--text3)'}"></div></div><div class="rank-val">${x._sc}/20</div></div>`;
+  }).join('')||'<div style="color:var(--text3)">Sin datos</div>';
+}
+
+// ================================================================
+// RENDER REELS LIST
+// ================================================================
+function renderReels(){
+  const c=document.getElementById('reels-list');
+  if(!DB.reels.length){c.innerHTML='<div class="empty"><div class="empty-icon">📱</div>No hay Reels. Usa ✏️ Añadir Reel.</div>';return;}
+  const sorted=[...DB.reels].map(r=>({...r,_sc:puntuarReel(r)})).sort((a,b)=>b._sc-a._sc);
+  c.innerHTML=sorted.map(r=>{
+    const p=getPrio(r._sc);
+    return`<div class="reel-card ${r._seed?'seed-card':''}">
+      <div class="reel-header">
+        <div class="score-box ${p.cls}"><span>${r._sc}</span><span class="score-box-label">pts</span></div>
+        <div style="flex:1">
+          <div class="reel-hook">${r.hook||'(sin hook)'}</div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+            <span class="tag ${tipoTag(r.tipo)}">${r.tipo||'—'}</span>
+            ${r.formato?`<span class="tag tag-gray">${r.formato}</span>`:''}
+            ${r.fecha?`<span class="tag tag-gray">${r.fecha}</span>`:''}
+            ${r._seed?'<span class="tag tag-gray">⚗️ Ejemplo</span>':''}
+            <span class="tag tag-${p.cls==='alta'?'red':p.cls==='media'?'yellow':'gray'}">${p.label}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          ${r.url?`<a href="${r.url}" target="_blank" style="font-size:20px;text-decoration:none">🔗</a>`:''}
+          <button onclick="eliminarReel('${r.id}')" style="background:transparent;border:none;cursor:pointer;font-size:18px;color:var(--text3);padding:2px 6px" title="Eliminar Reel">🗑</button>
+        </div>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-box"><div class="val" style="color:var(--green)">${fmtEur(r.cash_collected)}</div><div class="lbl">Cash</div></div>
+        <div class="metric-box"><div class="val" style="color:var(--accent)">${r.dms||0}</div><div class="lbl">DMs</div></div>
+        <div class="metric-box"><div class="val" style="color:var(--blue)">${r.retencion||0}%</div><div class="lbl">Retención</div></div>
+        <div class="metric-box"><div class="val">${fmt(r.vistas)}</div><div class="lbl">Vistas</div></div>
+      </div>
+      ${r.dolor?`<div style="margin-top:10px;font-size:12px"><span style="color:var(--text3);text-transform:uppercase;font-size:10px">Dolor: </span><span style="color:var(--text2)">${r.dolor}</span></div>`:''}
+      ${r.angulo?`<div style="margin-top:4px;font-size:12px"><span style="color:var(--text3);text-transform:uppercase;font-size:10px">Ángulo: </span><span style="color:var(--green)">${r.angulo}</span></div>`:''}
+    </div>`;
+  }).join('');
+}
+function eliminarReel(id){
+  if(!confirm('¿Eliminar este Reel? (no se puede deshacer)'))return;
+  DB.reels=DB.reels.filter(r=>r.id!==id);
+  saveDB(DB);renderReels();renderOverview();
+  showToast('🗑 Reel eliminado','info');
+}
+
+// ================================================================
+// IDEAS YT → Paso 1: enviar a Ideas de Reels en Notion
+// ================================================================
+function renderIdeasYT(){
+  const c=document.getElementById('ideas-list');
+  const cnt=document.getElementById('ideas-count');
+  const ideas=DB.reels.map(r=>({...r,_sc:puntuarReel(r)})).filter(r=>r._sc>=9).sort((a,b)=>b._sc-a._sc);
+  cnt.textContent=ideas.length+' ideas potenciales (score ≥9)';
+  if(!ideas.length){c.innerHTML='<div class="empty"><div class="empty-icon">🏆</div>Sin ideas con score ≥9 aún. Añade más Reels.</div>';return;}
+  const sent=DB.sent_ideas||[];
+  c.innerHTML='<div style="display:flex;flex-direction:column;gap:12px">'+ideas.map(r=>{
+    const p=getPrio(r._sc);
+    const ytTipo=tipoToYT(r.tipo||'');
+    const isSent=sent.includes(r.id);
+    const tituloYT=r.dolor?'[Reel→YT] '+r.hook:'[Reel→YT] '+( r.hook||'Idea de Reel');
+    return`<div class="reel-card ${isSent?'notion-card aprobada':''}">
+      <div class="reel-header">
+        <div class="score-box ${p.cls}"><span>${r._sc}</span><span class="score-box-label">pts</span></div>
+        <div style="flex:1">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Reel: ${r.fecha} · ${fmt(r.vistas)} vistas · ${r.dms||0} DMs · ${fmtEur(r.cash_collected)} cash</div>
+          <div class="reel-hook">${r.hook||'—'}</div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+            <span class="tag ${tipoTag(r.tipo)}">${r.tipo||'—'}</span>
+            <span style="font-size:12px;color:var(--text3)">→ YT: </span>
+            <span class="tag tag-blue">${ytTipo}</span>
+            <span class="tag tag-${p.cls==='alta'?'red':'yellow'}">${p.label}</span>
+          </div>
+        </div>
+        <button class="approve-btn ${isSent?'done':''}" onclick="enviarIdea1('${r.id}','${encodeURIComponent(tituloYT)}','${ytTipo}','${r._sc}','${p.label}',this)" ${isSent?'disabled':''}>
+          ${isSent?'✅ En Notion':'✓ → Notion'}
+        </button>
+      </div>
+      ${r.dolor?`<div style="margin-top:10px;font-size:12px"><span style="color:var(--text3);text-transform:uppercase;font-size:10px">Dolor: </span><span style="color:var(--text2)">${r.dolor}</span></div>`:''}
+      ${r.angulo?`<div style="margin-top:4px;font-size:12px"><span style="color:var(--text3);text-transform:uppercase;font-size:10px">Ángulo: </span><span style="color:var(--green)">${r.angulo}</span></div>`:''}
+      <div style="margin-top:10px;background:var(--bg3);border-radius:6px;padding:10px;font-size:12px;color:var(--text2)">
+        💡 Vídeo propuesto: "${r.dolor?'Cómo superar '+r.dolor.toLowerCase()+' siendo trader fondeado':tituloYT}"
+      </div>
+    </div>`;
+  }).join('')+'</div>';
+}
+async function enviarIdea1(reelId,tituloEnc,tipo,score,prio,btn){
+  const c=loadCfg();
+  if(!c.token){showToast('⚠️ Configura el token en ⚙️','error');return;}
+  btn.textContent='⏳';btn.disabled=true;
+  const reel=DB.reels.find(r=>r.id===reelId);
+  if(!reel){showToast('Error: Reel no encontrado','error');btn.textContent='✓ → Notion';btn.disabled=false;return;}
+  const titulo=decodeURIComponent(tituloEnc);
+  const dbId=c.ideas_db||'4bfcd25dfd44496abd6a42723bd914b8';
+  const body={
+    parent:{database_id:dbId},
+    properties:{
+      'Título':{title:[{text:{content:titulo}}]},
+      'Tipo':{select:{name:tipo}},
+      'Fuente':{select:{name:'📱 IG/Reels'}},
+      'Estado':{select:{name:'✨ Nueva'}},
+      'Score':{number:parseInt(score)||0},
+      'Prioridad':{select:{name:decodeURIComponent(prio)}},
+    }
+  };
+  if(reel.dolor) body.properties['Dolor']={rich_text:rtext(reel.dolor)};
+  if(reel.angulo) body.properties['Ángulo']={rich_text:rtext(reel.angulo)};
+  if(reel.hook) body.properties['Hook']={rich_text:rtext(reel.hook)};
+  const pq=`Cash: ${fmtEur(reel.cash_collected)} · DMs: ${reel.dms||0} · Retención: ${reel.retencion||0}% · Vistas: ${fmt(reel.vistas)}`;
+  body.properties['Por qué funciona']={rich_text:rtext(pq)};
+  try{
+    await notionFetch('pages','POST',body);
+    if(!DB.sent_ideas)DB.sent_ideas=[];
+    DB.sent_ideas.push(reelId);saveDB(DB);
+    btn.textContent='✅ En Notion';btn.className='approve-btn done';
+    showToast('✅ Idea enviada a "Ideas de Reels" en Notion','success');
+  }catch(e){
+    showToast('❌ '+e.message,'error');btn.textContent='✓ → Notion';btn.disabled=false;
+  }
+}
+
+// ================================================================
+// MIS IDEAS EN NOTION → Paso 2: enviar a BD Vídeos YT
+// ================================================================
+function extractText(p){return p&&p.rich_text?p.rich_text.map(t=>t.plain_text||'').join(''):'';}
+async function loadMisIdeas(){
+  const el=document.getElementById('mis-ideas-list');
+  const cnt=document.getElementById('mis-ideas-count');
+  const c=loadCfg();
+  if(!c.token){el.innerHTML='<div class="empty"><div class="empty-icon">⚙️</div>Configura el token en ⚙️ Config.</div>';return;}
+  el.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Cargando de Notion...</div>';
+  cnt.textContent='';
+  try{
+    const dbId=c.ideas_db||'4bfcd25dfd44496abd6a42723bd914b8';
+    const data=await notionFetch(`databases/${dbId}/query`,'POST',{
+      filter:{or:[{property:'Estado',select:{equals:'✨ Nueva'}}]},
+      sorts:[{property:'Score',direction:'descending'}]
+    });
+    const ideas=data.results||[];
+    cnt.textContent=ideas.length+' ideas pendientes de aprobación final';
+    if(!ideas.length){el.innerHTML='<div class="empty"><div class="empty-icon">✅</div>No hay ideas pendientes.</div>';return;}
+    const sentFinal=DB.sent_final||[];
+    el.innerHTML='<div style="display:flex;flex-direction:column;gap:10px">'+ideas.map(p=>{
+      const props=p.properties;
+      const titulo=props['Título']?.title?.map(t=>t.plain_text).join('')||'(sin título)';
+      const tipo=props['Tipo']?.select?.name||'';
+      const prio=props['Prioridad']?.select?.name||'';
+      const score=props['Score']?.number||0;
+      const dolor=extractText(props['Dolor']);
+      const angulo=extractText(props['Ángulo']);
+      const hook=extractText(props['Hook']);
+      const pq=extractText(props['Por qué funciona']);
+      const isSent=sentFinal.includes(p.id);
+      return`<div class="notion-card ${isSent?'aprobada':''}">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:6px">${titulo}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              ${tipo?`<span class="tag tag-blue">${tipo}</span>`:''}
+              ${prio?`<span class="tag tag-${prio.includes('Alta')?'red':prio.includes('Media')?'yellow':'gray'}">${prio}</span>`:''}
+              ${score?`<span class="tag tag-gray">${score}/20 pts</span>`:''}
+            </div>
+          </div>
+          <button class="approve-btn ${isSent?'done':''}" onclick="aprobarFinal('${p.id}','${encodeURIComponent(titulo)}','${tipo}','${encodeURIComponent(dolor)}','${encodeURIComponent(angulo)}','${encodeURIComponent(hook)}',this)" ${isSent?'disabled':''}>
+            ${isSent?'✅ En pipeline':'✓ → BD Vídeos'}
+          </button>
+        </div>
+        ${dolor?`<div style="margin-top:8px;font-size:12px"><span style="color:var(--text3);font-size:10px;text-transform:uppercase">Dolor: </span><span style="color:var(--text2)">${dolor}</span></div>`:''}
+        ${angulo?`<div style="margin-top:4px;font-size:12px"><span style="color:var(--text3);font-size:10px;text-transform:uppercase">Ángulo: </span><span style="color:var(--green)">${angulo}</span></div>`:''}
+        ${pq?`<div style="margin-top:6px;font-size:12px;color:var(--text3)">${pq}</div>`:''}
+      </div>`;
+    }).join('')+'</div>';
+  }catch(e){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">❌</div>Error: ${e.message}</div>`;
+  }
+}
+async function aprobarFinal(pageId,tituloEnc,tipo,dolorEnc,anguloEnc,hookEnc,btn){
+  const c=loadCfg();
+  if(!c.token){showToast('⚠️ Configura el token','error');return;}
+  btn.textContent='⏳';btn.disabled=true;
+  const titulo=decodeURIComponent(tituloEnc);
+  const dolor=decodeURIComponent(dolorEnc);
+  const angulo=decodeURIComponent(anguloEnc);
+  const hook=decodeURIComponent(hookEnc);
+  const vDB=c.videos_db||'bcce2a24cea948dbac8c9eb0d9825b61';
+  const body={
+    parent:{database_id:vDB},
+    properties:{
+      'Título del vídeo':{title:[{text:{content:titulo}}]},
+      'Fuente de idea':{select:{name:'📱 IG/Reels'}},
+      'Estado':{select:{name:'✅ Validado'}},
+      'Estado guion':{select:{name:'Sin empezar'}},
+    }
+  };
+  if(tipo)body.properties['Tipo']={select:{name:tipo}};
+  if(dolor)body.properties['Dolor principal']={rich_text:rtext(dolor)};
+  if(angulo)body.properties['Ángulo']={rich_text:rtext(angulo)};
+  if(hook)body.properties['Hook']={rich_text:rtext(hook)};
+  try{
+    await notionFetch('pages','POST',body);
+    await notionFetch(`pages/${pageId}`,'PATCH',{properties:{'Estado':{select:{name:'✅ Aprobada'}}}});
+    if(!DB.sent_final)DB.sent_final=[];
+    DB.sent_final.push(pageId);saveDB(DB);
+    btn.textContent='✅ En pipeline';btn.className='approve-btn done';
+    showToast(`✅ "${titulo.slice(0,35)}..." añadida al pipeline de producción`,'success');
+  }catch(e){
+    showToast('❌ '+e.message,'error');btn.textContent='✓ → BD Vídeos';btn.disabled=false;
+  }
+}
+
+// ================================================================
+// GUARDAR REEL
+// ================================================================
+function toggleFormato(){
+  const sel=document.getElementById('f-formato-sel').value;
+  const custom=document.getElementById('f-formato-custom');
+  custom.style.display=sel==='__custom'?'block':'none';
+}
+function guardarReel(){
+  const hook=document.getElementById('f-hook').value.trim();
+  const tipo=document.getElementById('f-tipo').value;
+  if(!hook){showToast('El hook es obligatorio','error');return;}
+  if(!tipo){showToast('Selecciona el tipo de contenido','error');return;}
+  const fmtSel=document.getElementById('f-formato-sel').value;
+  const fmtCustom=document.getElementById('f-formato-custom').value.trim();
+  const formato=fmtSel==='__custom'?fmtCustom:fmtSel;
+  DB.reels.push({
+    id:genId(),url:document.getElementById('f-url').value.trim(),
+    fecha:document.getElementById('f-fecha').value,tipo,formato,hook,
+    dolor:document.getElementById('f-dolor').value.trim(),
+    angulo:document.getElementById('f-angulo').value.trim(),
+    caption:document.getElementById('f-caption').value.trim(),
+    vistas:parseInt(document.getElementById('f-vistas').value)||0,
+    likes:parseInt(document.getElementById('f-likes').value)||0,
+    comentarios:parseInt(document.getElementById('f-comentarios').value)||0,
+    guardados:parseInt(document.getElementById('f-guardados').value)||0,
+    dms:parseInt(document.getElementById('f-dms').value)||0,
+    retencion:parseFloat(document.getElementById('f-retencion').value)||0,
+    cash_collected:parseFloat(document.getElementById('f-cash').value)||0,
+    notas:document.getElementById('f-notas').value.trim(),
+  });
+  saveDB(DB);renderOverview();
+  const msg=document.getElementById('msg-reel');msg.style.display='inline';setTimeout(()=>msg.style.display='none',2500);
+  showToast('✅ Reel guardado','success');
+  ['f-url','f-fecha','f-hook','f-dolor','f-angulo','f-caption','f-notas'].forEach(id=>document.getElementById(id).value='');
+  ['f-vistas','f-likes','f-comentarios','f-guardados','f-dms','f-retencion','f-cash'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-tipo').value='';
+  document.getElementById('f-formato-sel').value='';
+  document.getElementById('f-formato-custom').style.display='none';
+}
+
+// ================================================================
+// UTILS
+// ================================================================
+function exportarDB(){
+  const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='reels-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  showToast('⬇ Exportado','info');
+}
+function resetDB(){
+  localStorage.setItem('reels_reset_flag','1');
+  localStorage.removeItem(DB_KEY);
+  location.reload();
+}
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+}
+function showToast(msg,type='info'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+initCfg();renderOverview();
+</script>
+</body>
+</html>
